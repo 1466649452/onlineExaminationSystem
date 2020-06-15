@@ -11,7 +11,7 @@
 数据库采用8.0以上版本  
 数据库名称：examsystem  
 数据库密码：12345678  
-建议导出数据库时采用数据+结构的方式
+建议导出数据库时采用数据+结构的方式  
 
 ### git指引
 
@@ -37,11 +37,11 @@
    5. 查看已有分支：`git branch`
    6. 自动在本地创建分支来跟踪远程的serverfix分支：`git checkout --track origin/serverfix`
     
-    7. 查看当前分支状态： `git status`
-    8. 拉取远程库同名分支： `git fetch`
-    9. 拉取并自动合并远程库同名分支：`git pull`
-    10. 将当前分支推送到远程同名分支：`git push`
-    11. 将develop分支合并到当前分支上：`git merge develop`
+    7. 查看当前分支状态： `git status`  
+    8. 拉取远程库同名分支： `git fetch`  
+    9. 拉取并自动合并远程库同名分支：`git pull`  
+    10. 将当前分支推送到远程同名分支：`git push`  
+    11. 将develop分支合并到当前分支上：`git merge develop`  
    
 ### git分支管理原则
    1. master分支：系统始终可以运行的版本
@@ -54,9 +54,13 @@
 依赖部署总共分为：**spirng**、**mybatis**、**AOP**、**servlet、jsp、jstl**、**springmvc**、**json**、**日志**，需要添加新的可以写好注释添加到对应位置
 
 
-### 前段框架Vue
+### 前端框架Vue
 详细使用方法：[vue官方教程](https://cn.vuejs.org/v2/guide/)  
 引入vue方法  
 a. 在html的head内添加：`<script src="statics/js/vue.js" type="text/javascript" charset="utf-8"></script>`，其中statis/js/vue.js为文件地址.  
 b. cdn方式：添加`<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>`
 
+### 前端在线接口模拟  [fastmock](https://www.fastmock.site)  
+
+### swagger2 注解使用教程： [一键传送](https://blog.csdn.net/xiaojin21cen/article/details/78654652)  
+   swagger访问地址：启动tomcat，进入项目地址后，url为/swagger-ui.html  
