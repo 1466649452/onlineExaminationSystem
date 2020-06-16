@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.mapper.AdministratorMapper">
+    <insert id="insert" parameterType="com.pojo.Administrator" keyProperty="ad_id">
+        insert into Administrator (ad_id,ad_name,ad_password,ad_image) values(#{ad_id},#{ad_name},#{ad_password},#{ad_image})
+    </insert>
+
+    <delete id="deleteById" parameterType="String">
+        delete from Administrator where ad_id = #{ad_id}
+    </delete>
+    <delete id="delete" parameterType="com.pojo.Administrator">
+        delete from Administrator where ad_id = #{ad_id}
+    </delete>
+
+    <select id="findById" parameterType="String" resultType="com.pojo.Administrator">
+        select * from Administrator where ad_id = #{ad_id}
+    </select>
+    <select id="find" resultType="com.pojo.Administrator">
+        select * from Administrator
+    </select>
+
+    <update id="update" parameterType="com.pojo.Administrator">
+        update Administrator
+        <set>
+            ad_name = #{ad_name},
+            ad_password = #{ad_password},
+            ad_image = #{ad_image}
+        </set>
+        where ad_id = #{ad_id}
+    </update>
+</mapper>
