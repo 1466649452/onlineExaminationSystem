@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 14/06/2020 23:31:03
+ Date: 16/06/2020 14:33:12
 */
 
 SET NAMES utf8mb4;
@@ -104,8 +104,8 @@ DROP TABLE IF EXISTS `Score`;
 CREATE TABLE `Score` (
   `stu_id` varchar(255) NOT NULL COMMENT '考试学生id',
   `paper_id` int NOT NULL COMMENT '试卷id',
-  `score` int DEFAULT NULL COMMENT '学生考试成绩',
-  `finish` date DEFAULT NULL COMMENT '学生提交时间',
+  `score` float DEFAULT NULL COMMENT '学生考试成绩',
+  `finish` timestamp NULL DEFAULT NULL COMMENT '学生提交时间',
   `stu_ans` json DEFAULT NULL COMMENT '学生答案列表',
   PRIMARY KEY (`stu_id`,`paper_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -147,8 +147,8 @@ CREATE TABLE `Test` (
   `paper_id` int NOT NULL COMMENT '试卷id',
   `paper_name` varchar(255) DEFAULT NULL COMMENT '试卷名称',
   `t_id` varchar(255) DEFAULT NULL COMMENT '出卷人id',
-  `start` date NOT NULL COMMENT '考试开始时间',
-  `end` date DEFAULT NULL COMMENT '考试结束时间',
+  `start` timestamp NOT NULL COMMENT '考试开始时间',
+  `end` timestamp NULL DEFAULT NULL COMMENT '考试结束时间',
   PRIMARY KEY (`paper_id`),
   KEY `试卷-老师` (`t_id`),
   CONSTRAINT `试卷-老师` FOREIGN KEY (`t_id`) REFERENCES `Teacher` (`t_id`) ON DELETE CASCADE ON UPDATE CASCADE

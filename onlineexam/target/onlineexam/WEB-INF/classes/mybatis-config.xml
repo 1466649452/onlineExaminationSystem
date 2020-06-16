@@ -6,5 +6,9 @@
     <typeAliases>
         <package name="com.scu.exam.pojo"/>
     </typeAliases>
-
+<!--
+    <mappers>
+        <package name="com.scu.exam.mapper"/>
+    </mappers>
+-->
 </configuration>

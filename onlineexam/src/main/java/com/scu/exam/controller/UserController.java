@@ -17,7 +17,6 @@ public class UserController {
             @ApiResponse(code = 400, message = "请求参数没填好"),
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
-    @ResponseBody
     @RequestMapping("/list")
     public void list(){
         System.out.println("hello");

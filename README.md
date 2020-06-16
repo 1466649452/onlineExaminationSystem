@@ -63,4 +63,15 @@ b. cdn方式：添加`<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"
 ### 前端在线接口模拟  [fastmock](https://www.fastmock.site)  
 
 ### swagger2 注解使用教程： [一键传送](https://blog.csdn.net/xiaojin21cen/article/details/78654652)  
-   swagger访问地址：启动tomcat，进入项目地址后，url为/swagger-ui.html  
+  
+   **swagger访问地址**：启动tomcat，进入项目地址后，url为/swagger-ui.html  
+   
+### Spring的单元测试
+   注意需要在测试类上方添加  
+   `@RunWith(SpringJUnit4ClassRunner.class)`  
+   和  
+   `@ContextConfiguration(locations={"classpath:applicationContext.xml"})`  
+   
+   注意测试方法@Test引入的包为`import org.junit.Test;`
+   
+### 后端数据返回为json
