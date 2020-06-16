@@ -1,27 +1,31 @@
 package com.scu.exam.pojo;
 
+import com.alibaba.fastjson.JSONObject;
+import io.swagger.util.Json;
+
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Score {
-    private String stu_id;
+    private String stu_id;;
     private int paper_id;
-    private float score;
-    private Date finish;
+    private double score;
+    private Long finish;
+    private String stu_ans;
 
-    /**
-     * hashmaphashMap中key为quesiton_id
-     */
-    private Map stu_ans=new HashMap();
+
 
     //构造器
-    public Score(String stu_id, int paper_id, float score, Date finish, Map stu_ans) {
+    public Score(String stu_id, int paper_id, double score, Date finish, JSONObject stu_ans) {
         this.stu_id = stu_id;
         this.paper_id = paper_id;
         this.score = score;
-        this.finish = finish;
-        this.stu_ans = stu_ans;
+        this.finish = finish.getTime();
+        if(stu_ans==null){
+            this.stu_ans=new JSONObject().toJSONString();
+        }else{
+            this.stu_ans = stu_ans.toString();
+        }
+
     }
     public Score(){
 
@@ -43,28 +47,32 @@ public class Score {
         this.paper_id = paper_id;
     }
 
-    public float getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(float score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
     public Date getFinish() {
-        return finish;
+        return new Date(finish);
     }
 
     public void setFinish(Date finish) {
-        this.finish = finish;
+        this.finish = finish.getTime();
     }
 
-    public Map getStu_ans() {
-        return stu_ans;
+    public JSONObject getStu_ansObject() {
+        return JSONObject.parseObject(this.stu_ans);
     }
 
-    public void setStu_ans(Map stu_ans) {
-        this.stu_ans = stu_ans;
+    public String getStu_ans() {
+        return this.stu_ans;
+    }
+
+    public void setStu_ans(JSONObject stu_ans) {
+        this.stu_ans = stu_ans.toString();
     }
 
     @Override

@@ -10,10 +10,14 @@ public class Teacher {
         this.t_id = t_id;
         this.t_name = t_name;
         this.t_password = t_password;
-        this.t_image = t_image;
+        if (t_image == null) {
+            this.t_image = "";
+        } else {
+            this.t_image = t_image;
+        }
     }
 
-    public Teacher(){
+    public Teacher() {
 
     }
 

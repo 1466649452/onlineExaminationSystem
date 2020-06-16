@@ -30,10 +30,10 @@ public class ScoreController {
 
         System.out.println("hello");
         System.out.println(stu_id);
-        Score b=scoreService.findOneScore(1);
-        System.out.println(b);
-        Score a=scoreService.findOneScore(stu_id);
-        System.out.println(a);
+        //Score b=scoreService.findScoreBystuid(1);
+        //System.out.println(b);
+        //Score a=scoreService.findScoreBystuid(stu_id);
+        //System.out.println(a);
         System.out.println("借宿");
 
 

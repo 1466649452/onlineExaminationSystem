@@ -239,6 +239,15 @@
       <artifactId>jackson-core</artifactId>
       <version>2.10.3</version>
     </dependency>
+
+    <!--阿里json包-->
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.71</version>
+    </dependency>
+
+
     <!--json相关，jackson end-->
 
     <!-- LOGGING 日志 begin -->

@@ -5,7 +5,67 @@
 
 
 <mapper namespace="com.scu.exam.mapper.ScoreMapper">
-    <select id="findOneScore" parameterType="Integer" resultType="com.scu.exam.pojo.Score">
-        select * from Score where stu_id = #{stu_id};
+    <!-- 根据stu_id可以查到一名学生的多次考试 -->
+    <select id="findScoreBystuid" parameterType="String" resultType="Score">
+        select * from score where stu_id = #{stu_id};
     </select>
+
+    <!-- 根据paper_id可以查到一场考试的多位学生 -->
+    <select id="findScoreBypaperid" parameterType="Integer" resultType="Score">
+        select * from score where paper_id = #{paper_id};
+    </select>
+
+    <!-- 通过stu_id和paper_id查到具体的某一次考试 -->
+    <select id="findOneScore" resultType="Score">
+        select * from score where stu_id = #{stu_id} and paper_id = #{paper_id};
+    </select>
+
+    <!-- 通过paper_id和成绩查询各次的排名 -->
+    <select id="findScoreCompare" resultType="Score">
+        select * from score
+        where paper_id = #{paper_id}
+        <if test="cmp == 'more'">and stu_score &gt; #{score}</if>
+        <if test="cmp=='equal'">and stu_score = #{score}</if>
+        <if test="cmp=='less'">and stu_score &lt; #{score}</if>
+        <if test="_parameter.containsKey('orderseq')">
+            <if test="orderseq != null and orderseq=='desc'">order by stu_score desc</if>
+            <if test="orderseq != null and orderseq=='asc'">order by stu_score asc</if>
+        </if>
+    </select>
+
+
+    <!-- 插入部分 -->
+    <insert id="insertOneScore" keyProperty="stu_id,paper_id" parameterType="com.scu.exam.pojo.Score">
+        insert into score (stu_id,paper_id,stu_score,finish,stu_ans) values (#{stu_id},#{paper_id},#{score},#{finish},#{stu_ans})
+    </insert>
+
+    <insert id="insetManyScore" keyProperty="stu_id,paper_id" parameterType="list">
+        insert into score (stu_id,paper_id,stu_score,finish,stu_ans) values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.stu_id},#{item.paper_id},#{item.score},#{item.finish},#{item.stu_ans})
+        </foreach>
+    </insert>
+
+    <!-- 删除部分-->
+    <delete id="deleteOneScore">
+        delete from score where stu_id=#{stu_id} and paper_id=#{paper_id}
+    </delete>
+    <delete id="deleteBystuid">
+        delete from score where stu_id=#{stu_id}
+    </delete>
+    <delete id="deleteBypaperid">
+        delete from score where paper_id=#{paper_id}
+    </delete>
+
+    <!-- 更新部分 -->
+    <update id="updateScore" >
+        update score set stu_score=#{score} where stu_id=#{stu_id} and paper_id=#{paper_id}
+    </update>
+    <update id="updatefinishTime" >
+        update score set finish=#{finish} where stu_id=#{stu_id} and paper_id=#{paper_id}
+    </update>
+    <update id="updatefinishStuans" >
+        update score set stu_ans=#{stu_ans} where stu_id=#{stu_id} and paper_id=#{paper_id}
+    </update>
+
 </mapper>
