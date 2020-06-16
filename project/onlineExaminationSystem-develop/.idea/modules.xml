@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/examspace.iml" filepath="$PROJECT_DIR$/examspace.iml" />
+      <module fileurl="file://$PROJECT_DIR$/onlineexam/onlineexam.iml" filepath="$PROJECT_DIR$/onlineexam/onlineexam.iml" />
+    </modules>
+  </component>
+</project>
