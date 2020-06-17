@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.scu.exam.mapper.TestMapper">
+
+    <!--如果查询不到数据会返回list.size=0-->
+    <select id="findByTid" parameterType="String" resultType="Test">
+        select * from test where t_id = #{t_id}
+    </select>
+
+    <insert id="insertTest" parameterType="Test" keyProperty="paper_id" useGeneratedKeys="true">
+        insert into test (paper_name, t_id, start, end) values(#{paper_name}, #{t_id}, #{start}, #{end})
+    </insert>
+
+    <update id="updateTest" parameterType="Test">
+        update test
+        <set>
+            <if test="paper_name!=null and paper_name!=''">paper_name = #{paper_name},</if>
+            <if test="t_id!=null and t_id!=''">t_id = #{t_id},</if>
+            <if test="start!=null and start!=''">start = #{start},</if>
+            <if test="end!=null and end!=''">end = #{end}</if>
+        </set>
+        where paper_id = #{paper_id}
+    </update>
+
+    <delete id="deleteTest" parameterType="Integer">
+        delete from test where paper_id = #{paper_id}
+    </delete>
+
+    <delete id="deleteAllByTid" parameterType="String">
+        delete from test where t_id = #{t_id}
+    </delete>
+
+
+
+</mapper>

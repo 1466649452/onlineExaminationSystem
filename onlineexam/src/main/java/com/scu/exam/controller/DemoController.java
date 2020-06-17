@@ -38,7 +38,6 @@ public class DemoController {
         ResponseUtils.renderJson(response,score.toString());
     }
 
-
     @ApiOperation("采用往json中添加数据后返回")
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
@@ -49,6 +48,7 @@ public class DemoController {
      * @RespinseBody会将方法的返回值转换为json或xml传递到 httprespons中返回到前端
      * @RequestPara用head中的数据，即get方法吧数据放到url中
      * ajax中data中的只需要使用@RequestBody来传递
+     * @RequestParam
      *  模版在这里奥
      * */
     @ResponseBody
