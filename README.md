@@ -11,7 +11,7 @@
 数据库采用8.0以上版本  
 数据库名称：examsystem  
 数据库密码：12345678  
-建议导出数据库时采用数据+结构的方式
+建议导出数据库时采用数据+结构的方式  
 
 ### git指引
 
@@ -37,11 +37,11 @@
    5. 查看已有分支：`git branch`
    6. 自动在本地创建分支来跟踪远程的serverfix分支：`git checkout --track origin/serverfix`
     
-    7. 查看当前分支状态： `git status`
-    8. 拉取远程库同名分支： `git fetch`
-    9. 拉取并自动合并远程库同名分支：`git pull`
-    10. 将当前分支推送到远程同名分支：`git push`
-    11. 将develop分支合并到当前分支上：`git merge develop`
+    7. 查看当前分支状态： `git status`  
+    8. 拉取远程库同名分支： `git fetch`  
+    9. 拉取并自动合并远程库同名分支：`git pull`  
+    10. 将当前分支推送到远程同名分支：`git push`  
+    11. 将develop分支合并到当前分支上：`git merge develop`  
    
 ### git分支管理原则
    1. master分支：系统始终可以运行的版本
@@ -54,9 +54,58 @@
 依赖部署总共分为：**spirng**、**mybatis**、**AOP**、**servlet、jsp、jstl**、**springmvc**、**json**、**日志**，需要添加新的可以写好注释添加到对应位置
 
 
-### 前段框架Vue
+### 前端框架Vue
 详细使用方法：[vue官方教程](https://cn.vuejs.org/v2/guide/)  
 引入vue方法  
 a. 在html的head内添加：`<script src="statics/js/vue.js" type="text/javascript" charset="utf-8"></script>`，其中statis/js/vue.js为文件地址.  
 b. cdn方式：添加`<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>`
 
+### 前端在线接口模拟  [fastmock](https://www.fastmock.site)  
+
+### swagger2 注解使用教程： [一键传送](https://blog.csdn.net/xiaojin21cen/article/details/78654652)  
+  
+   **swagger访问地址**：启动tomcat，进入项目地址后，url为/swagger-ui.html  
+   
+### Spring的单元测试
+   注意需要在测试类上方添加  
+   `@RunWith(SpringJUnit4ClassRunner.class)`  
+   和  
+   `@ContextConfiguration(locations={"classpath:applicationContext.xml"})`  
+   
+   注意测试方法@Test引入的包为`import org.junit.Test;`
+   
+### 前后端数据交互模版见DemoController方法。
+
+**ResponseUtils**该工具类主要作用在于设置http的Head，解决了中文编码错误，建议使用
+后端向前端返回数据请使用**ResponseUtils**中的**renderJson**方法  
+该方法的第一个参数为HttpServletResponse，第二个参数为String或者是可以使用toString的方法。  
+当然建议将数据写入JSONObject中再返回给前端，方便前端处理。
+
+对于对象转json字符串可以使用序列化的方法：具体参考utils文件夹下方的referenceCode的示例代码
+
+addValue接口的微信小程序端访问示例如下：ajax类似使用data字段
+```
+wx.request({
+  url: 'http://localhost:8080/addValue',
+  data:{
+    'information':"中文"
+  },
+  method:"POST",
+  success:res=>{
+    console.log(res);
+    this.setData({
+      returnvalue: res.data.respo
+    })
+  }
+})
+```
+
+返回数据显示如下：
+```
+data:
+    name: "王"
+    respo: "success"
+    __proto__: Object
+    errMsg: "request:ok"
+```
+因此前端可以通过res.data.name去访问数据
