@@ -74,4 +74,38 @@ b. cdn方式：添加`<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"
    
    注意测试方法@Test引入的包为`import org.junit.Test;`
    
-### 后端数据返回为json
+### 前后端数据交互模版见DemoController方法。
+
+**ResponseUtils**该工具类主要作用在于设置http的Head，解决了中文编码错误，建议使用
+后端向前端返回数据请使用**ResponseUtils**中的**renderJson**方法  
+该方法的第一个参数为HttpServletResponse，第二个参数为String或者是可以使用toString的方法。  
+当然建议将数据写入JSONObject中再返回给前端，方便前端处理。
+
+对于对象转json字符串可以使用序列化的方法：具体参考utils文件夹下方的referenceCode的示例代码
+
+addValue接口的微信小程序端访问示例如下：ajax类似使用data字段
+```
+wx.request({
+  url: 'http://localhost:8080/addValue',
+  data:{
+    'information':"中文"
+  },
+  method:"POST",
+  success:res=>{
+    console.log(res);
+    this.setData({
+      returnvalue: res.data.respo
+    })
+  }
+})
+```
+
+返回数据显示如下：
+```
+data:
+    name: "王"
+    respo: "success"
+    __proto__: Object
+    errMsg: "request:ok"
+```
+因此前端可以通过res.data.name去访问数据
