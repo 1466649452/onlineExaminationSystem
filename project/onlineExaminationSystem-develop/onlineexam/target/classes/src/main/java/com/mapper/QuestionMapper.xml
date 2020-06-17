@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.mapper.QuestionMapper">
+
+    <insert id="insert" parameterType="com.pojo.Question">
+        insert into Question
+        (question_id,question_info,correct_answer,type)
+        values
+        (#{question_id},#{question_info},#{correct_answer},#{type})
+    </insert>
+
+    <update id="updateById" parameterType="integer">
+        update Question
+        <set>
+            <if test="question_info!=null and question_info!=''">question_info = #{question_info},</if>
+            <if test="correct_answer!=null and correct_answer!=''">correct_answer = #{correct_answer},</if>
+            <if test="type!=null and type!=''">type = #{type},</if>
+        </set>
+        where question_id = #{question_id}
+    </update>
+
+    <delete id="deleteById" parameterType="integer">
+        delete from Question where question_id = #{question_id}
+    </delete>
+
+    <select id="findById" parameterType="integer" resultType="com.pojo.Question">
+        select * from Question where question_id = #{question_id}
+    </select>
+
+    <select id="findAll" resultType="com.pojo.Question">
+        select * from Question
+    </select>
+</mapper>
