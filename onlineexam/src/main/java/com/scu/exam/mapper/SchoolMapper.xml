@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.scu.exam.mapper.SchoolMapper">
+
+    <!--查找-->
+    <select id="findSchoolByName" parameterType="String" resultType="School">
+        select * from school where school_name = #{school_name}
+    </select>
+
+    <!--增加-->
+    <insert id="insertSchool" parameterType="com.scu.exam.pojo.School" keyProperty="school_name">
+        insert into school (school_name,school_address,school_phone) values(#{school_name},#{school_address},#{school_phone})
+    </insert>
+
+    <!--修改-->
+    <update id="updateSchool" parameterType="School">
+        update school
+        <set>
+            <if test="school_address!=null and school_address!=''">school_address = #{school_address},</if>
+            <if test="school_phone!=null and school_phone!=''">school_phone = #{school_phone},</if>
+        </set>
+        where school_name = #{school_name}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteSchoolByName" parameterType="String">
+        delete from school where school_name = #{school_name}
+    </delete>
+
+</mapper>
