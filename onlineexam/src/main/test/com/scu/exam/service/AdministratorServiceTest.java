@@ -1,7 +1,6 @@
 package com.scu.exam.service;
 
 import com.scu.exam.pojo.Administrator;
-import com.scu.exam.service.AdministratorService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
