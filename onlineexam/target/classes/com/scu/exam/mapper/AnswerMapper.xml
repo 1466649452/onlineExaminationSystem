@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.scu.exam.mapper.AnswerMapper">
+    <insert id="insert" parameterType="com.scu.exam.pojo.Answer" keyProperty="question_id">
+        insert into Answer (question_id,answer) values(#{question_id},#{answer})
+    </insert>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from Answer where question_id = #{question_id}
+    </delete>
+    <delete id="delete" parameterType="com.scu.exam.pojo.Answer">
+        delete from Answer where question_id = #{question_id}
+    </delete>
+
+    <select id="findById" parameterType="Integer" resultType="com.scu.exam.pojo.Answer">
+        select * from Answer where question_id = #{question_id}
+    </select>
+    <select id="find" resultType="com.scu.exam.pojo.Answer">
+        select * from Answer
+    </select>
+
+    <update id="update" parameterType="com.scu.exam.pojo.Answer">
+        update Answer
+        <set>
+            answer = #{answer}
+        </set>
+        where question_id = #{question_id}
+    </update>
+</mapper>
