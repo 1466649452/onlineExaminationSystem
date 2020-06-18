@@ -41,4 +41,6 @@ public interface AdministratorService {
     输入：要修改的管理员id
      */
     public int updateAdministrator(Administrator administrator);
+
+    public int findAdminByName(String ad_name);
 }

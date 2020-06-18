@@ -16,4 +16,6 @@ public interface AdministratorMapper {
     List<Administrator> find();
 
     int delete(Administrator administrator);
+
+    int findByName(String ad_name);
 }

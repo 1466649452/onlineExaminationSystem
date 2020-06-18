@@ -56,4 +56,9 @@ public class AdministratorServiceImpl implements AdministratorService {
     public int updateAdministrator(Administrator administrator) {
         return administratorMapper.update(administrator);
     }
+
+    @Override
+    public int findAdminByName(String ad_name) {
+        return administratorMapper.findByName(ad_name);
+    }
 }
