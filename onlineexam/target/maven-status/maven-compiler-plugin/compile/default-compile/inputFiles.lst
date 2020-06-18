@@ -5,7 +5,6 @@ D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\mapper\
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\utils\SwaggerConfiguration.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\mapper\QuestionMapper.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\controller\AnswerController.java
-D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\controller\UserController.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\controller\ScoreController.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\pojo\Question.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\utils\ResponseUtils.java
@@ -23,6 +22,7 @@ D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\pojo\Ad
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\pojo\Score.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\service\TeacherService.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\service\QuestionService.java
+D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\controller\DemoController.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\mapper\AnswerMapper.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\service\impl\TeacherServiceImpl.java
 D:\project\onlineExaminationSystem\onlineexam\src\main\java\com\scu\exam\mapper\AdministratorMapper.java
