@@ -20,6 +20,11 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
+    public Test findByPid(int p_id) {
+        return testMapper.findByPid(p_id);
+    }
+
+    @Override
     public int insertTest(Test test) {
         return testMapper.insertTest(test);
     }
