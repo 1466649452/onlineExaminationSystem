@@ -52,7 +52,7 @@ public class DemoController {
      *  模版在这里奥
      * */
     @ResponseBody
-    @PostMapping("/addValue")
+    @GetMapping("/addValue")
     public void addValue(@RequestBody JSONObject data, HttpServletResponse response) {
         //前段通过post方法请求数据
         System.out.println(data);
