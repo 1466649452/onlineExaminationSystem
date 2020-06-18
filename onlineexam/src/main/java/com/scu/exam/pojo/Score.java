@@ -6,7 +6,7 @@ import io.swagger.util.Json;
 import java.util.Date;
 
 public class Score {
-    private String stu_id;;
+    private String stu_id;
     private int paper_id;
     private double score;
     private Long finish;

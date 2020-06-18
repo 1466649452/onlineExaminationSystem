@@ -9,6 +9,10 @@
         select * from test where t_id = #{t_id}
     </select>
 
+    <select id="findByPid" parameterType="Integer" resultType="Test">
+        select * from test where p_id = #{p_id}
+    </select>
+
     <insert id="insertTest" parameterType="Test" keyProperty="paper_id" useGeneratedKeys="true">
         insert into test (paper_name, t_id, start, end) values(#{paper_name}, #{t_id}, #{start}, #{end})
     </insert>

@@ -12,6 +12,9 @@ public interface TestMapper {
     //如果查询不到数据会返回list.size=0
     List<Test> findByTid(String t_id);
 
+    //根据试卷id查找试卷
+    Test findByPid(int p_id);
+
     //插入试卷
     int insertTest(Test test);
 
