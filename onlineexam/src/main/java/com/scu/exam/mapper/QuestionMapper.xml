@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace表示命名空间 -->
 <mapper namespace="com.scu.exam.mapper.QuestionMapper">
-    <insert id="insert" parameterType="com.scu.exam.pojo.Question" keyProperty="question_id">
+    <insert id="insert" parameterType="com.scu.exam.pojo.Question" keyProperty="question_id" useGeneratedKeys="true">
         insert into Question
         (question_id,question_info,correct_answer,type)
         values
@@ -22,6 +22,9 @@
     </select>
     <select id="findAll" resultType="com.scu.exam.pojo.Question">
         select * from Question
+    </select>
+    <select id="findByInfo" resultType="com.scu.exam.pojo.Question">
+        select * from Question where question_info = #{question_info}
     </select>
 
     <update id="update" parameterType="com.scu.exam.pojo.Question">

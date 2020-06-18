@@ -43,4 +43,9 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> findAllQuestion() {
         return questionMapper.findAll();
     }
+
+    @Override
+    public Question findQuestionByInfo(String question_info) {
+        return questionMapper.findByInfo(question_info);
+    }
 }

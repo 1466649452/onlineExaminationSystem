@@ -2,13 +2,13 @@ package com.scu.exam.pojo;
 
 public class Question {
     private Integer question_id;
-    private String question_idfo;
+    private String question_info;
     private String correct_answer;
     private String type;
 
-    public Question(Integer question_id, String question_idfo, String correct_answer, String type) {
+    public Question(Integer question_id, String question_info, String correct_answer, String type) {
         this.question_id = question_id;
-        this.question_idfo = question_idfo;
+        this.question_info = question_info;
         this.correct_answer = correct_answer;
         this.type = type;
     }
@@ -24,12 +24,12 @@ public class Question {
         this.question_id = question_id;
     }
 
-    public String getQuestion_idfo() {
-        return question_idfo;
+    public String getQuestion_info() {
+        return question_info;
     }
 
-    public void setQuestion_idfo(String question_idfo) {
-        this.question_idfo = question_idfo;
+    public void setQuestion_info(String question_info) {
+        this.question_info = question_info;
     }
 
     public String getCorrect_answer() {
@@ -52,7 +52,7 @@ public class Question {
     public String toString() {
         return "Question{" +
                 "question_id=" + question_id +
-                ", question_idfo='" + question_idfo + '\'' +
+                ", question_idfo='" + question_info + '\'' +
                 ", correct_answer='" + correct_answer + '\'' +
                 ", type='" + type + '\'' +
                 '}';

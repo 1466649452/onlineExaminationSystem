@@ -42,4 +42,6 @@ public interface QuestionService {
     输出：试题列表
      */
     List<Question> findAllQuestion();
+
+    Question findQuestionByInfo(String question_info);
 }

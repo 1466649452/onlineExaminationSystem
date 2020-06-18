@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace表示命名空间 -->
 <mapper namespace="com.scu.exam.mapper.AdministratorMapper">
-    <insert id="insert" parameterType="com.scu.exam.pojo.Administrator" keyProperty="ad_id">
+    <insert id="insert" parameterType="com.scu.exam.pojo.Administrator" keyProperty="ad_id" useGeneratedKeys="true">
         insert into Administrator (ad_id,ad_name,ad_password,ad_image) values(#{ad_id},#{ad_name},#{ad_password},#{ad_image})
     </insert>
 
@@ -19,6 +19,11 @@
     </select>
     <select id="find" resultType="com.scu.exam.pojo.Administrator">
         select * from Administrator
+    </select>
+    <select id="findByName" parameterType="String" resultType="com.scu.exam.pojo.Administrator">
+        select * from Administrator
+        where
+        ad_name = #{ad_name}
     </select>
 
     <update id="update" parameterType="com.scu.exam.pojo.Administrator">

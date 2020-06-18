@@ -31,15 +31,9 @@ public class AdministratorController {
     })
     @PostMapping("/addAdmin")
     public void addAdmin(@RequestBody JSONObject adminInfo, HttpServletResponse response){
-//        adminInfo.put("ad_name", "aaaaaa");
-//        adminInfo.put("ad_password", "bbbbbb");
-//        adminInfo.put("ad_image", "cccccc");
         System.out.println(adminInfo.toString());
 
-        Administrator administrator = new Administrator();
-        administrator.setAd_name((String)adminInfo.get("ad_name"));
-        administrator.setAd_password((String)adminInfo.get("ad_password"));
-        administrator.setAd_image((String)adminInfo.get("ad_image"));
+        Administrator administrator = setAdminByJSON(adminInfo);
 
         Administrator adminSql = administratorService.findAdminByName(administrator.getAd_name());
         if(adminSql.getAd_password() == administrator.getAd_password()){
@@ -90,16 +84,8 @@ public class AdministratorController {
     })
     @PostMapping("/updateAdmin")
     public void updateAdminInfo(String ad_id, @RequestBody JSONObject adminInfo, HttpServletResponse response){
-        Administrator administrator = new Administrator();
-         administrator.setAd_image("aaaaaa");
-
-//         adminInfo.put("ad_name", "dfefer");
-//         adminInfo.put("ad_password", "vefergre");
-//         adminInfo.put("ad_image", "dsferfrf");
-
-         administrator.setAd_name((String)adminInfo.get("ad_name"));
-         administrator.setAd_password((String)adminInfo.get("ad_password"));
-         administrator.setAd_image((String)adminInfo.get("ad_image"));
+         Administrator administrator = setAdminByJSON(adminInfo);
+         administrator.setAd_id(ad_id);
 
          /* 在数据库修改相对应的管理员信息 */
          try{
@@ -112,5 +98,17 @@ public class AdministratorController {
          System.out.println(response);
     }
 
+
+    /* 将前端传回的json对象中信息取出
+       (包括ad_name, ad_password, ad_image)，
+       放入Administrator实例中
+    */
+    public Administrator setAdminByJSON(JSONObject jsonObject){
+        Administrator administrator = new Administrator();
+        administrator.setAd_name((String)jsonObject.get("ad_name"));
+        administrator.setAd_password((String)jsonObject.get("ad_password"));
+        administrator.setAd_image((String)jsonObject.get("ad_image"));
+        return administrator;
+    }
 
 }

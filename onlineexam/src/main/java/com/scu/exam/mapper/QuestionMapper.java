@@ -16,4 +16,6 @@ public interface QuestionMapper {
     int delete(Question question);
 
     int update(Question question);
+
+    Question findByInfo(String question_info);
 }
