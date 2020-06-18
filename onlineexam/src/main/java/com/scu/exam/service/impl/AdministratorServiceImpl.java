@@ -58,7 +58,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int findAdminByName(String ad_name) {
+    public Administrator findAdminByName(String ad_name) {
         return administratorMapper.findByName(ad_name);
     }
 }

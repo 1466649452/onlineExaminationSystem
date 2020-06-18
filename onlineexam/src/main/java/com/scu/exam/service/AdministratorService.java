@@ -42,5 +42,5 @@ public interface AdministratorService {
      */
     public int updateAdministrator(Administrator administrator);
 
-    public int findAdminByName(String ad_name);
+    public Administrator findAdminByName(String ad_name);
 }

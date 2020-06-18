@@ -17,5 +17,5 @@ public interface AdministratorMapper {
 
     int delete(Administrator administrator);
 
-    int findByName(String ad_name);
+    Administrator findByName(String ad_name);
 }

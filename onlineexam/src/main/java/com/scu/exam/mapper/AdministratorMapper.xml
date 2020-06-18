@@ -20,7 +20,7 @@
     <select id="find" resultType="com.scu.exam.pojo.Administrator">
         select * from Administrator
     </select>
-    <select id="findByName" parameterType="String" resultType="java.lang.Integer">
+    <select id="findByName" parameterType="String" resultType="com.scu.exam.pojo.Administrator">
         select * from Administrator
         where
         ad_name = #{ad_name}
