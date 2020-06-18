@@ -36,7 +36,7 @@ public class AdministratorController {
         Administrator administrator = setAdminByJSON(adminInfo);
 
         Administrator adminSql = administratorService.findAdminByName(administrator.getAd_name());
-        if(adminSql.getAd_password() == administrator.getAd_password()){
+        if(adminSql.getAd_password().equals(administrator.getAd_password())){
             ResponseUtils.renderJson(response, "失败！该用户已存在！");
         }else{
             try{
@@ -99,7 +99,8 @@ public class AdministratorController {
     }
 
 
-    /* 将前端传回的json对象中信息取出
+    /*
+       将前端传回的json对象中信息取出
        (包括ad_name, ad_password, ad_image)，
        放入Administrator实例中
     */
