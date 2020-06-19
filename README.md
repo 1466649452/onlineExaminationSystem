@@ -109,3 +109,95 @@ data:
     errMsg: "request:ok"
 ```
 因此前端可以通过res.data.name去访问数据
+
+## ajax 封装完成，参数
+```
+/**
+* url:类型：字符串。请求的地址，必填
+* method:类型：字符串。默认为get方法，选填
+* async:类型：boolean默认为为false异步方法，选填。true为同步，false为异步
+* header:类型：json。可选项
+* accessToken自动获取
+* timeout：类型：整型。设置超时的时间，单位为毫秒，默认时间60秒
+* success：数据请求成功的回调函数，参数res为返回值
+*/
+```
+使用示例如下:
+首先在head标签中通过`<script src="statics/js/request.js"></script>`引入文件
+
+具体使用：
+```
+<script type="text/javascript">
+    ajaxrequest({
+        url: "http://localhost:8080/info/getPaperStudentScoreInfo",
+        method: "get",
+        data: {
+            "stu_id": "1",
+            "paper_id": 1,
+            "userId": "1",
+            "userPassword": "yan"
+        },
+        success: function(res) {
+            console.log("返回")
+            console.log(res)
+        }
+    })
+</script>
+```
+
+### 数据交互方式
+form表单提交，后端可以通过两种方式获取  
+一：通过`request.getParameter`的方式获取（推荐） 
+```
+public void login( HttpServletRequest request,HttpServletResponse response) {
+    System.out.println("进入登陆验证...");
+    String userId=request.getParameter("userId").toString();
+    String userPassword=request.getParameter("userPassword").toString();
+    System.out.println(userId+""+userPassword);
+}
+```
+二：参数少的情况可以写到参数中   
+```
+public void login( String userId,String userPassword,HttpServletResponse response) {
+    System.out.println("进入登陆验证...");
+    System.out.println(userId+""+userPassword);
+}
+```
+
+
+自行封装的**ajax**的**前后端数据示例**    
+前端：  
+```
+ajaxrequest({
+    url: "http://localhost:8080/addValue",
+    method: "post",
+    data: {
+        "stu_id": "1",
+        "paper_id": 1,
+        "userId": "1",
+        "userPassword": "yan"
+    },
+    success: function(res) {
+        console.log("返回")
+        console.log(res)
+    }
+})
+```
+后端：  
+```
+@ResponseBody
+@PostMapping("/addValue")
+public void addValue(@RequestBody JSONObject data, HttpServletResponse response) {
+       //前段通过post方法请求数据
+       System.out.println(data);
+       System.out.println(data.get("paper_id"));
+       //新建一个jsonobject返回到前端
+       JSONObject value = new JSONObject();
+       value.put("respo", "success");
+       value.put("name", "王");
+
+       ResponseUtils.renderJson(response, value);
+}
+```
+
+

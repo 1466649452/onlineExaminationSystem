@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.scu.exam.mapper.ClassesMapper">
+    <select id="findClassById" parameterType="String" resultType="Classes">
+        select * from classes where class_id = #{class_id}
+    </select>
+
+    <insert id="insertClass" parameterType="com.scu.exam.pojo.Classes" keyProperty="class_">
+        insert into classes (class_id,grade,t_id,stu_number,school) values(#{class_id},#{grade},#{t_id},#{stu_number},#{school})
+    </insert>
+
+    <update id="updateClass" parameterType="com.scu.exam.pojo.Classes">
+        update classes
+        <set>
+            <if test="grade!=null">grade=#{grade},</if>
+            <if test="t_id!=null">t_id = #{t_id},</if>
+            <if test="stu_number!=null">stu_number = #{stu_number},</if>
+            <if test="school!=null">school = #{school},</if>
+        </set>
+        where class_id = #{class_id}
+    </update>
+
+    <delete id="deleteClassById" parameterType="String">
+        delete from classes where class_id = #{class_id}
+    </delete>
+
+</mapper>

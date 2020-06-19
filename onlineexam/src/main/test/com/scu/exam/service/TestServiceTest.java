@@ -31,6 +31,12 @@ public class TestServiceTest {
     }
 
     @Test
+    public void findByPidTest(){
+        com.scu.exam.pojo.Test result = testService.findByPid(1);
+        System.out.println(result);
+    }
+
+    @Test
     public void insertTest()  {
        com.scu.exam.pojo.Test test = new com.scu.exam.pojo.Test();
         test.setPaper_name("jiujiu");
