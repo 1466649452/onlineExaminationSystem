@@ -33,7 +33,7 @@ public interface AnswerService {
     输入：答案所对应的题目id
     输入：查找到的对应的Answer对象
      */
-    public Answer findAnswerById(Integer question_id);
+    public List<Answer> findAnswerById(Integer question_id);
 
     /*
     查找所有的Answer

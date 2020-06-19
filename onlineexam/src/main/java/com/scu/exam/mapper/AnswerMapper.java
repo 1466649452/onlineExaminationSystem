@@ -8,7 +8,7 @@ public interface AnswerMapper {
 
     int deleteById(Integer question_id);
 
-    Answer findById(Integer question_id);
+    List<Answer> findById(Integer question_id);
 
     int insert(Answer answer);
 

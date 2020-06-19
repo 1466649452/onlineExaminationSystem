@@ -1,6 +1,7 @@
 package com.scu.exam.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.scu.exam.pojo.Answer;
 import com.scu.exam.pojo.Question;
 import com.scu.exam.service.QuestionService;
 import com.scu.exam.utils.ResponseUtils;
@@ -96,6 +97,7 @@ public class QuestionController {
         if (question != null){
             JSONObject resultJson = new JSONObject();
             resultJson.put("question", question);
+            resultJson.put("answerList", answerController.getAnswerById(question.getQuestion_id()));
             ResponseUtils.renderJson(response, resultJson);
         }else{
             ResponseUtils.renderJson(response, "查找失败！该题目不存在！");
@@ -113,8 +115,17 @@ public class QuestionController {
         String keyword = (String)jsonObject.get("keyword");
         List<Question> questionList = questionService.findQuestionByKeyword(keyword);
 
+        List<JSONObject> jsonObjectList = null;
+        for (int i = 0; i < questionList.size(); i++){
+            JSONObject quesWithAns = new JSONObject();
+            Question question = questionList.get(i);
+            quesWithAns.put("question", question);
+            quesWithAns.put("answerList", answerController.getAnswerById(question.getQuestion_id()));
+            jsonObjectList.add(quesWithAns);
+        }
+
         JSONObject resultJSON = new JSONObject();
-        resultJSON.put("question", questionList);
+        resultJSON.put("questionList", jsonObjectList);
         ResponseUtils.renderJson(response, resultJSON);
         System.out.println(response);
     }
