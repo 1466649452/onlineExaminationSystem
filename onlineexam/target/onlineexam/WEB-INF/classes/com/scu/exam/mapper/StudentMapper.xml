@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.scu.exam.mapper.StudentMapper">
+
+    <!--插入-->
+    <insert id="insertStudent" parameterType="com.scu.exam.pojo.Student" keyProperty="stu_id">
+        insert into student (stu_id,stu_name,stu_password,class_id,stu_Image,stu_idcard,stu_birthdate) values(#{stu_id},#{stu_name},#{stu_password},#{class_id},#{stu_Image},#{stu_idcard},#{stu_birthdate})
+    </insert>
+    <insert id="insertStudentList" parameterType="list" keyProperty="stu_id">
+        insert into student (stu_id,stu_name,stu_password,class_id,stu_Image,stu_idcard,stu_birthdate) values
+        <foreach item="item" collection="list" separator=",">
+        (#{stu_id},#{stu_name},#{stu_password},#{phone},#{class_id},#{stu_Image},#{stu_idcard},#{stu_birthdate})
+        </foreach>
+    </insert>
+
+    <!--查询-->
+    <select id="findStudentById" parameterType="String" resultType="com.scu.exam.pojo.Student">
+        select * from student where stu_id = #{stu_id}
+    </select>
+    <select id="findStudentByName" parameterType="String" resultType="com.scu.exam.pojo.Student">
+        select * from student where stu_name = #{stu_name}
+    </select>
+
+    <!--修改-->
+    <update id="updateStudent" >
+        update student
+        <set>
+            <if test="stu_name!=null">stu_name=#{stu_name},</if>
+            <if test="stu_password!=null">stu_password=#{stu_password},</if>
+            <if test="class_id!=null">class_id=#{class_id},</if>
+            <if test="stu_idcard!=null">stu_idcard=#{stu_idcard},</if>
+            <if test="stu_password!=null">stu_password=#{stu_password},</if>
+            <if test="stu_birthdate!=null">stu_birthdate=#{stu_birthdate},</if>
+            <if test="stu_Image!=null">stu_Image=#{stu_Image}</if>
+
+        </set>
+        where stu_id=#{stu_id}
+    </update>
+
+    <!--删除-->
+    <delete id="deleteStudentById" parameterType="String">
+        delete from student where stu_id = #{stu_id}
+    </delete>
+
+</mapper>

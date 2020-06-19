@@ -21,6 +21,7 @@ public class ResponseUtils {
         response.setHeader("Pragma", "No-cache");
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
+        response.setHeader("Access-Control-Allow-Origin","*");
         try {
             response.getWriter().write(text);
         } catch (IOException e) {

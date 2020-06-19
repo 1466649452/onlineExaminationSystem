@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.scu.exam.mapper.CorrectRateMapper">
+
+    <select id="findByAllId" resultType="CorrectRate">
+        select * from correctrate where question_id = #{question_id} and paper_id = #{paper_id}
+    </select>
+
+    <select id="findByPid" parameterType="Integer" resultType="CorrectRate">
+        select * from correctrate where paper_id = #{paper_id}
+    </select>
+
+    <insert id="insertCorrectRate" parameterType="CorrectRate">
+        insert into correctrate (question_id, paper_id, accuracy, res_number, point) values (#{question_id}, #{paper_id}, #{accuracy}, #{res_number}, #{point})
+    </insert>
+
+    <insert id="insertCorrectRateBatch" parameterType="java.util.List">
+        insert into correctrate (question_id, paper_id, accuracy, res_number, point) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.question_id}, #{item.paper_id}, #{item.accuracy}, #{item.res_number}, #{item.point})
+        </foreach>
+    </insert>
+
+    <update id="updateCorrectRate" parameterType="CorrectRate">
+      update correctrate
+      <set>
+          <if test="accuracy!=null and accuracy!=''">accuracy=#{accuracy},</if>
+          <if test="res_number!=null and res_number!=''">res_number=#{res_number},</if>
+          <if test="point!=null and point!=''">point=#{point}</if>
+      </set>
+      where question_id = #{question_id} and paper_id = #{paper_id}
+    </update>
+
+    <delete id="deleteCorrectRate">
+        delete from correctrate where question_id = #{question_id} and paper_id = #{paper_id}
+    </delete>
+
+    <delete id="deleteCorrectRateBatch" parameterType="Integer">
+        delete from correctrate where paper_id = #{paper_id}
+    </delete>
+
+</mapper>
