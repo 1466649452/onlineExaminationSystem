@@ -7,10 +7,8 @@ import io.swagger.annotations.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.Enumeration;
 
 @Api(tags = "用户模块")
 @Controller
@@ -52,12 +50,11 @@ public class DemoController {
      *  模版在这里奥
      * */
     @ResponseBody
-    @GetMapping("/addValue")
+    @PostMapping("/addValue")
     public void addValue(@RequestBody JSONObject data, HttpServletResponse response) {
         //前段通过post方法请求数据
         System.out.println(data);
-        System.out.println(data.get("information"));
-
+        System.out.println(data.get("paper_id"));
         //新建一个jsonobject返回到前端
         JSONObject value = new JSONObject();
         value.put("respo", "success");

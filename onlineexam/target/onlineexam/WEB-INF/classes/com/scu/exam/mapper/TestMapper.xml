@@ -10,7 +10,7 @@
     </select>
 
     <select id="findByPid" parameterType="Integer" resultType="Test">
-        select * from test where p_id = #{p_id}
+        select * from test where paper_id = #{p_id}
     </select>
 
     <insert id="insertTest" parameterType="Test" keyProperty="paper_id" useGeneratedKeys="true">

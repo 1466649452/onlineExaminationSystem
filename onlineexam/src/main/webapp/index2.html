@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>
+        测试中
+    </title>
+    <script src="statics/js/request.js"></script>
+</head>
+<body>
+<form action="http://localhost:8080/login" method="post">
+    <input name="userId" placeholder="姓名"/><br/>
+    <input name="userPassword" placeholder="学号"/><br/>
+    <button type="submit">提交</button>
+</form>
+<br/>
+<br/>
+<div id="test">
+    {{namespace}}
+</div>
+</body>
+<script language="JavaScript">
+    ajaxrequest({
+        //url: "https://www.fastmock.site/mock/4dce34a80882ca7a798d454a4d5e9698/testajax/pap",
+        //url: "http://localhost:8080/info/getstudentScore",
+        //method: 'get',
+        url:"http://localhost:8080/main/login",
+        method:"post",
+        data: {
+            "stu_id":"1",
+            "paper_id":1,
+            "userId": "1",
+            "userPassword": "yan"
+        },
+        success: function(res) {
+            console.log("返回")
+            console.log(res)
+        }
+    })
+</script>
+-->
+</html>

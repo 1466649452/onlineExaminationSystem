@@ -21,10 +21,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         System.out.println("进入拦截器");
         try {
             httpServletResponse.setCharacterEncoding("UTF-8");
-            Cookie[] cookie=httpServletRequest.getCookies();
-            System.out.println(cookie);
             String token = httpServletRequest.getHeader("accessToken");
-            System.out.println(token);
             if (token == null) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("data", "token is null");
