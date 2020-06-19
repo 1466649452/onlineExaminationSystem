@@ -48,4 +48,11 @@ public class QuestionServiceImpl implements QuestionService {
     public Question findQuestionByInfo(String question_info) {
         return questionMapper.findByInfo(question_info);
     }
+
+    @Override
+    public List<Question> findQuestionByKeyword(String keyword) {
+        return questionMapper.findByKeyword(keyword);
+    }
+
+
 }

@@ -26,6 +26,9 @@
     <select id="findByInfo" resultType="com.scu.exam.pojo.Question">
         select * from Question where question_info = #{question_info}
     </select>
+    <select id="findByKeyword" resultType="com.scu.exam.pojo.Question">
+        select * from Question where question_info like %${question_info}%
+    </select>
 
     <update id="update" parameterType="com.scu.exam.pojo.Question">
         update Question

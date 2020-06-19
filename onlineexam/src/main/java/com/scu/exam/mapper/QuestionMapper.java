@@ -18,4 +18,6 @@ public interface QuestionMapper {
     int update(Question question);
 
     Question findByInfo(String question_info);
+
+    List<Question> findByKeyword(String keyword);
 }

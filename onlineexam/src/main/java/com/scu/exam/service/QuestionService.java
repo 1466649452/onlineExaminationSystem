@@ -44,4 +44,6 @@ public interface QuestionService {
     List<Question> findAllQuestion();
 
     Question findQuestionByInfo(String question_info);
+
+    List<Question> findQuestionByKeyword(String keyword);
 }

@@ -72,7 +72,6 @@ public class AdministratorController {
         System.out.println(response);
     }
 
-
     @ApiOperation("管理员修改自己的个人信息")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "ad_id", dataType = "String", required = true, value = "当前管理员Id")
