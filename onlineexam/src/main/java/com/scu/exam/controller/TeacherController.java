@@ -118,7 +118,6 @@ public class TeacherController {
             String t_image=(String)data.get("t_image");
             teacherService.updateTeacherHeadimage(t_id,t_image);
         }
-
     }
 
     @ApiOperation("删除教师信息")

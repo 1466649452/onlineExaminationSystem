@@ -1,7 +1,6 @@
 package com.scu.exam.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.scu.exam.pojo.Answer;
 import com.scu.exam.pojo.Question;
 import com.scu.exam.service.QuestionService;
 import com.scu.exam.utils.ResponseUtils;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.List;
 
 @Api(tags = "试题管理模块")
@@ -45,7 +43,7 @@ public class QuestionController {
         }else{
             try{
                 questionService.insertQuestion(question);
-                /* 同时也要吧题目设置的选项添加到数据库的answer表中 */
+                /* 同时也要把题目设置的选项添加到数据库的answer表中 */
                 answerController.addAnswer(jsonObject);
             }catch (DataAccessException e){
                 ResponseUtils.renderJson(response, "添加失败！！！");
@@ -65,7 +63,7 @@ public class QuestionController {
     @PostMapping("/updateQuestion")
     public void updateQuestion(@RequestBody JSONObject jsonObject, HttpServletResponse response){
         Question question = setQuestionByJSON(jsonObject);
-        question.setQuestion_id((Integer)jsonObject.get("question_id"));
+        question.setQuestion_id(jsonObject.getInteger("question_id"));
 
         Question questionSql = questionService.findQuestionByInfo(question.getQuestion_info());
         if(questionSql != null){
@@ -119,7 +117,10 @@ public class QuestionController {
         for (int i = 0; i < questionList.size(); i++){
             JSONObject quesWithAns = new JSONObject();
             Question question = questionList.get(i);
-            quesWithAns.put("question", question);
+            quesWithAns.put("question_id", question.getQuestion_id());
+            quesWithAns.put("question_info", question.getQuestion_info());
+            quesWithAns.put("correct_answer", question.getCorrect_answer());
+            quesWithAns.put("type", question.getType());
             quesWithAns.put("answerList", answerController.getAnswerById(question.getQuestion_id()));
             jsonObjectList.add(quesWithAns);
         }

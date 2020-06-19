@@ -31,23 +31,28 @@ public class AdministratorController {
     })
     @PostMapping("/addAdmin")
     public void addAdmin(@RequestBody JSONObject adminInfo, HttpServletResponse response){
-        System.out.println(adminInfo.toString());
-
+        System.out.println("传入的JSONObject中的数据："+adminInfo.toString());
+        //将前端传回的adminInfo中的信息提取到一个Administrator实例中
         Administrator administrator = setAdminByJSON(adminInfo);
 
+        //查找数据库中与该管理员同名(ad_name)的其他管理员
         Administrator adminSql = administratorService.findAdminByName(administrator.getAd_name());
-        if(adminSql.getAd_password().equals(administrator.getAd_password())){
+        //同名的管理员存在，则不能添加管理员
+        if(adminSql != null){
             ResponseUtils.renderJson(response, "失败！该用户已存在！");
         }else{
             try{
+                //无同名管理员，则在数据库中添加该管理员姓名
                 administratorService.insertAdministrator(administrator);
             }catch (DataAccessException e){
+                //捕捉数据库插入异常
                 ResponseUtils.renderJson(response, "注册失败！！！");
             }
+            ResponseUtils.renderJson(response, "注册成功！！！！");
         }
-        ResponseUtils.renderJson(response, "注册成功！！！！");
 
-        System.out.println(response);
+        //待删
+        System.out.println("传到前端的response："+response.toString());
     }
 
     @ApiOperation("管理员查看本人的个人信息")
@@ -61,15 +66,29 @@ public class AdministratorController {
     })
     @GetMapping("/getAdmin")
     public void getAdminInfo(String ad_id, HttpServletResponse response){
-        Administrator administrator = administratorService.findAdministratorById(ad_id);
-        if (administrator != null){
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("admin", administrator);
-            ResponseUtils.renderJson(response, jsonObject);
+        System.out.println("要查找的ad_id:"+ad_id);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            //在数据库中查找Administrator
+            Administrator administrator = administratorService.findAdministratorById(ad_id);
+            if (administrator != null){
+                //如果不为空，则表示查找到数据
+                jsonObject.put("admin", administrator);
+                jsonObject.put("status", "查找成功！");
+            }else {
+                //查询结果为空，则表明该用户不存在
+                jsonObject.put("admin", null);
+                jsonObject.put("status", "该用户不存在！");
+            }
+        }catch (DataAccessException e){
+            jsonObject.put("admin", null);
+            jsonObject.put("status", "对数据库的操作失败！！");
         }
+        //查询结果放入到response中，返回给前端
+        ResponseUtils.renderJson(response, jsonObject);
 
         //测试用，待删
-        System.out.println(response);
+        System.out.println("传到前端的response："+response.toString());
     }
 
     @ApiOperation("管理员修改自己的个人信息")
@@ -86,15 +105,28 @@ public class AdministratorController {
          Administrator administrator = setAdminByJSON(adminInfo);
          administrator.setAd_id(ad_id);
 
-         /* 在数据库修改相对应的管理员信息 */
-         try{
-             administratorService.updateAdministrator(administrator);
-         }catch (DataAccessException e){
-             ResponseUtils.renderJson(response, "修改失败！");
+         JSONObject jsonObject = new JSONObject();
+         //判断该用户在数据库中是否存在
+         if (administratorService.findAdministratorById(ad_id) != null){
+             //判断修改后的用户在数据库中是否已存在
+             if (administratorService.findAdminByName(administrator.getAd_name()) == null){
+                 try{
+                     /* 在数据库修改相对应的管理员信息 */
+                     administratorService.updateAdministrator(administrator);
+                     jsonObject.put("status", "修改成功！");
+                 }catch (DataAccessException e){
+                     jsonObject.put("status", "修改失败！对数据库的操作失误！");
+                 }
+             }else {
+                 jsonObject.put("status", "该用户名已被使用，请重新修改！");
+             }
+         }else {
+             jsonObject.put("status", "该用户不存在！");
          }
-         ResponseUtils.renderJson(response, "修改成功！");
+         ResponseUtils.renderJson(response, jsonObject);
 
-         System.out.println(response);
+        //测试用，待删
+        System.out.println("传到前端的response："+response.toString());
     }
 
 
