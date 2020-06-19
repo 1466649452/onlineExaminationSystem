@@ -25,7 +25,29 @@ public class Score {
         }else{
             this.stu_ans = stu_ans.toString();
         }
-
+    }
+    public Score(String stu_id, Integer paper_id, Double score, Long finish, JSONObject stu_ans) {
+        this.stu_id = stu_id;
+        this.paper_id = paper_id;
+        this.score = score;
+        this.finish = finish;
+        if(stu_ans==null){
+            this.stu_ans=new JSONObject().toJSONString();
+        }else{
+            this.stu_ans = stu_ans.toString();
+        }
+    }
+    //构造器
+    public Score(String stu_id, int paper_id, double score, Long finish, JSONObject stu_ans) {
+        this.stu_id = stu_id;
+        this.paper_id = paper_id;
+        this.score = score;
+        this.finish = finish;
+        if(stu_ans==null){
+            this.stu_ans=new JSONObject().toJSONString();
+        }else{
+            this.stu_ans = stu_ans.toString();
+        }
     }
     public Score(){
 
