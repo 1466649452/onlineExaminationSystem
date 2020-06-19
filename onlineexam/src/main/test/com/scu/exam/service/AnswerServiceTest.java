@@ -26,14 +26,14 @@ public class AnswerServiceTest {
         printAllAnswer();
     }
 
-    @Test
-    public void deleteAnswer() {
-        cleanAnswerTable();
-        initAnswerTable();
-        Answer answer = answerService.findAnswerById(111111);
-        answerService.deleteAnswer(answer);
-        printAllAnswer();
-    }
+//    @Test
+//    public void deleteAnswer() {
+//        cleanAnswerTable();
+//        initAnswerTable();
+//        Answer answer = answerService.findAnswerById(111111);
+//        answerService.deleteAnswer(answer);
+//        printAllAnswer();
+//    }
 
     @Test
     public void deleteAnswerById() {
