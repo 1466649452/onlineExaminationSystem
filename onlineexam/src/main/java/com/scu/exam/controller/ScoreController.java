@@ -123,6 +123,7 @@ public class ScoreController {
     })
     @GetMapping("/countStudentBetween")
     public void countStudentBetween(Integer paper_id, Double startScore, Double endScore, HttpServletResponse response) {
+        System.out.println(paper_id+":"+startScore+":"+endScore);
         List<Score> scoreListmore = scoreService.findScoreCompare(paper_id, startScore, "more");
         List<Score> scoreListless = scoreService.findScoreCompare(paper_id, endScore, "less");
         List<Score> returnList = new ArrayList<>();
@@ -219,11 +220,10 @@ public class ScoreController {
         JSONObject js=new JSONObject();
         if(t!=0){
             js.put("status","success");
-            ResponseUtils.renderJson(response,js);
         }else{
             js.put("status","fail");
-            ResponseUtils.renderJson(response,js);
         }
+        ResponseUtils.renderJson(response,js);
     }
 
     @ApiOperation("删除一位学生所有考试记录")

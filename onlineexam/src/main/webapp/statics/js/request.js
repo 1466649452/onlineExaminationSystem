@@ -1,4 +1,4 @@
-function ajaxrequest(options) {
+function ajax(options) {
 
 	/**
 	 * url:类型：字符串。请求的地址，必填
@@ -17,8 +17,6 @@ function ajaxrequest(options) {
 	} else {
 		xhr = new ActiveXObject("Microsoft.XMLHTTP");
 	}
-
-
 
 	//url检查
 	if (options.url == null) {
@@ -52,10 +50,10 @@ function ajaxrequest(options) {
 	}
 	//cookie的名字为统一规定
 	var cookies = getCookie("accessToken");
-	console.log(cookies);
-
-
-	xhr.withCredentials = true;
+	console.log("cookie+ "+cookies);
+	
+	
+	//xhr.withCredentials = true;
 	// 连接
 	var mm = options.method.toLowerCase();
 	if (mm == "get" || mm == "delete") {
@@ -114,10 +112,8 @@ function ajaxrequest(options) {
 			cookie_pos = cookie_pos + cookie_name.length + 1;
 			//计算取cookie值得结束索引
 			var cookie_end = allcookies.indexOf(";", cookie_pos);
-
 			if (cookie_end == -1) {
 				cookie_end = allcookies.length;
-
 			}
 			//得到想要的cookie的值
 			var value = unescape(allcookies.substring(cookie_pos, cookie_end));

@@ -33,7 +33,7 @@ public class TeacherServiceTest {
     @Test
     public void queryTest(){
 
-        Teacher teacher=teacherService.findTeacherById("123");
+        Teacher teacher=teacherService.findTeacherById("456");
         System.out.println(teacher);
 
         /*List<Teacher> teacherList=teacherService.findTeacherByname("颜老师");
