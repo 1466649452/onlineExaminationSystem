@@ -28,114 +28,141 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
-    @ApiOperation("获取教师信息")
+    @ApiOperation("获取教师信息(测试通过)")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "t_id", dataType = "String", required = true, value = "教师id")
     })
     @GetMapping("/getTeacherInfo")
-    public void getTeacherInfo(String t_id, HttpServletResponse response){
-        Teacher teacher=(Teacher)teacherService.findTeacherById(t_id);
-        JSONObject js=new JSONObject();
-        if(teacher==null){
-            js.put("status","success");
-            js.put("error","没有教师信息");
-            ResponseUtils.renderJson(response,js);
-        }else{
-            js.put("status","success");
-            JSONObject tt=(JSONObject) JSONObject.toJSON(teacher);
-            JsonOperation.combineJson(js,tt);
-            ResponseUtils.renderJson(response,js);
+    public void getTeacherInfo(String t_id, HttpServletResponse response) {
+        JSONObject res = new JSONObject();
+        try {
+            Teacher teacher = (Teacher) teacherService.findTeacherById(t_id);
+            if (teacher == null) {
+                res.put("status", "fail");
+                res.put("error", "没有教师信息");
+            } else {
+                res.put("status", "success");
+                JSONObject tt = (JSONObject) JSONObject.toJSON(teacher);
+                res.put("data", tt);
+            }
+            ResponseUtils.renderJson(response, res);
+        } catch (Exception e) {
+            res.put("status", "fail");
+            ResponseUtils.renderJson(response, res);
         }
     }
 
-    @ApiOperation("获取同名教师信息")
+    @ApiOperation("获取同名教师信息(测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "t_name", dataType = "String", required = true, value = "教师姓名")
     })
     @GetMapping("/getNameTeacherInfo")
-    public void getNameTeacherInfo(String t_name, HttpServletResponse response){
-        List<Teacher> teacher=teacherService.findTeacherByname(t_name);
-
-        if(teacher==null||teacher.size()==0){
-            JSONObject js=new JSONObject();
-            js.put("status","success");
-            js.put("error","没有教师信息");
-            ResponseUtils.renderJson(response,js);
-        }else{
-            JSONArray json=(JSONArray)JSONArray.toJSON(teacher);
-            ResponseUtils.renderJson(response,json);
+    public void getNameTeacherInfo(String t_name, HttpServletResponse response) {
+        JSONObject js = new JSONObject();
+        try {
+            List<Teacher> teacher = teacherService.findTeacherByname(t_name);
+            if (teacher == null || teacher.size() == 0) {
+                js.put("error", "没有教师信息");
+                js.put("status", "fail");
+            } else {
+                js.put("status", "success");
+                JSONArray json = (JSONArray) JSONArray.toJSON(teacher);
+                js.put("data", json);
+            }
+            ResponseUtils.renderJson(response, js);
+        } catch (Exception e) {
+            js.put("status", "fail");
+            ResponseUtils.renderJson(response, js);
         }
+
     }
 
-    @ApiOperation("添加教师信息")
+    @ApiOperation("添加教师信息(测试通过）")
     @PostMapping("/insertOneTeacher")
-    public void insertOneTeacher(@RequestBody JSONObject data,HttpServletResponse response){
-        JSONObject js=(JSONObject) JSONObject.toJSON(data.get("teacher"));
-        //必要数据校验 t_id
-        if(js.get("t_id")==null){
-            JSONObject res=new JSONObject();
-            res.put("status","fail");
-            res.put("error","没有传入必要信息");
-            ResponseUtils.renderJson(response,res);
-            return;
+    public void insertOneTeacher(@RequestBody JSONObject data, HttpServletResponse response) {
+        JSONObject responsetoforward=new JSONObject();
+
+        try{
+            String t_id = data.get("t_id") != null ? data.get("t_id").toString() : null;
+            String t_name = data.get("t_name") != null ? data.get("t_name").toString() : null;
+            String t_password = data.get("t_password") != null ? data.get("t_password").toString() : null;
+            String t_image = data.get("t_image") != null ? data.get("t_image").toString() : null;
+
+            //必要数据校验 t_id
+            if (t_id == null) {
+                responsetoforward.put("status", "fail");
+            }else{
+                Teacher tea = new Teacher(t_id, t_name, t_password, t_image);
+                if (teacherService.insertOneTeacher(tea) != 0) {
+                    responsetoforward.put("status", "success");
+                } else {
+                    responsetoforward.put("status", "fail");
+                }
+            }
+            ResponseUtils.renderJson(response, responsetoforward);
+        }catch (Exception e){
+            responsetoforward.put("status", "fail");
+            ResponseUtils.renderJson(response, responsetoforward);
         }
-        Teacher tea=new Teacher((String) js.get("t_id"),(String)js.get("t_name"),(String)js.get("t_password"),(String)js.get("t_image"));
-        if(teacherService.insertOneTeacher(tea)!=0){
-            JSONObject res=new JSONObject();
-            res.put("status","success");
-            ResponseUtils.renderJson(response,res);
-        }else{
-            JSONObject res=new JSONObject();
-            res.put("status","fail");
-            res.put("error","未知错误");
-            ResponseUtils.renderJson(response,res);
-        }
+
 
 
     }
 
-    @ApiOperation("修改教师信息")
+    @ApiOperation("修改教师信息(测试通过）")
     @PostMapping("/updateOneTeacher")
-    public void updateOneTeacher(@RequestBody JSONObject data, HttpServletResponse response){
+    public void updateOneTeacher(@RequestBody JSONObject data, HttpServletResponse response) {
         //必要数据校验 stu_id,paper_id
-        String t_id=(String)data.get("t_id");
-        if(data.get("t_id")==null){
-            JSONObject res=new JSONObject();
-            res.put("status","fail");
-            res.put("error","没有传入必要信息");
-            ResponseUtils.renderJson(response,res);
+        String t_id = (String) data.get("t_id");
+        JSONObject res = new JSONObject();
+        if (data.get("t_id") == null) {
+            res.put("status", "fail");
+            res.put("error", "没有传入必要信息");
+            ResponseUtils.renderJson(response, res);
             return;
         }
-        if(data.get("t_password")!=null){
-            String password=(String)data.get("t_password");
-            teacherService.updateTeacherPassword(t_id,password);
-        }
-        if(data.get("t_name")!=null){
-            String t_name=(String)data.get("t_name");
-            teacherService.updateTeacherName(t_id,t_name);
-        }
-        if(data.get("t_image")!=null){
-            String t_image=(String)data.get("t_image");
-            teacherService.updateTeacherHeadimage(t_id,t_image);
-        }
 
+        if (data.get("t_password") != null) {
+            String password = (String) data.get("t_password");
+            if (teacherService.updateTeacherPassword(t_id, password) != 0) {
+                res.put("status", "success");
+            } else {
+                res.put("status", "fail");
+            }
+        }
+        if (data.get("t_name") != null) {
+            String t_name = (String) data.get("t_name");
+            if (teacherService.updateTeacherName(t_id, t_name) != 0) {
+                res.put("status", "success");
+            } else {
+                res.put("status", "fail");
+            }
+        }
+        if (data.get("t_image") != null) {
+            String t_image = (String) data.get("t_image");
+            if (teacherService.updateTeacherHeadimage(t_id, t_image) != 0) {
+                res.put("status", "success");
+            } else {
+                res.put("status", "fail");
+            }
+        }
+        ResponseUtils.renderJson(response, res);
     }
 
-    @ApiOperation("删除教师信息")
+    @ApiOperation("删除教师信息(测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "t_id", dataType = "Integer", required = true, value = "教师id")
     })
-    @PostMapping("/deleteOneScore")
-    public void deleteOneScore(String t_id, HttpServletResponse response){
-        int t=teacherService.deleteTeacherByid(t_id);
-        JSONObject js=new JSONObject();
-        if(t!=0){
-            js.put("status","success");
-            ResponseUtils.renderJson(response,js);
-        }else{
-            js.put("status","fail");
-            ResponseUtils.renderJson(response,js);
+    @PostMapping("/deleteOneTeacher")
+    public void deleteOneScore(@RequestBody JSONObject data, HttpServletResponse response) {
+        int t = teacherService.deleteTeacherByid(data.get("t_id").toString());
+        JSONObject js = new JSONObject();
+        if (t != 0) {
+            js.put("status", "success");
+        } else {
+            js.put("status", "fail");
         }
+        ResponseUtils.renderJson(response, js);
     }
 
 }
