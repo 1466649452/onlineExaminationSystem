@@ -55,13 +55,13 @@ public class MainLoginController {
         System.out.println(stu.toString());
         if (stu != null && stu.getStu_password().equals(userPassword)) {
             loginsuccess = true;
-            identity = "stu";
+            identity = "student";
             System.out.println("找到学生" + loginsuccess + " " + identity);
         } else {
             tea = (Teacher) teacherService.findTeacherById(userId);
             if (tea != null && tea.getT_password().equals(userPassword)) {
                 loginsuccess = true;
-                identity = "tea";
+                identity = "teacher";
             } else {
                 admin = (Administrator) administratorService.findAdministratorById(userId);
                 if (admin != null && admin.getAd_password().equals(userPassword)) {
@@ -75,10 +75,10 @@ public class MainLoginController {
             //登陆验证通过
             String userName = "";
             switch (identity) {
-                case "stu":
+                case "student":
                     userName = stu.getStu_name();
                     break;
-                case "tea":
+                case "teacher":
                     userName = tea.getT_name();
                     break;
                 case "admin":
@@ -95,6 +95,7 @@ public class MainLoginController {
             response.addCookie(cookie);
             JSONObject json = new JSONObject();
             json.put("login", "success");
+            json.put("identity", identity);
             ResponseUtils.renderJson(response, json);
         } else {
             //未通过

@@ -42,21 +42,28 @@ public class ScoreController {
     /*
      * 查询学生情况相关API
      * */
-    @ApiOperation("获取一位考生某次考试的信息")
+    @ApiOperation("获取一位考生某次考试的信息(测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "stu_id", dataType = "String", required = true, value = "用户Id"),
             @ApiImplicitParam(paramType = "query", name = "paper_id", dataType = "Integer", required = true, value = "试卷id")
     })
     @GetMapping("/getstudentScore")
     public void getScoreInfo(String stu_id, Integer paper_id, HttpServletResponse response) {
-        System.out.println("获取一位考生某次考试的信息");
-        System.out.println(stu_id + " and " + paper_id);
-        JSONObject returnjsonobj = this.getCompleteInfoBystu_idandPaper_id(stu_id, paper_id);
+        System.out.println("获取一位考生一次考试的信息");
+        JSONObject res = this.getCompleteInfoBystu_idandPaper_id(stu_id, paper_id);
         System.out.println("查询结束");
-        ResponseUtils.renderJson(response, returnjsonobj);
+        if(res==null){
+            //没有查询到
+            JSONObject js=new JSONObject();
+            js.put("status","fail");
+            ResponseUtils.renderJson(response, js);
+        }else{
+            res.put("status","success");
+            ResponseUtils.renderJson(response, res);
+        }
     }
-    //获取学生某次考试的完整信息，包含姓名等
 
+    //获取学生某次考试的完整信息，包含姓名等
     private JSONObject getCompleteInfoBystu_idandPaper_id(String stu_id, Integer paper_id) {
         Score score = (Score) scoreService.findOneScore(stu_id, paper_id);
         JSONObject scorejson = (JSONObject) JSONObject.toJSON(score);
@@ -79,7 +86,7 @@ public class ScoreController {
         return scorejson;
     }
 
-    @ApiOperation("获取某次考试的所有学生信息")
+    @ApiOperation("获取某次考试的所有学生信息（测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "paper_id", dataType = "Integer", required = true, value = "试卷id")
     })
@@ -112,10 +119,10 @@ public class ScoreController {
         testinfojson.put("studentscores", studentsinfojson);
 
 
-        ResponseUtils.renderJson(response, teacherinfojson);
+        ResponseUtils.renderJson(response, testinfojson);
     }
 
-    @ApiOperation("分数区间人数统计")
+    @ApiOperation("分数区间人数统计（测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "paper_id", dataType = "Integer", required = true, value = "试卷id"),
             @ApiImplicitParam(paramType = "query", name = "startScore", dataType = "Double", required = true, value = "试卷id"),
@@ -123,6 +130,7 @@ public class ScoreController {
     })
     @GetMapping("/countStudentBetween")
     public void countStudentBetween(Integer paper_id, Double startScore, Double endScore, HttpServletResponse response) {
+        System.out.println(paper_id+":"+startScore+":"+endScore);
         List<Score> scoreListmore = scoreService.findScoreCompare(paper_id, startScore, "more");
         List<Score> scoreListless = scoreService.findScoreCompare(paper_id, endScore, "less");
         List<Score> returnList = new ArrayList<>();
@@ -151,7 +159,7 @@ public class ScoreController {
     /*
      * 添加数据相关api
      * */
-    @ApiOperation("添加学生考试记录")
+    @ApiOperation("添加学生考试记录（测试通过）")
     @PostMapping("/addRecordOfScore")
     public void addRecordOfScore(@RequestBody JSONObject data, HttpServletResponse response) throws JsonProcessingException {
         JSONObject js=(JSONObject) JSONObject.toJSON(data.get("record"));
@@ -185,7 +193,7 @@ public class ScoreController {
         }
     }
 
-    @ApiOperation("添加学生考试记录")
+    @ApiOperation("更新学生考试记录")
     @PostMapping("/updateOneScore")
     public void updateTestScore(@RequestBody JSONObject data, HttpServletResponse response){
         JSONObject js=(JSONObject) JSONObject.toJSON(data.get("record"));
@@ -208,31 +216,33 @@ public class ScoreController {
 
     }
 
-    @ApiOperation("删除学生考试记录")
+
+    @ApiOperation("删除学生考试记录(测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "stu_id", dataType = "String", required = true, value = "用户Id"),
             @ApiImplicitParam(paramType = "query", name = "paper_id", dataType = "Integer", required = true, value = "试卷id")
     })
     @PostMapping("/deleteOneScore")
-    public void deleteOneScore(Integer paper_id,String stu_id, HttpServletResponse response){
-        int t=scoreService.deleteOneScore(stu_id,paper_id);
+    public void deleteOneScore(@RequestBody JSONObject data, HttpServletResponse response){
+        int t=scoreService.deleteOneScore((String)data.get("stu_id"),(Integer)data.get("paper_id"));
+        System.out.println(t);
         JSONObject js=new JSONObject();
         if(t!=0){
             js.put("status","success");
-            ResponseUtils.renderJson(response,js);
         }else{
             js.put("status","fail");
-            ResponseUtils.renderJson(response,js);
         }
+        ResponseUtils.renderJson(response,js);
     }
 
-    @ApiOperation("删除一位学生所有考试记录")
+
+    @ApiOperation("删除一位学生所有考试记录（测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "stu_id", dataType = "String", required = true, value = "用户Id")
     })
     @PostMapping("/deleteStudentScore")
-    public void deleteStudentScore(String stu_id, HttpServletResponse response){
-        int t=scoreService.deleteBystuid(stu_id);
+    public void deleteStudentScore(@RequestBody JSONObject data, HttpServletResponse response){
+        int t=scoreService.deleteBystuid((String)data.get("stu_id"));
         JSONObject js=new JSONObject();
         if(t!=0){
             js.put("status","success");
@@ -243,13 +253,13 @@ public class ScoreController {
         }
     }
 
-    @ApiOperation("删除一场考试的所有考试记录")
+    @ApiOperation("删除一场考试的所有考试记录（测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "paper_id", dataType = "Integer", required = true, value = "用户Id")
     })
     @PostMapping("/deleteTestScore")
-    public void deleteTestScore(Integer paper_id, HttpServletResponse response){
-        int t=scoreService.deleteBypaperid(paper_id);
+    public void deleteTestScore(@RequestBody JSONObject data, HttpServletResponse response){
+        int t=scoreService.deleteBypaperid((Integer)data.get("paper_id"));
         JSONObject js=new JSONObject();
         if(t!=0){
             js.put("status","success");

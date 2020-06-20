@@ -38,7 +38,7 @@ public class ScoreServiceTest {
     @Test
     public void insertManyTest() throws JsonProcessingException {
         JSONObject testap=new JSONObject();
-        //testap.put("b",1);
+        testap.put("b",1);
         System.out.println(testap.get("b"));
         Score tscore1=new Score("1",1,98.5,new Date(),testap);
         Score tscore2=new Score("1",2,98.5,new Date(),testap);
@@ -63,7 +63,7 @@ public class ScoreServiceTest {
     @Test
     public void findOneTest() throws IOException {
         Score a=scoreService.findOneScore("1",1);
-        System.out.println(a.getFinish());
+        System.out.println(a.getScore());
     }
 
     //查询考试多少分以上的人
@@ -71,10 +71,15 @@ public class ScoreServiceTest {
     public void scoremorethan(){
         //List<Score> a=scoreService.findScoreCompare(1,70.0,"more");
 
-        List<Score> b=scoreService.findScoreCompare(1,70.0,"more","asc");
-        Iterator<Score> temp=b.iterator();
-        while (temp.hasNext()){
-            System.out.println(temp.next());
+        List<Score> b=scoreService.findScoreCompare(1,20,"more");
+        List<Score> c = scoreService.findScoreCompare(1, 100, "less");
+        Iterator<Score> temp1=b.iterator();
+        while (temp1.hasNext()){
+            System.out.println(c.contains(temp1.next()));
+        }
+        Iterator<Score> temp2=b.iterator();
+        while (temp2.hasNext()){
+            System.out.println(temp2.next());
         }
     }
 
@@ -88,7 +93,7 @@ public class ScoreServiceTest {
 
         //System.out.println(scoreService.deleteOneScore("12345",1));
         //System.out.println(scoreService.deleteBystuid("12345"));
-        System.out.println(scoreService.deleteBypaperid(2));
+        System.out.println(scoreService.deleteOneScore("1",2));
 
 
     }
