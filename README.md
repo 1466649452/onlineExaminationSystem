@@ -37,11 +37,12 @@
    5. 查看已有分支：`git branch`
    6. 自动在本地创建分支来跟踪远程的serverfix分支：`git checkout --track origin/serverfix`
     
-    7. 查看当前分支状态： `git status`  
-    8. 拉取远程库同名分支： `git fetch`  
-    9. 拉取并自动合并远程库同名分支：`git pull`  
-    10. 将当前分支推送到远程同名分支：`git push`  
+    7. 查看当前分支状态： `git status`
+    8. 拉取远程库同名分支： `git fetch`
+    9. 拉取并自动合并远程库同名分支：`git pull`
+    10. 将当前分支推送到远程同名分支：`git push`
     11. 将develop分支合并到当前分支上：`git merge develop`  
+    
    
 ### git分支管理原则
    1. master分支：系统始终可以运行的版本
@@ -156,14 +157,14 @@ public void login( HttpServletRequest request,HttpServletResponse response) {
     System.out.println(userId+""+userPassword);
 }
 ```
-二：参数少的情况可以写到参数中   
+二：form表单参数少的情况可以将需要的数据写到参数中，（仅限url中传参数）   
 ```
 public void login( String userId,String userPassword,HttpServletResponse response) {
     System.out.println("进入登陆验证...");
     System.out.println(userId+""+userPassword);
 }
-```
-
+```  
+***注意：通过url传递参数才可以如方法二去获取数据，即get方法。对于post方法需要通过@RequestBody来获取***
 
 自行封装的**ajax**的**前后端数据示例**    
 前端：  

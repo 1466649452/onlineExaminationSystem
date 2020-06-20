@@ -50,8 +50,6 @@ function ajax(options) {
 	}
 	//cookie的名字为统一规定
 	var cookies = getCookie("accessToken");
-	console.log("cookie+ "+cookies);
-	
 	
 	//xhr.withCredentials = true;
 	// 连接
@@ -104,7 +102,6 @@ function ajax(options) {
 		var allcookies = document.cookie;
 		//索引长度，开始索引的位置
 		var cookie_pos = allcookies.indexOf(cookie_name);
-		console.log(cookie_pos)
 		// 如果找到了索引，就代表cookie存在,否则不存在
 		if (cookie_pos != -1) {
 			// 把cookie_pos放在值的开始，只要给值加1即可

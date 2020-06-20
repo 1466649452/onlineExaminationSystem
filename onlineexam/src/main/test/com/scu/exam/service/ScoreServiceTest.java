@@ -93,7 +93,7 @@ public class ScoreServiceTest {
 
         //System.out.println(scoreService.deleteOneScore("12345",1));
         //System.out.println(scoreService.deleteBystuid("12345"));
-        System.out.println(scoreService.deleteBypaperid(2));
+        System.out.println(scoreService.deleteOneScore("1",2));
 
 
     }
