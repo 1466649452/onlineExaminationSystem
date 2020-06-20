@@ -15,12 +15,22 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public int insertOneTeacher(Teacher teacher) {
-        return teacherMapper.insertOneTeacher(teacher);
+        try {
+            return teacherMapper.insertOneTeacher(teacher);
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     @Override
     public int insertManyTeacher(List<Teacher> teacherList) {
-        return teacherMapper.insertManyTeacher(teacherList);
+        try {
+            return teacherMapper.insertManyTeacher(teacherList);
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     @Override
@@ -35,34 +45,59 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public int deleteTeacherByid(String t_id) {
-        return teacherMapper.deleteTeacherByid(t_id);
+        try {
+            return teacherMapper.deleteTeacherByid(t_id);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public int updateTeacherName(String t_id, String t_name) {
-        return teacherMapper.updateTeacherName(t_id,t_name);
+        try {
+            return teacherMapper.updateTeacherName(t_id, t_name);
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     @Override
     public int updateTeacherPassword(String t_id, String t_password) {
-        return teacherMapper.updateTeacherPassword(t_id,t_password);
+        try {
+            return teacherMapper.updateTeacherPassword(t_id, t_password);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public int updateTeacherHeadimage(String t_id, String t_image) {
-        return teacherMapper.updateTeacherHeadimage(t_id,t_image);
+        try {
+            return teacherMapper.updateTeacherHeadimage(t_id, t_image);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public int updateTeacher(String t_id, String t_name, String t_password, String t_image) {
-        if(t_image==null){
-            t_image="";
+        try {
+            if (t_image == null) {
+                t_image = "";
+            }
+            return teacherMapper.updateTeacher(t_id, t_name, t_password, t_image);
+        } catch (Exception e) {
+            return 0;
         }
-        return teacherMapper.updateTeacher(t_id,t_name,t_password,t_image);
     }
 
     @Override
     public int updateTeacher(String t_id, String t_name, String t_password) {
-        return teacherMapper.updateTeacher(t_id,t_name,t_password);
+        try {
+            return teacherMapper.updateTeacher(t_id, t_name, t_password);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

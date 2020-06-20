@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TeacherTest</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="js/request.js"></script>
+	</head>
+	<body>
+		<div id="ttt">
+			<br />
+			<br />
+			根据t_id删除教师
+			<button v-on:click="deleteOneTeacher">测试</button><br />
+			<br />
+			更新教师信息，t_id必填，t_name,t_password,t_image根据需要填写（通过）
+			<button v-on:click="updateOneTeacher">测试</button><br />
+			<br />
+			添加教师信息(通过)
+			<button v-on:click="insertOneTeacher">测试</button><br />
+			<br />
+			通过t_name获取同名教师信息
+			<button v-on:click="getNameTeacherInfo">测试</button><br />
+			<br />
+			通过t_id获取教师信息
+			<button v-on:click="getTeacherInfo">测试</button>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var app =new Vue({
+			el:"#ttt",
+			methods:{
+				deleteOneTeacher(){
+					ajax({
+						url: "http://localhost:8080/teacher/deleteOneTeacher",
+						data: {
+							t_id: "1"
+						},
+						method:"post",
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				},
+				updateOneTeacher(){
+					ajax({
+						url: "http://localhost:8080/teacher/updateOneTeacher",
+						data: {
+							t_id: "1",
+							t_password:"12345678",
+							t_name:"wangli",
+							t_image:"http://123"
+						},
+						method:"post",
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				},
+				insertOneTeacher(){
+					ajax({
+						url: "http://localhost:8080/teacher/insertOneTeacher",
+						data: {
+							t_id: "1",
+							t_name:"王莉",
+							t_password:"12345678"
+						},
+						method:"post",
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				},
+				getNameTeacherInfo(){
+					ajax({
+						url: "http://localhost:8080/teacher/getNameTeacherInfo",
+						data: {
+							t_name:"王莉"
+						},
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				},
+				getTeacherInfo(){
+					ajax({
+						url: "http://localhost:8080/teacher/getTeacherInfo",
+						data: {
+							t_id:"1"
+						},
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				}
+				
+			}
+		})
+	</script>
+</html>
