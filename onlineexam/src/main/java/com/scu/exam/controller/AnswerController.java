@@ -19,18 +19,18 @@ public class AnswerController {
     /*
     在添加试题时，也要添加该试题的各个选项
      */
-    public void addAnswer(JSONObject jsonObject){
-        Iterator<Object> answerList = jsonObject.getJSONArray("answer").iterator();
+    public void addAnswer(Integer question_id, JSONObject jsonObject){
+        Iterator<Object> answerList = jsonObject.getJSONArray("answeraList").iterator();
         while ((answerList.hasNext())){
-            Answer answer = getAnswerByJSON(answerList, jsonObject.getInteger("question_id"));
+            Answer answer = getAnswerByJSON((JSONObject)answerList.next(), question_id);
             answerService.insertAnswer(answer);
         }
     }
 
     public void updateAnswer(JSONObject jsonObject){
-        Iterator<Object> answerList = jsonObject.getJSONArray("answer").iterator();
+        Iterator<Object> answerList = jsonObject.getJSONArray("answerList").iterator();
         while ((answerList.hasNext())){
-            Answer answer = getAnswerByJSON(answerList, jsonObject.getInteger("question_id"));
+            Answer answer = getAnswerByJSON((JSONObject)answerList.next(), jsonObject.getInteger("question_id"));
             answerService.updateAnswer(answer);
         }
     }
@@ -43,10 +43,9 @@ public class AnswerController {
         return answerService.findAnswerById(question_id);
     }
 
-    public Answer getAnswerByJSON(Iterator<Object> answerList, Integer question_id){
-        JSONObject answerJSON = (JSONObject)answerList.next();
+    public Answer getAnswerByJSON(JSONObject jsonObject, Integer question_id){
         Answer answer = new Answer();
-        String answerContent = answerJSON.getString("answerInfo");
+        String answerContent = jsonObject.getString("answer");
 
         answer.setQuestion_id(question_id);
         answer.setAnswer(answerContent);
