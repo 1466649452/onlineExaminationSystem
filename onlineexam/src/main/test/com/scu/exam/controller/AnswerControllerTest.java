@@ -1,7 +1,6 @@
 package com.scu.exam.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.scu.exam.pojo.Administrator;
 import com.scu.exam.pojo.Answer;
 import com.scu.exam.service.AnswerService;
 import org.junit.After;
@@ -51,7 +50,7 @@ public class AnswerControllerTest {
 
     public JSONObject initJSONObject(Integer question_id){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("question_id", 222222);
+        jsonObject.put("question_id",question_id);
         jsonObject.put("question_info", "sdfegve");
         jsonObject.put("correct_answer", "cvdfergf");
         jsonObject.put("type", "q");
@@ -76,7 +75,7 @@ public class AnswerControllerTest {
         System.out.println("插入符合规范的答案：");
         System.out.println("期望输出：插入成功后的数据库信息");
         JSONObject jsonObject = initJSONObject(222222);
-        answerController.addAnswer(jsonObject);
+        answerController.addAnswer(222222, jsonObject);
 
         System.out.println("测试结束");
     }

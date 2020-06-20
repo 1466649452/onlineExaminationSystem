@@ -42,5 +42,8 @@ public interface AdministratorService {
      */
     public int updateAdministrator(Administrator administrator);
 
+    /*
+    通过姓名查找到管理员
+     */
     public Administrator findAdminByName(String ad_name);
 }
