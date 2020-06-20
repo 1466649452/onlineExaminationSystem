@@ -25,6 +25,30 @@ public class AdministratorServiceTest{
         initAdministrator();
     }
 
+    public void initAdministrator(){
+        Administrator administrator1 = new Administrator("aaaaaa", "ssssss", "dddddd", "ffffff");
+        Administrator administrator2 = new Administrator("bbbbbb", "nnnnnn", "mmmmmm", "bbbbbb");
+        Administrator administrator3 = new Administrator("cccccc", "bbbbbb", "dddddd", "ffffff");
+        administratorService.insertAdministrator(administrator1);
+        administratorService.insertAdministrator(administrator2);
+        administratorService.insertAdministrator(administrator3);
+    }
+
+    public void cleanAdministrator(){
+        List<Administrator> administratorList = administratorService.findAllAdministrator();
+        for (int i = 0; i < administratorList.size(); i++){
+            administratorService.deleteAdministrator(administratorList.get(i));
+        }
+    }
+
+    public void printAllAdministrators(){
+        System.out.println("数据库中的所有数据：");
+        List<Administrator> administratorList = administratorService.findAllAdministrator();
+        for (int i = 0; i < administratorList.size(); i++){
+            System.out.println(administratorList.get(i).toString());
+        }
+    }
+
     @Test
     public void insertAdministrator() throws IOException {
         System.out.println("开始测试insertAdministrator()：");
@@ -83,35 +107,16 @@ public class AdministratorServiceTest{
     @Test
     public void findAdminByName(){
         System.out.println("开始测试findAdminByName()：");
-        String ad_name = "bbbbbb";
+        String ad_name = "ssssss";
         Administrator administrator = administratorService.findAdminByName(ad_name);
-        System.out.println("查找到的Administrator: "+administrator.toString());
+        if (administrator != null){
+            System.out.println("查找到的Administrator: "+administrator.toString());
+        }else {
+            System.out.println("未查找到Administrator");
+        }
+
         printAllAdministrators();
         System.out.println("测试结束");
-    }
-
-    public void initAdministrator(){
-        Administrator administrator1 = new Administrator("aaaaaa", "ssssss", "dddddd", "ffffff");
-        Administrator administrator2 = new Administrator("bbbbbb", "nnnnnn", "mmmmmm", "bbbbbb");
-        Administrator administrator3 = new Administrator("cccccc", "ssssss", "dddddd", "ffffff");
-        administratorService.insertAdministrator(administrator1);
-        administratorService.insertAdministrator(administrator2);
-        administratorService.insertAdministrator(administrator3);
-    }
-
-    public void cleanAdministrator(){
-        List<Administrator> administratorList = administratorService.findAllAdministrator();
-        for (int i = 0; i < administratorList.size(); i++){
-            administratorService.deleteAdministrator(administratorList.get(i));
-        }
-    }
-
-    public void printAllAdministrators(){
-        System.out.println("数据库中的所有数据：");
-        List<Administrator> administratorList = administratorService.findAllAdministrator();
-        for (int i = 0; i < administratorList.size(); i++){
-            System.out.println(administratorList.get(i).toString());
-        }
     }
 
 }

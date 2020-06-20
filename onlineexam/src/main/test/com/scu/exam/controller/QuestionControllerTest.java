@@ -87,7 +87,8 @@ public class QuestionControllerTest {
     }
 
     @Test
-    public void addQuestion(HttpServletResponse response) {
+    public void addQuestion() {
+        HttpServletResponse response = null;
         System.out.println("开始测试addQuestion():");
 
         System.out.println("插入符合规范的题目：");
@@ -104,7 +105,8 @@ public class QuestionControllerTest {
     }
 
     @Test
-    public void updateQuestion(HttpServletResponse response) {
+    public void updateQuestion() {
+        HttpServletResponse response = null;
         System.out.println("开始测试updateQuestion():");
 
         System.out.println("符合规范的修改题目：");
@@ -126,7 +128,8 @@ public class QuestionControllerTest {
     }
 
     @Test
-    public void getQuestionById(HttpServletResponse response) {
+    public void getQuestionById() {
+        HttpServletResponse response = null;
         System.out.println("开始测试getQuestionById():");
 
         System.out.println("查找题库中存在的题目：");
@@ -140,23 +143,25 @@ public class QuestionControllerTest {
         System.out.println("测试结束");
     }
 
+//    @Test
+//    public void getQuestionByKeyword() {
+//        HttpServletResponse response = null;
+//        System.out.println("开始测试getQuestionByKeyword():");
+//
+//        System.out.println("查找题库中存在的题目：");
+//        System.out.println("期望输出：查找成功！");
+//        questionController.getQuestionByKeyword("we", response);
+//
+//        System.out.println("没有与关键词相关的题目：");
+//        System.out.println("期望输出：questionList为null");
+//        questionController.getQuestionByKeyword("a", response);
+//
+//        System.out.println("测试结束");
+//    }
+
     @Test
-    public void getQuestionByKeyword(HttpServletResponse response) {
-        System.out.println("开始测试getQuestionByKeyword():");
-
-        System.out.println("查找题库中存在的题目：");
-        System.out.println("期望输出：查找成功！");
-        questionController.getQuestionByKeyword("we", response);
-
-        System.out.println("没有与关键词相关的题目：");
-        System.out.println("期望输出：questionList为null");
-        questionController.getQuestionByKeyword("a", response);
-
-        System.out.println("测试结束");
-    }
-
-    @Test
-    public void deleteQuestion(HttpServletResponse response) {
+    public void deleteQuestion() {
+        HttpServletResponse response = null;
         System.out.println("开始测试deleteQuestion():");
 
         System.out.println("删除题库中存在的题目：");
