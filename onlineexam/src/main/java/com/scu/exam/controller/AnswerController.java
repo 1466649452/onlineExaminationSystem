@@ -8,8 +8,7 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class AnswerController {
@@ -19,36 +18,39 @@ public class AnswerController {
     /*
     在添加试题时，也要添加该试题的各个选项
      */
-    public void addAnswer(Integer question_id, JSONObject jsonObject){
-        Iterator<Object> answerList = jsonObject.getJSONArray("answeraList").iterator();
+    public void addAnswer(Integer question_id, JSONObject data){
+        //得到data中的存有answer选项的列表的Iterator
+        Iterator<Object> answerList = data.getJSONArray("answerList").iterator();
         while ((answerList.hasNext())){
-            Answer answer = getAnswerByJSON((JSONObject)answerList.next(), question_id);
+            //得到当前answer的内容
+            String answerContent = (String)answerList.next();
+            //初始化一个answer实例
+            Answer answer = new Answer(question_id, answerContent);
+            //向数据库中插入answer实例
             answerService.insertAnswer(answer);
         }
     }
 
-    public void updateAnswer(JSONObject jsonObject){
-        Iterator<Object> answerList = jsonObject.getJSONArray("answerList").iterator();
-        while ((answerList.hasNext())){
-            Answer answer = getAnswerByJSON((JSONObject)answerList.next(), jsonObject.getInteger("question_id"));
-            answerService.updateAnswer(answer);
-        }
+    public void updateAnswer(JSONObject data){
+        //得到要操作的answer的ID
+        Integer question_id = data.getInteger("question_id");
+        //由于不能批量修改，所以此处先删除，再添加，使修改更具有灵活性
+        answerService.deleteAnswerById(question_id);
+        //添加修改后的answer选项
+        addAnswer(question_id, data);
     }
 
     public void deleteAnswerById(Integer question_id){
         answerService.deleteAnswerById(question_id);
     }
 
-    public List<Answer> getAnswerById(Integer question_id){
-        return answerService.findAnswerById(question_id);
+    public List<String> getAnswerById(Integer question_id){
+        List<String> answerList = new ArrayList<>();
+        List<Answer> answers = answerService.findAnswerById(question_id);
+        for (int i = 0; i < answers.size(); i++){
+            answerList.add(answers.get(i).getAnswer());
+        }
+        return answerList;
     }
 
-    public Answer getAnswerByJSON(JSONObject jsonObject, Integer question_id){
-        Answer answer = new Answer();
-        String answerContent = jsonObject.getString("answer");
-
-        answer.setQuestion_id(question_id);
-        answer.setAnswer(answerContent);
-        return  answer;
-    }
 }

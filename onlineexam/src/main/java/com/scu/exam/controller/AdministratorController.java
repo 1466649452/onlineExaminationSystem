@@ -5,6 +5,7 @@ import com.scu.exam.pojo.Administrator;
 import com.scu.exam.service.AdministratorService;
 import com.scu.exam.utils.ResponseUtils;
 import io.swagger.annotations.*;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,16 @@ public class AdministratorController {
     @Autowired
     private AdministratorService administratorService;
 
-    @ApiOperation("添加管理员个人信息，注册时用")
+    @ApiOperation("添加管理员个人信息，注册时用(测试通过)")
+    /*
+      输入数据结构：
+         {
+           "ad_name": ad_name,
+           "ad_password": ad_password,
+           "ad_image": ad_image
+         }
+     */
+
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 400, message = "请求参数没填好"),
@@ -35,27 +45,35 @@ public class AdministratorController {
         //将前端传回的adminInfo中的信息提取到一个Administrator实例中
         Administrator administrator = setAdminByJSON(adminInfo);
 
+        //随机产生一个ad_id（注：由于数据库设计原因，只能在此自动生成ad_id
+        String ad_id = RandomString.make(7);
+        while (administratorService.findAdministratorById(ad_id) != null){
+            ad_id = RandomString.make(7);
+        }
+        System.out.println(ad_id);
+        administrator.setAd_id(ad_id);
+
         //查找数据库中与该管理员同名(ad_name)的其他管理员
         Administrator adminSql = administratorService.findAdminByName(administrator.getAd_name());
         //同名的管理员存在，则不能添加管理员
         if(adminSql != null){
-            ResponseUtils.renderJson(response, "失败！该用户已存在！");
+            ResponseUtils.renderJson(response, "失败！该用户名已存在！");
         }else{
             try{
                 //无同名管理员，则在数据库中添加该管理员姓名
                 administratorService.insertAdministrator(administrator);
+                ResponseUtils.renderJson(response, "注册成功！！！！");
             }catch (DataAccessException e){
+                String msg = e.getMessage();
                 //捕捉数据库插入异常
-                ResponseUtils.renderJson(response, "注册失败！！！");
+                ResponseUtils.renderJson(response, "注册失败！！！"+msg);
             }
-            ResponseUtils.renderJson(response, "注册成功！！！！");
         }
-
         //待删
         System.out.println("传到前端的response："+response.toString());
     }
 
-    @ApiOperation("管理员查看本人的个人信息")
+    @ApiOperation("管理员查看本人的个人信息（测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "ad_id", dataType = "String", required = true, value = "当前管理员Id")
     })
@@ -91,7 +109,7 @@ public class AdministratorController {
         System.out.println("传到前端的response："+response.toString());
     }
 
-    @ApiOperation("管理员修改自己的个人信息")
+    @ApiOperation("管理员修改自己的个人信息（测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "ad_id", dataType = "String", required = true, value = "当前管理员Id")
     })
@@ -142,5 +160,7 @@ public class AdministratorController {
         administrator.setAd_image((String)jsonObject.get("ad_image"));
         return administrator;
     }
+
+
 
 }
