@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace表示命名空间 -->
 <mapper namespace="com.scu.exam.mapper.AnswerMapper">
-    <insert id="insert" parameterType="com.scu.exam.pojo.Answer" keyProperty="question_id">
+    <insert id="insert" parameterType="com.scu.exam.pojo.Answer">
         insert into Answer (question_id,answer) values(#{question_id},#{answer})
     </insert>
 

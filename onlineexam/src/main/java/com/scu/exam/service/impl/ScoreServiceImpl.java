@@ -17,8 +17,8 @@ public class ScoreServiceImpl implements ScoreService {
     private ScoreMapper scoremapper;
 
     /*
-    * 查询
-    * */
+     * 查询
+     * */
     @Override
     public List<Score> findScoreBystuid(String stu_id) {
         return scoremapper.findScoreBystuid(stu_id);
@@ -26,7 +26,7 @@ public class ScoreServiceImpl implements ScoreService {
 
     @Override
     public Score findOneScore(String stu_id, Integer paper_id) {
-        return scoremapper.findOneScore(stu_id,paper_id);
+        return scoremapper.findOneScore(stu_id, paper_id);
     }
 
     @Override
@@ -37,67 +37,103 @@ public class ScoreServiceImpl implements ScoreService {
     //试卷成绩查询范围
     @Override
     public List<Score> findScoreCompare(Integer paper_id, double score, String cmp, String orderseq) {
-        return scoremapper.findScoreCompare(paper_id,score,cmp,orderseq);
+        return scoremapper.findScoreCompare(paper_id, score, cmp, orderseq);
     }
 
     @Override
     public List<Score> findScoreCompare(Integer paper_id, double score, String cmp) {
-        return scoremapper.findScoreCompare(paper_id,score,cmp);
+        return scoremapper.findScoreCompare(paper_id, score, cmp);
     }
 
 
-
-
-
-
-
-
     /*
-    * 插入
-    * */
+     * 插入
+     * */
     @Override
     public int insertOneScore(Score score) {
-        return scoremapper.insertOneScore(score);
+        try {
+            return scoremapper.insertOneScore(score);
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     @Override
     public int insetManyScore(List<Score> scoreList) {
-        return scoremapper.insetManyScore(scoreList);
+        try {
+            return scoremapper.insetManyScore(scoreList);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
 
     /*
-    * 删除
-    * */
+     * 删除
+     * */
     @Override
     public int deleteOneScore(String stu_id, Integer paper_id) {
-        return scoremapper.deleteOneScore(stu_id,paper_id);
+        try {
+            return scoremapper.deleteOneScore(stu_id, paper_id);
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
+
     @Override
     public int deleteBystuid(String stu_id) {
-        return scoremapper.deleteBystuid(stu_id);
+        try {
+            return scoremapper.deleteBystuid(stu_id);
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
+
     @Override
     public int deleteBypaperid(Integer paper_id) {
-        return scoremapper.deleteBypaperid(paper_id);
+        try {
+            return scoremapper.deleteBypaperid(paper_id);
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     /*
-    * 更新
-    * */
+     * 更新
+     * */
     @Override
     public int updateScore(String stu_id, Integer paper_id, double score) {
-        return scoremapper.updateScore(stu_id,paper_id,score);
+        try {
+            return scoremapper.updateScore(stu_id, paper_id, score);
+        } catch (Exception e) {
+            return 0;
+        }
+
+
     }
 
     @Override
     public int updatefinishTime(String stu_id, Integer paper_id, Date finish) {
-        return scoremapper.updatefinishTime(stu_id,paper_id,finish.getTime());
+        try {
+            return scoremapper.updatefinishTime(stu_id, paper_id, finish.getTime());
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
     @Override
     public int updatefinishStuans(String stu_id, Integer paper_id, JSONObject stu_ans) {
-        return scoremapper.updatefinishStuans(stu_id,paper_id,stu_ans.toJSONString());
+        try {
+            return scoremapper.updatefinishStuans(stu_id, paper_id, stu_ans.toJSONString());
+        } catch (Exception e) {
+            return 0;
+        }
+
     }
 
 }

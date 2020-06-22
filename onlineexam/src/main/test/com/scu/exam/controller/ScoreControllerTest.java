@@ -2,10 +2,7 @@ package com.scu.exam.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.scu.exam.pojo.Classes;
-import com.scu.exam.pojo.School;
-import com.scu.exam.pojo.Score;
-import com.scu.exam.pojo.Student;
+import com.scu.exam.pojo.*;
 import com.scu.exam.service.*;
 import com.scu.exam.utils.JsonOperation;
 import org.junit.Test;
@@ -30,10 +27,17 @@ public class ScoreControllerTest {
     @Autowired
     private TestService testService;
     @Autowired
+    private TeacherService teacherService;
+    @Autowired
     private ClassesService classesService;
     @Autowired
     private SchoolService schoolService;
 
+    @Test
+    public void change(){
+        Student stu=studentService.findStudentById("32");
+        System.out.println(stu);
+    }
 
     @Test
     public void getScoreInfoTest(){

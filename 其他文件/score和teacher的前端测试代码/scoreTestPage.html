@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>vuedata</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="js/request.js"></script>
+	</head>
+	<body>
+		<div id="ttt">
+			<form id="loginform" action="http://localhost:8080/login" method="post">
+				<input name="userId" placeholder="姓名" /><br />
+				<input name="userPassword" placeholder="学号" /><br />
+				<button type="submit">登陆验证</button>
+			</form>
+			<br />
+			<br />
+			添加学生记录成绩记录（通过）
+			<button v-on:click="addScore">测试</button>
+			<br />
+			<br />
+			查看某场考试，某个区间分数的学生考试成绩记录（通过）
+			<button v-on:click="scorebetween">测试</button>
+			<br />
+			<br />
+			删除一位学生某场考试记录（通过）
+			<button v-on:click="deleteScore">测试</button>
+			<br />
+			<br />
+			删除一场考试所有成绩记录（通过）
+			<button v-on:click="deleteTestScore">测试</button>
+			<br />
+			<br />
+			删除一个学生所有考试成绩记录（通过）
+			<button v-on:click="deleteStudentScore">测试</button>
+			<br />
+			<br />
+			获取一次考试的所有记录，包括试卷信息和学生答题情况（通过）
+			<button v-on:click="gettestinfo">测试</button>
+			<br />
+			<br />
+			获取一位考生某次考试记录，包含学生信息等(通过)
+			<button v-on:click="getstudentinfo">测试</button>
+			<br />
+			<br />
+			更新考生成绩(通过)
+			<button v-on:click="updateOneScore">测试</button>
+
+		</div>
+	</body>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: "#ttt",
+			data: {
+				space: 123
+			},
+			methods: {
+				addScore: function(e) {
+					let podata = {
+						"finish": 1592539618221,
+						"paper_id": 1,
+						"score": 23.3,
+						"stu_ans": {
+							"123": 12
+						},
+						"stu_id": "1"
+					}
+					ajax({
+						url: "http://localhost:8080/score/addRecordOfScore",
+						method: "post",
+						data: {
+							'record': podata
+						},
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				},
+				scorebetween: function() {
+					ajax({
+						url: "http://localhost:8080/score/countStudentBetween",
+						data: {
+							paper_id: 1,
+							startScore: 20,
+							endScore: 100
+						},
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				},
+				deleteScore: function() {
+					ajax({
+						url: "http://localhost:8080/score/deleteOneScore",
+						data: {
+							stu_id: "1",
+							paper_id: 1
+
+						},
+						method: "post",
+						success: function(res) {
+							console.log(res)
+						}
+					})
+				},
+				deleteTestScore: function() {
+					ajax({
+						url: "http://localhost:8080/score/deleteTestScore",
+						data: {
+							paper_id: 1
+						},
+						method: "post",
+						success: res => {
+							console.log(res)
+						}
+					})
+				},
+				deleteStudentScore: function() {
+					ajax({
+						url: "http://localhost:8080/score/deleteStudentScore",
+						data: {
+							stu_id: "1"
+						},
+						method: "post",
+						success: res => {
+							console.log(res)
+						}
+					})
+				},
+				gettestinfo() {
+					ajax({
+						url: "http://localhost:8080/score/getPaperStudentScoreInfo",
+						data: {
+							paper_id: 1
+						},
+						success: res => {
+							console.log(res)
+						}
+					})
+				},
+				getstudentinfo() {
+					ajax({
+						url: "http://localhost:8080/score/getstudentScore",
+						data: {
+							stu_id: "1",
+							paper_id: 1
+						},
+						success: res => {
+							console.log(res)
+						}
+					})
+				},
+				updateOneScore:function() {
+					ajax({
+						url: "http://localhost:8080/score/updateOneScore",
+						data: {
+							stu_id: "1",
+							paper_id: 1,
+							score: 61.8
+						},
+						method: "post",
+						success: res => {
+							console.log(res)
+						}
+					})
+				}
+
+			}
+
+		})
+	</script>
+</html>
