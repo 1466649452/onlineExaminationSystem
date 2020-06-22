@@ -122,6 +122,7 @@ public class ScoreController {
             }
             JSONArray studentsinfojson = (JSONArray) JSONArray.toJSON(studentsinfo);
             testinfojson.put("studentscores", studentsinfojson);
+
             res.put("data",testinfojson);
             res.put("status","success");
             ResponseUtils.renderJson(response, res);
@@ -173,6 +174,7 @@ public class ScoreController {
         }
     }
 
+
     /*
      * 添加数据相关api
      * */
@@ -190,7 +192,8 @@ public class ScoreController {
                 return;
             }
             //String stu_id, int paper_id, double score, Date finish, JSONObject stu_ans
-            Score insertScore = new Score((String) js.get("stu_id"), (Integer) js.get("paper_id"), (Double) js.get("score"), (Long) js.get("finish"), (JSONObject) js.get("stu_ans"));
+            Double score = Double.valueOf(js.get("score").toString());
+            Score insertScore = new Score((String) js.get("stu_id"), (Integer) js.get("paper_id"), score, (Long) js.get("finish"), (JSONObject) js.get("stu_ans"));
             if (scoreService.findOneScore(insertScore.getStu_id(), insertScore.getPaper_id()) != null) {
                 res.put("status", "fail");
                 res.put("error", "该学生已经做过该题");

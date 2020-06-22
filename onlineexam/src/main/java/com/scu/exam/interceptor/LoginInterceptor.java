@@ -9,6 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,9 +18,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     //    在请求处理之前调用,只有返回true才会执行要执行的请求
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) {
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws IOException {
         //设置登陆地址
-        String loginAddr="www.baidu.com";
+        String loginAddr="/htmlsite/login.html";
         System.out.println("进入拦截器");
         try {
             httpServletResponse.setCharacterEncoding("UTF-8");
@@ -52,14 +53,13 @@ public class LoginInterceptor implements HandlerInterceptor {
                 res.put("status", "fail");
                 ResponseUtils.renderJson(httpServletResponse,res);
             }
-            httpServletResponse.setStatus(302);
-            httpServletResponse.setHeader("Location", loginAddr);
+            httpServletResponse.sendRedirect(loginAddr);
             return false;
         }catch (Exception e){
             e.printStackTrace();
             //返回到登陆界面
-            httpServletResponse.setStatus(302);
-            httpServletResponse.setHeader("Location", loginAddr);
+
+            httpServletResponse.sendRedirect(loginAddr);
             return false;
         }
     }
