@@ -5,9 +5,9 @@
 <mapper namespace="com.scu.exam.mapper.QuestionMapper">
     <insert id="insert" parameterType="com.scu.exam.pojo.Question" keyProperty="question_id" useGeneratedKeys="true">
         insert into Question
-        (question_id,question_info,correct_answer,type)
+        (question_info,correct_answer,type)
         values
-        (#{question_id},#{question_info},#{correct_answer},#{type})
+        (#{question_info},#{correct_answer},#{type})
     </insert>
 
     <delete id="deleteById" parameterType="Integer">
@@ -27,7 +27,7 @@
         select * from Question where question_info = #{question_info}
     </select>
     <select id="findByKeyword" resultType="com.scu.exam.pojo.Question">
-        select * from Question where question_info like %${question_info}%
+        select * from Question where question_info like concat('%',#{keyword},'%')
     </select>
 
     <update id="update" parameterType="com.scu.exam.pojo.Question">

@@ -1,7 +1,7 @@
 package com.scu.exam.service;
 
 import com.scu.exam.pojo.Question;
-import com.scu.exam.service.QuestionService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,55 +18,63 @@ public class QuestionServiceTest {
     @Autowired
     QuestionService questionService;
 
-    @Test
-    public void insertQuestion() {
+    @Before
+    public void setUp() throws Exception {
         cleanQuestionTable();
         initQuestionTable();
         printAllQuestion();
+    }
+
+
+    @Test
+    public void insertQuestion() {
+        System.out.println("开始测试insertQuestion()：");
+        printAllQuestion();
+        System.out.println("测试结束");
     }
 
     @Test
     public void deleteQuestion() {
-        cleanQuestionTable();
-        initQuestionTable();
+        System.out.println("开始测试deleteQuestion()：");
         Question question = questionService.findQuestionById(111111);
         questionService.deleteQuestion(question);
         printAllQuestion();
+        System.out.println("测试结束");
     }
 
     @Test
     public void deleteQuestionById() {
-        cleanQuestionTable();
-        initQuestionTable();
+        System.out.println("开始测试deleteQuestionById()：");
         questionService.deleteQuestionById(222222);
         printAllQuestion();
+        System.out.println("测试结束");
     }
 
     @Test
     public void updateQuestion() {
-        cleanQuestionTable();
-        initQuestionTable();
+        System.out.println("开始测试updateQuestion()：");
         Question question = new Question(333333, "rrrrrrrr", "dfwefe", "A");
         questionService.updateQuestion(question);
         printAllQuestion();
+        System.out.println("测试结束");
     }
 
     @Test
     public void findQuestionById() {
-        cleanQuestionTable();
-        initQuestionTable();
+        System.out.println("开始测试findQuestionById()：");
         Question question = questionService.findQuestionById(111111);
         System.out.println(question.toString());
+        System.out.println("测试结束");
     }
 
     @Test
     public void findAllQuestion() {
-        cleanQuestionTable();
-        initQuestionTable();
+        System.out.println("开始测试findAllQuestion()：");
         List<Question> questionList = questionService.findAllQuestion();
         for (int i = 0; i < questionList.size(); i++){
             System.out.println(questionList.get(i).toString());
         }
+        System.out.println("测试结束");
     }
 
     public void initQuestionTable(){
@@ -86,6 +94,7 @@ public class QuestionServiceTest {
     }
 
     public void printAllQuestion(){
+        System.out.println("数据库中的怕有数据：");
         List<Question> questionList = questionService.findAllQuestion();
         for (int i = 0; i < questionList.size(); i++){
             System.out.println(questionList.get(i).toString());

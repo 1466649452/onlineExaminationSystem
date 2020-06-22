@@ -112,41 +112,48 @@ public class TeacherController {
     @ApiOperation("修改教师信息(测试通过）")
     @PostMapping("/updateOneTeacher")
     public void updateOneTeacher(@RequestBody JSONObject data, HttpServletResponse response) {
-        //必要数据校验 stu_id,paper_id
-        String t_id = (String) data.get("t_id");
-        JSONObject res = new JSONObject();
-        if (data.get("t_id") == null) {
-            res.put("status", "fail");
-            res.put("error", "没有传入必要信息");
-            ResponseUtils.renderJson(response, res);
-            return;
-        }
-
-        if (data.get("t_password") != null) {
-            String password = (String) data.get("t_password");
-            if (teacherService.updateTeacherPassword(t_id, password) != 0) {
-                res.put("status", "success");
-            } else {
-                res.put("status", "fail");
-            }
-        }
-        if (data.get("t_name") != null) {
-            String t_name = (String) data.get("t_name");
-            if (teacherService.updateTeacherName(t_id, t_name) != 0) {
-                res.put("status", "success");
-            } else {
-                res.put("status", "fail");
-            }
-        }
-        if (data.get("t_image") != null) {
-            String t_image = (String) data.get("t_image");
-            if (teacherService.updateTeacherHeadimage(t_id, t_image) != 0) {
-                res.put("status", "success");
-            } else {
-                res.put("status", "fail");
-            }
-        }
-        ResponseUtils.renderJson(response, res);
+		JSONObject res = new JSONObject();
+		try{
+			//必要数据校验 stu_id,paper_id
+			String t_id = (String) data.get("t_id");
+			
+			if (data.get("t_id") == null) {
+			    res.put("status", "fail");
+			    res.put("error", "没有传入必要信息");
+			    ResponseUtils.renderJson(response, res);
+			    return;
+			}
+			
+			if (data.get("t_password") != null) {
+			    String password = (String) data.get("t_password");
+			    if (teacherService.updateTeacherPassword(t_id, password) != 0) {
+			        res.put("status", "success");
+			    } else {
+			        res.put("status", "fail");
+			    }
+			}
+			if (data.get("t_name") != null) {
+			    String t_name = (String) data.get("t_name");
+			    if (teacherService.updateTeacherName(t_id, t_name) != 0) {
+			        res.put("status", "success");
+			    } else {
+			        res.put("status", "fail");
+			    }
+			}
+			if (data.get("t_image") != null) {
+			    String t_image = (String) data.get("t_image");
+			    if (teacherService.updateTeacherHeadimage(t_id, t_image) != 0) {
+			        res.put("status", "success");
+			    } else {
+			        res.put("status", "fail");
+			    }
+			}
+			ResponseUtils.renderJson(response, res);
+		}catch(Exception e){
+			res.put("status", "fail");
+			ResponseUtils.renderJson(response, res);
+		}
+        
     }
 
     @ApiOperation("删除教师信息(测试通过）")
@@ -155,14 +162,20 @@ public class TeacherController {
     })
     @PostMapping("/deleteOneTeacher")
     public void deleteOneScore(@RequestBody JSONObject data, HttpServletResponse response) {
-        int t = teacherService.deleteTeacherByid(data.get("t_id").toString());
-        JSONObject js = new JSONObject();
-        if (t != 0) {
-            js.put("status", "success");
-        } else {
-            js.put("status", "fail");
-        }
-        ResponseUtils.renderJson(response, js);
+		JSONObject res = new JSONObject();
+		try{
+			int t = teacherService.deleteTeacherByid(data.get("t_id").toString());
+			if (t != 0) {
+			    res.put("status", "success");
+			} else {
+			    res.put("status", "fail");
+			}
+			ResponseUtils.renderJson(response, res);
+		}catch(Exception e){
+			res.put("status", "fail");
+			ResponseUtils.renderJson(response, res);
+		}
+        
     }
 
 }

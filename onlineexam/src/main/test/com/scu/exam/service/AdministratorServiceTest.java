@@ -1,6 +1,7 @@
 package com.scu.exam.service;
 
 import com.scu.exam.pojo.Administrator;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,68 +19,19 @@ public class AdministratorServiceTest{
     @Autowired
     private AdministratorService administratorService;
 
-    @Test
-    public void insertAdministrator() throws IOException {
+    @Before
+    public void setUp() throws Exception {
         cleanAdministrator();
         initAdministrator();
-        printAllAdministrators();
-    }
-
-    @Test
-    public void deleteAdministrator() throws IOException {
-        cleanAdministrator();
-        initAdministrator();
-        Administrator administrator = administratorService.findAdministratorById("aaaaaa");
-        administratorService.deleteAdministrator(administrator);
-        printAllAdministrators();
-    }
-
-    @Test
-    public void deleteAdministratorById() throws IOException {
-        cleanAdministrator();
-        initAdministrator();
-        administratorService.deleteAdministratorById("bbbbbb");
-        printAllAdministrators();
-    }
-
-    @Test
-    public void findAdministratorById() throws IOException {
-        cleanAdministrator();
-        initAdministrator();
-        Administrator administrator = administratorService.findAdministratorById("cccccc");
-        System.out.println(administrator.toString());
-    }
-
-    @Test
-    public void findAllAdministrator() throws IOException {
-        cleanAdministrator();
-        initAdministrator();
-        printAllAdministrators();
-    }
-    @Test
-
-    public void updateAdministrator() throws IOException {
-        cleanAdministrator();
-        initAdministrator();
-        Administrator administrator = new Administrator("cccccc", "rrrrrr", "dddddd", "ffffff");
-        administratorService.updateAdministrator(administrator);
-        System.out.println(administratorService.findAdministratorById("cccccc").toString());
     }
 
     public void initAdministrator(){
         Administrator administrator1 = new Administrator("aaaaaa", "ssssss", "dddddd", "ffffff");
         Administrator administrator2 = new Administrator("bbbbbb", "nnnnnn", "mmmmmm", "bbbbbb");
-        Administrator administrator3 = new Administrator("cccccc", "ssssss", "dddddd", "ffffff");
+        Administrator administrator3 = new Administrator("cccccc", "bbbbbb", "dddddd", "ffffff");
         administratorService.insertAdministrator(administrator1);
         administratorService.insertAdministrator(administrator2);
         administratorService.insertAdministrator(administrator3);
-    }
-
-    public void printAllAdministrators(){
-        List<Administrator> administratorList = administratorService.findAllAdministrator();
-        for (int i = 0; i < administratorList.size(); i++){
-            System.out.println(administratorList.get(i).toString());
-        }
     }
 
     public void cleanAdministrator(){
@@ -87,6 +39,84 @@ public class AdministratorServiceTest{
         for (int i = 0; i < administratorList.size(); i++){
             administratorService.deleteAdministrator(administratorList.get(i));
         }
+    }
+
+    public void printAllAdministrators(){
+        System.out.println("数据库中的所有数据：");
+        List<Administrator> administratorList = administratorService.findAllAdministrator();
+        for (int i = 0; i < administratorList.size(); i++){
+            System.out.println(administratorList.get(i).toString());
+        }
+    }
+
+    @Test
+    public void insertAdministrator() throws IOException {
+        System.out.println("开始测试insertAdministrator()：");
+        printAllAdministrators();
+        System.out.println("测试结束");
+    }
+
+    @Test
+    public void deleteAdministrator() throws IOException {
+        System.out.println("开始测试deleteAdministrator()：");
+        Administrator administrator = administratorService.findAdministratorById("aaaaaa");
+        administratorService.deleteAdministrator(administrator);
+        printAllAdministrators();
+        System.out.println("测试结束");
+    }
+
+    @Test
+    public void deleteAdministratorById() throws IOException {
+        System.out.println("开始测试deleteAdministratorById()：");
+        administratorService.deleteAdministratorById("bbbbbb");
+        printAllAdministrators();
+        System.out.println("测试结束");
+    }
+
+    @Test
+    public void findAdministratorById() throws IOException {
+        System.out.println("开始测试findAdministratorById()：");
+        Administrator administrator = administratorService.findAdministratorById("cccccc");
+        System.out.println("查找到的Administrator: "+administrator.toString());
+        printAllAdministrators();
+        System.out.println("测试结束");
+    }
+
+    @Test
+    public void findAllAdministrator() throws IOException {
+        System.out.println("开始测试findAllAdministrator()：");
+        System.out.println("查找到的所有Administrator: ");
+        List<Administrator> administratorList = administratorService.findAllAdministrator();
+        for (int i = 0; i < administratorList.size(); i++){
+            System.out.println(administratorList.get(i).toString());
+        }
+        System.out.println("测试结束");
+    }
+
+    @Test
+    public void updateAdministrator() throws IOException {
+        System.out.println("开始测试updateAdministrator()：");
+        Administrator administrator = new Administrator("cccccc", "rrrrrr", "dddddd", "ffffff");
+        administratorService.updateAdministrator(administrator);
+        System.out.print("修据后的数据：");
+        System.out.println(administratorService.findAdministratorById("cccccc").toString());
+        printAllAdministrators();
+        System.out.println("测试结束");
+    }
+
+    @Test
+    public void findAdminByName(){
+        System.out.println("开始测试findAdminByName()：");
+        String ad_name = "ssssss";
+        Administrator administrator = administratorService.findAdminByName(ad_name);
+        if (administrator != null){
+            System.out.println("查找到的Administrator: "+administrator.toString());
+        }else {
+            System.out.println("未查找到Administrator");
+        }
+
+        printAllAdministrators();
+        System.out.println("测试结束");
     }
 
 }
