@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(tags = "试题管理模块")
@@ -22,93 +23,136 @@ import java.util.List;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
     private AnswerController answerController;
 
 
-    @ApiOperation("添加题目到数据库中")
+    @ApiOperation("添加题目到数据库中（测试通过）")
+    /*
+       参数JSONObject data的格式：
+          {
+           "question_info": question_info,
+           "correct_answer": correct_answer,
+           "type": type,
+           "answerList": [ "answer1",
+                           "answer2",
+                           .........,
+                           "answern"
+                         ]
+          }
+     */
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 400, message = "请求参数没填好"),
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/addQuestion")
-    public void addQuestion(@RequestBody JSONObject jsonObject, HttpServletResponse response){
-        System.out.println("传入的JSONObject中的数据："+jsonObject.toString());
-
+    public void addQuestion(@RequestBody JSONObject data, HttpServletResponse response){
         //将jsonObject中的数据取出放到question中
-        Question question = setQuestionByJSON(jsonObject);
-        JSONObject jsonObject1 = new JSONObject();
+        Question question = setQuestionByJSON(data);
+        JSONObject jsonObject = new JSONObject();
 
         //查找数据库中是否有相同题干的题目，来判断该题目是否已经存在
         Question questionSql = questionService.findQuestionByInfo(question.getQuestion_info());
         if(questionSql != null){
             //该题目已经存在
-            jsonObject1.put("status", "失败！该题目已存在！");
+            jsonObject.put("status", "失败！该题目已存在！");
         }else{
             try{
                 //将question插入到question表中
                 questionService.insertQuestion(question);
-                /* 同时也要把题目设置的选项添加到数据库的answer表中 */
+                //得到系统对所插入题目生成的id,用来设置要插入的answer
                 Integer question_id = questionService.findQuestionByInfo(question.getQuestion_info()).getQuestion_id();
-                answerController.addAnswer(question_id, jsonObject);
-                jsonObject1.put("status", "添加成功！");
+                //同时也要把题目设置的选项添加到数据库的answer表中
+                answerController.addAnswer(question_id, data);
+                //反馈结果
+                jsonObject.put("status", "添加成功！");
             }catch (DataAccessException e){
-                jsonObject1.put("status", "添加失败！");
+                //反馈异常
+                jsonObject.put("status", "添加失败！数据库操作失误！"+"\n"+"详情："+e.getMessage());
             }
         }
-        ResponseUtils.renderJson(response, jsonObject1);
-
-        System.out.println("传到前端的response："+response);
+        //将结果jsonObject1存入到response中，反馈给前端
+        ResponseUtils.renderJson(response, jsonObject);
     }
 
-    @ApiOperation("修改题目")
+    @ApiOperation("修改题目（测试通过）")
+    /*
+       参数JSONObject data的格式：
+          {
+           "question_id": question_id,
+           "question_info": question_info,
+           "correct_answer": correct_answer,
+           "type": type,
+           "answerList": [ "answer1",
+                           "answer2",
+                           .........,
+                           "answern"
+                         ]
+          }
+     */
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 400, message = "请求参数没填好"),
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/updateQuestion")
-    public void updateQuestion(@RequestBody JSONObject jsonObject, HttpServletResponse response){
-        System.out.println("传入的JSONObject中的数据："+jsonObject.toString());
-        JSONObject jsonObject1 = new JSONObject();
+    public void updateQuestion(@RequestBody JSONObject data, HttpServletResponse response){
+        JSONObject jsonObject = new JSONObject();
 
         //将前端传来的jsonObject中的值取出放到一个Question实例中
-        Question question = setQuestionByJSON(jsonObject);
-        question.setQuestion_id(jsonObject.getInteger("question_id"));
+        Question question = setQuestionByJSON(data);
+        question.setQuestion_id(data.getInteger("question_id"));
 
         //根据修改后的题干信息在数据库中查找是否有相同的题目
         Question questionSql = questionService.findQuestionByInfo(question.getQuestion_info());
         if(questionSql != null){
             //修改后的题目在数据库中已存在
-            jsonObject1.put("status", "失败！该题目已存在！");
+            jsonObject.put("status", "失败！修改后的题目已存在！");
         }else{
             try{
                 /* 在数据库中修改题目的信息 */
                 questionService.updateQuestion(question);
-                /* 同时也要在数据库中修改各个选项 */
-                answerController.updateAnswer(jsonObject);
-                jsonObject1.put("status", "修改成功！");
+                /* 同时也要在数据库中修改各个选项answer */
+                answerController.updateAnswer(data);
+                jsonObject.put("status", "修改成功！");
             }catch (DataAccessException e){
-                jsonObject1.put("status", "修改失败！");
+                jsonObject.put("status", "修改失败！数据库操作失误！"+"\n"+"详情："+e.getMessage());
             }
         }
-        ResponseUtils.renderJson(response, jsonObject1);
-
-        System.out.println("传到前端的response："+response);
+        ResponseUtils.renderJson(response, jsonObject);
     }
 
-    @ApiOperation("通过试题的id查找题目")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "question_id", dataType = "Integer", required = true, value = "要查找的题目的id")
-    })
+    @ApiOperation("通过试题的id查找题目(测试通过）")
+    /*
+      输入的数据data:
+        {
+          "question_id": question_id
+        }
+      响应的查找结果：
+        {
+          "question_id": question_id,
+          "question_info": question_info,
+          "correct_answer": correct_answer,
+          "type": type,
+          "answerList":
+              [
+                "answer1",
+                "answer2",
+                .........,
+                "answern"
+              ]
+        }
+     */
+
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 400, message = "请求参数没填好"),
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
-    @GetMapping("/getQuestionById")
-    public void getQuestionById(Integer question_id, HttpServletResponse response){
-        System.out.println("传入的question_id："+question_id);
+    @PostMapping("/getQuestionById")
+    public void getQuestionById(@RequestBody JSONObject data, HttpServletResponse response){
+        Integer question_id = data.getInteger("question_id");
         JSONObject resultJson = new JSONObject();
         try {
             //通过question_id在数据库中查找question
@@ -127,14 +171,12 @@ public class QuestionController {
             }
         } catch (DataAccessException e){
             //对数据库操作发生的异常
-            resultJson.put("status", "查找失败！");
+            resultJson.put("status", "查找失败！数据库操作失误！"+"\n"+"详情："+e.getMessage());
         }
         ResponseUtils.renderJson(response, resultJson);
-
-        System.out.println("传到前端的response："+response);
     }
 
-    @ApiOperation("通过题干的关键字查找题目")
+    @ApiOperation("通过题干的关键字查找题目（测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "keyword", dataType = "String", required = true, value = "题干中的关键词")
     })
@@ -145,29 +187,27 @@ public class QuestionController {
     })
     @GetMapping("/getQuestionByKeyword")
     public void getQuestionByKeyword(String keyword, HttpServletResponse response){
-        System.out.println("要查找的关键词为："+keyword);
-
         JSONObject resultJSON = new JSONObject();
         try {
             //通过关键字查找得到一个question列表
             List<Question> questionList = questionService.findQuestionByKeyword(keyword);
 
-            List<JSONObject> jsonObjectList = null;
+            List<JSONObject> jsonObjectList = new ArrayList<>();
             for (int i = 0; i < questionList.size(); i++){
             /*
                将题目及其答案列表都放入一个JSONObject中
                quesWithAns的结构如下：
                    {
-                     “question_id": question_id
-                     "question_info": question_info
-                     "correct_answer": correct_answer
-                     "type": type
-                     "answerList": {
-                            {"answer": answer}
-                            {"answer": answer}
-                            ..................
-                            {"answer": answer}
-                     }
+                     “question_id": question_id,
+                     "question_info": question_info,
+                     "correct_answer": correct_answer,
+                     "type": type,
+                     "answerList": [
+                            "answer1",
+                            "answer"2,
+                            ........,
+                            "answern"
+                      ]
                    }
              */
                 JSONObject quesWithAns = new JSONObject();
@@ -190,22 +230,17 @@ public class QuestionController {
         }
         //将查找结果放入到response中
         ResponseUtils.renderJson(response, resultJSON);
-
-        System.out.println(response);
     }
 
-    @ApiOperation("删除指定id的试题")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "question_id", dataType = "Integer", required = true, value = "题目的Id")
-    })
+    @ApiOperation("删除指定id的试题（测试通过）")
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 400, message = "请求参数没填好"),
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
-    @GetMapping("/deleteQuestion")
-    public void deleteQuestion(Integer question_id, HttpServletResponse response){
-        System.out.println("要删除的题目的Id:"+question_id);
+    @PostMapping("/deleteQuestion")
+    public void deleteQuestion(@RequestBody JSONObject data, HttpServletResponse response){
+        Integer question_id = data.getInteger("question_id");
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -218,8 +253,6 @@ public class QuestionController {
             jsonObject.put("status", "删除失败！");
         }
         ResponseUtils.renderJson(response, jsonObject);
-
-        System.out.println("传到前端的response："+response);
     }
 
 

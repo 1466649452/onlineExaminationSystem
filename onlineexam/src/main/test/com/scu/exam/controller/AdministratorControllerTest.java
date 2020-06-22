@@ -12,8 +12,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,7 +59,8 @@ public class AdministratorControllerTest {
     }
 
     @Test
-    public void addAdmin(HttpServletResponse response) {
+    public void addAdmin() {
+        HttpServletResponse response = null;
         System.out.println("开始测试addAdmin():");
 
         System.out.println("插入一个符合规范的数据：");
@@ -70,7 +77,8 @@ public class AdministratorControllerTest {
     }
 
     @Test
-    public void getAdminInfo(HttpServletResponse response) {
+    public void getAdminInfo() {
+        HttpServletResponse response = null;
         System.out.println("开始测试getAdminInfo():");
 
         System.out.println("查找一个数据库中有的Administrator：");
@@ -85,7 +93,8 @@ public class AdministratorControllerTest {
     }
 
     @Test
-    public void updateAdminInfo(HttpServletResponse response) {
+    public void updateAdminInfo() {
+        HttpServletResponse response = null;
         System.out.println("开始测试updateAdminInfo():");
 
         System.out.println("正常进行一个修改操作：");

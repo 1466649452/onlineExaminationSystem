@@ -12,7 +12,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import static org.junit.Assert.*;
 
@@ -54,7 +57,122 @@ public class AnswerControllerTest {
         jsonObject.put("question_info", "sdfegve");
         jsonObject.put("correct_answer", "cvdfergf");
         jsonObject.put("type", "q");
-        List<Answer> answerList = null;
+        List<Answer> answerList = new List<Answer>() {
+            @Override
+            public int size() {
+                return 0;
+            }
+
+            @Override
+            public boolean isEmpty() {
+                return false;
+            }
+
+            @Override
+            public boolean contains(Object o) {
+                return false;
+            }
+
+            @Override
+            public Iterator<Answer> iterator() {
+                return null;
+            }
+
+            @Override
+            public Object[] toArray() {
+                return new Object[0];
+            }
+
+            @Override
+            public <T> T[] toArray(T[] a) {
+                return null;
+            }
+
+            @Override
+            public boolean add(Answer answer) {
+                return false;
+            }
+
+            @Override
+            public boolean remove(Object o) {
+                return false;
+            }
+
+            @Override
+            public boolean containsAll(Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(Collection<? extends Answer> c) {
+                return false;
+            }
+
+            @Override
+            public boolean addAll(int index, Collection<? extends Answer> c) {
+                return false;
+            }
+
+            @Override
+            public boolean removeAll(Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public boolean retainAll(Collection<?> c) {
+                return false;
+            }
+
+            @Override
+            public void clear() {
+
+            }
+
+            @Override
+            public Answer get(int index) {
+                return null;
+            }
+
+            @Override
+            public Answer set(int index, Answer element) {
+                return null;
+            }
+
+            @Override
+            public void add(int index, Answer element) {
+
+            }
+
+            @Override
+            public Answer remove(int index) {
+                return null;
+            }
+
+            @Override
+            public int indexOf(Object o) {
+                return 0;
+            }
+
+            @Override
+            public int lastIndexOf(Object o) {
+                return 0;
+            }
+
+            @Override
+            public ListIterator<Answer> listIterator() {
+                return null;
+            }
+
+            @Override
+            public ListIterator<Answer> listIterator(int index) {
+                return null;
+            }
+
+            @Override
+            public List<Answer> subList(int fromIndex, int toIndex) {
+                return null;
+            }
+        };
         Answer answer1 = new Answer(question_id, "vvvvvvvvvvv");
         Answer answer2 = new Answer(question_id, "lllllllllll");
         Answer answer3 = new Answer(question_id, "nnnnnnnnnnn");
