@@ -35,10 +35,8 @@ public class ScoreControllerTest {
 
     @Test
     public void change(){
-        JSONObject js=new JSONObject();
-        js.put("2",2);
-        js.put("2",2);
-        System.out.println(js);
+        Student stu=studentService.findStudentById("32");
+        System.out.println(stu);
     }
 
     @Test

@@ -32,7 +32,7 @@ public class TokenSign {
      * @param userId
      * @return
      */
-    public static String signToken(String userId,String userName){
+    public static String signToken(String userId,String userName,String identity){
 
         try{
             //设置失效时间
@@ -49,6 +49,7 @@ public class TokenSign {
                     //存储自己想要留存给客户端浏览器的内容
                     .withClaim("userId",userId)
                     .withClaim("userName",userName)
+                    .withClaim("identity",identity)
                     .withExpiresAt(date)
                     .sign(algorithm);
         }catch (Exception e){
@@ -59,7 +60,7 @@ public class TokenSign {
 
     @Test
     public void namespa(){
-        System.out.println(TokenSign.signToken("1466649452","123"));
+        System.out.println(TokenSign.signToken("1466649452","123","student"));
 
     }
 

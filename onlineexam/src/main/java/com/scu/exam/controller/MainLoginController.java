@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Api(tags = "登陆以及登陆状态校验")
 @Controller
@@ -40,70 +41,92 @@ public class MainLoginController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/login")//@RequestBody JSONObject data,//String userId,String userPassword,
-    public void login( HttpServletRequest request,HttpServletResponse response) {
-        System.out.println("进入登陆验证...");
-        String userId=request.getParameter("userId").toString();
-        String userPassword=request.getParameter("userPassword").toString();
-        System.out.println(userId+":"+userPassword);
-        //数据库权限校验
-        boolean loginsuccess = false;
-        String identity = "";
-        //逐个权限验证
-        Teacher tea = null;
-        Administrator admin = null;
-        Student stu = (Student) studentService.findStudentById(userId);
-        System.out.println(stu.toString());
-        if (stu != null && stu.getStu_password().equals(userPassword)) {
-            loginsuccess = true;
-            identity = "student";
-            System.out.println("找到学生" + loginsuccess + " " + identity);
-        } else {
-            tea = (Teacher) teacherService.findTeacherById(userId);
-            if (tea != null && tea.getT_password().equals(userPassword)) {
+    public void login( HttpServletRequest request,HttpServletResponse response) throws IOException {
+        String successAddr="index2.html";
+        String failAddr="index3.html";
+        try{
+            System.out.println("进入登陆验证...");
+            String userId=request.getParameter("userId").toString();
+            String userPassword=request.getParameter("userPassword").toString();
+            System.out.println(userId+":"+userPassword);
+            //数据库权限校验
+            boolean loginsuccess = false;
+            String identity = "";
+            //逐个权限验证
+            Teacher tea = null;
+            Administrator admin = null;
+            Student stu = (Student) studentService.findStudentById(userId);
+            if (stu != null && stu.getStu_password().equals(userPassword)) {
                 loginsuccess = true;
-                identity = "teacher";
+                identity = "student";
+                System.out.println("找到学生" + loginsuccess + " " + identity);
             } else {
-                admin = (Administrator) administratorService.findAdministratorById(userId);
-                if (admin != null && admin.getAd_password().equals(userPassword)) {
+                tea = (Teacher) teacherService.findTeacherById(userId);
+                if (tea != null && tea.getT_password().equals(userPassword)) {
                     loginsuccess = true;
-                    identity = "admin";
+                    identity = "teacher";
+                    System.out.println("找到教师" + loginsuccess + " " + identity);
+                } else {
+                    admin = (Administrator) administratorService.findAdministratorById(userId);
+                    if (admin != null && admin.getAd_password().equals(userPassword)) {
+                        loginsuccess = true;
+                        identity = "admin";
+                        System.out.println("找到管理员" + loginsuccess + " " + identity);
+                    }
                 }
             }
-        }
-        if (loginsuccess == true) {
-            System.out.println("登陆验证通过...");
-            //登陆验证通过
-            String userName = "";
-            switch (identity) {
-                case "student":
-                    userName = stu.getStu_name();
-                    break;
-                case "teacher":
-                    userName = tea.getT_name();
-                    break;
-                case "admin":
-                    userName = admin.getAd_name();
-                    break;
+            if (loginsuccess == true) {
+                System.out.println("登陆验证通过...");
+                //登陆验证通过
+                String userName = "";
+                switch (identity) {
+                    case "student":
+                        userName = stu.getStu_name();
+                        break;
+                    case "teacher":
+                        userName = tea.getT_name();
+                        break;
+                    case "admin":
+                        userName = admin.getAd_name();
+                        break;
+                }
+                System.out.println("产生token中...");
+                //产生token
+                String accessToken = TokenSign.signToken(userId, userName,identity);
+                Cookie cookie = new Cookie("accessToken", accessToken);
+                cookie.setMaxAge(60000);
+                cookie.setPath("./");
+                cookie.setDomain(request.getServerName());
+                response.addCookie(cookie);
+                JSONObject json = new JSONObject();
+                json.put("login", "success");
+                json.put("identity", identity);
+                //验证通过
+                //重定位到合适的页面
+                response.sendRedirect(successAddr);
+                ResponseUtils.renderJson(response, json);
+            } else {
+                //未通过
+                System.out.println("登陆验证未通过...");
+                JSONObject json = new JSONObject();
+                json.put("login", "fail");
+                //验证未通过
+                //重定位到合适的页面
+                response.sendRedirect(failAddr);
+                ResponseUtils.renderJson(response, json);
             }
-            System.out.println("产生token中...");
-            //产生token
-            String accessToken = TokenSign.signToken(userId, userName);
-            Cookie cookie = new Cookie("accessToken", accessToken);
-            cookie.setMaxAge(60000);
-            cookie.setPath("./");
-            cookie.setDomain(request.getServerName());
-            response.addCookie(cookie);
-            JSONObject json = new JSONObject();
-            json.put("login", "success");
-            json.put("identity", identity);
-            ResponseUtils.renderJson(response, json);
-        } else {
+        }catch (Exception e){
             //未通过
             System.out.println("登陆验证未通过...");
             JSONObject json = new JSONObject();
             json.put("login", "fail");
+
+            //验证未通过
+            //重定位到合适的页面
+            response.sendRedirect(failAddr);
             ResponseUtils.renderJson(response, json);
         }
+
 
     }
 
