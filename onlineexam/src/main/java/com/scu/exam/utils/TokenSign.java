@@ -19,7 +19,7 @@ public class TokenSign {
     /*
     * 过期时间一小时，毫秒计算
     * */
-    private static final long EXPIRE_TIME=60*1000;
+    public static final int EXPIRE_TIME=60*1000*60*3;
 
     /*
     * 私钥已加密

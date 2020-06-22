@@ -168,24 +168,24 @@
 							</a>
 						</div>
 						<div>
-							<h3 class="display-3" style="font-weight: bold;margin-bottom: 30px;" align="center" bgcolor="#fffae8">计算机等级考试</h3>
+							<h3 class="display-3" style="font-weight: bold;margin-bottom: 30px;" align="center" bgcolor="#fffae8">{{examinfo.paper_name}}</h3>
 						</div>
 						<div v-for="(item,index) in examinationQuestion" style="margin-top: 20px;margin-left: 50px;">
-							<div v-if="item.question_type=='choose'">								
+							<div v-if="item.type=='choose'">								
 								<!--选择题的循环-->
 								<td style="width: 100%">
 									<span id="GridView1_ctl02_Label1" style="font-size: 22px;">{{index+1}}.
 									</span>
-									<span id="GridView1_ctl02_Label2" style="font-size: 22px;"> {{item.question_title}}
+									<span id="GridView1_ctl02_Label2" style="font-size: 22px;"> {{item.question_info}}
 									</span>
-									<span style="font-size: 14px;"> ({{item.question_score}}分)<br />
+									<span style="font-size: 14px;"> ({{item.point}}分)<br />
 									</span>
 								</td>
 
 								<td style="width: 100%;">
-									<div v-for="items in item.question_answer" style="margin-top: 10px;" @click="namespace(item.question_id,items)">
-										<input :name="item.question_title" style="width:13px;height:13px;" type="radio">
-										<a style="margin-left: 15px;font-size: 18px;">{{items}}</a>
+									<div v-for="items in item.answerlist" style="margin-top: 10px;" @click="namespace(item.question_id,items.answer)">
+										<input :name="item.question_info" style="width:13px;height:13px;" type="radio">
+										<a style="margin-left: 15px;font-size: 18px;">{{items.answer}}</a>
 										</input>
 									</div>
 								</td>
@@ -195,15 +195,15 @@
 								<td style="width: 100%">
 									<span id="GridView1_ctl02_Label1" style="font-size: 22px;">{{index+1}}.
 									</span>
-									<span id="GridView1_ctl02_Label2" style="font-size: 22px;"> {{item.question_title}}
+									<span id="GridView1_ctl02_Label2" style="font-size: 22px;"> {{item.question_info}}
 									</span>
-									<span style="font-size: 14px;"> ({{item.question_score}}分)<br />
+									<span style="font-size: 14px;"> ({{item.point}}分)<br />
 									</span>
 								</td>
 								<td style="width: 100%;">
 									<tr>
-										<input :name="item.question_title" @click="namespace(item.question_id,'true')" style="width:13px;height:13px;margin-top: 15px;" type="radio"><a style="font-size: 18px;">正确</a>
-										<input :name="item.question_title" @click="namespace(item.question_id,'false')" style="width:13px;height:13px;margin-left:300px;" type="radio"><a style="font-size: 18px;">错误</a>
+										<input :name="item.question_info" @click="namespace(item.question_id,'true')" style="width:13px;height:13px;margin-top: 15px;" type="radio"><a style="font-size: 18px;">正确</a>
+										<input :name="item.question_info" @click="namespace(item.question_id,'false')" style="width:13px;height:13px;margin-left:300px;" type="radio"><a style="font-size: 18px;">错误</a>
 									</tr>
 								</td>
 							</div>
@@ -249,34 +249,39 @@
 				paper_id: "",
 				examinfo: {},
 				stu_ans: {},
+				/*
 				examinationQuestion: [{
 					question_id: 12334,
-					question_title: "成都冷？",
-					question_answer: ["晴天", "阴天", "内容"],
-					question_correctanswer: "晴天",
-					question_score: 20,
-					question_type: "choose"
-				}, {
-					question_id: 12331,
-					question_title: "成都冷吗？",
-					question_answer: ["晴天", "阴天", "内容"],
-					question_correctanswer: "晴天",
-					question_score: 20,
-					question_type: "choose"
-				}, {
-					question_id: 12332,
-					question_title: "成都不冷吗？",
-					question_answer: ["晴天", "阴天", "内容"],
-					question_correctanswer: "true",
-					question_score: 20,
-					question_type: "choe"
+					question_info: "成都冷？",
+					answerlist: ["晴天", "阴天", "内容"],
+					correct_answer: "晴天",
+					point: 20,
+					type: "choose"
 				}],
+				*/
+			   examinationQuestion:[]
 			},
 			created: function() {
 				this.paper_id = localStorage.getItem("paper_id");
 				console.log(this.paper_id)
 				//获取内容
 				//请求获取数据
+				//考试信息获取
+				ajax({
+					url:"http://localhost:8080/student/test",
+					data:{
+						paper_id:parseInt(this.paper_id)
+					},
+					method:"get",
+					success:res=>{
+						var data=res.shift();
+						data.end=new Date(data.start);
+						data.start=new Date(data.start);
+						this.examinfo=data;
+						this.examinationQuestion=res;
+						console.log(res)
+					}
+				})
 			},
 			methods: {
 				submit: function() {
@@ -320,8 +325,9 @@
 			var totalScore = 0;
 			for (var i = 0; i < examination.length; i++) {
 				var q_id = examination[i].question_id;
-				var q_score = examination[i].question_score;
-				var q_correctans = examination[i].question_correctanswer;
+				var q_score = examination[i].point;
+				console.log(q_score)
+				var q_correctans = examination[i].correct_answer;
 				var student_ans = stu_ans[q_id];
 				if (student_ans == q_correctans) {
 					totalScore += q_score;

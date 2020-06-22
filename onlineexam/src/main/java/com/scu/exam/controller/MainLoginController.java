@@ -43,7 +43,7 @@ public class MainLoginController {
     })
     @PostMapping("/login")//@RequestBody JSONObject data,//String userId,String userPassword,
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String successAddr="/htmlsite/pages/samples/index.html";
+        String successAddr="/htmlsite/index.html";
         String failAddr="/htmlsite/login.html";
         try{
             System.out.println("进入登陆验证...");
@@ -97,7 +97,8 @@ public class MainLoginController {
                 //产生token
                 String accessToken = TokenSign.signToken(userId, userName,identity);
                 Cookie cookie = new Cookie("accessToken", accessToken);
-                cookie.setMaxAge(60000);
+                //两个小时过期
+                cookie.setMaxAge(TokenSign.EXPIRE_TIME);
                 cookie.setPath("./");
                 cookie.setDomain(request.getServerName());
                 response.addCookie(cookie);
