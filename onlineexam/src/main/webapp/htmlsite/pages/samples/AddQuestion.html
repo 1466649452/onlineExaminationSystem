@@ -180,25 +180,49 @@
 												<div class="forms-sample">
 													<div class="form-group">
 														<label for="exampleInputUsername1">题目信息</label>
-														<input type="text" class="form-control" id="question_info" placeholder="请输入所添加题目题干">
+														<input type="text" class="form-control" id="question_info" @blur="questiontitle($event)" :value="modify_questionid.question_info">
 													</div>
-													<div class="form-group">
-														<label>正确答案</label>
-														<input class="form-control" id="correct_answer" placeholder="请输入正确答案">
+													<div v-if="modify_questionid.type=='choose'">
+														<div class="form-group">
+															<label>题目选项</label>
+															<div hidden>{{se}}</div>
+															<div v-for="item in arrs">
+																<div style="display: flex;flex-direction: row; align-items: center;margin-top: 10px;">
+																	<div>{{index+1}}.</div>
+																	<div style="margin-left: 20px;"><input type="text" class="form-control" :value="item" @blur="changeAnswer(index,$event)"></div>
+																</div>
+															</div>
+														</div>
+														<div class="form-group">
+															<label>正确答案</label>
+															<select v-model="modify_questionid.correct_answer" class="form-control" @change="chooseRightans($event)">
+																<option id="correct_answer" :value="item" v-for="(item,index) in modify_questionid.answerList">{{item}}</option>
+															</select>
+														</div>
+														
+													</div>
+													<div v-else>
+														<div class="form-group">
+															<label>正确答案</label>
+															<div>
+																<input :name="it" style="width:13px;height:13px;" type="radio"><a style="font-size: 13px;">正确</a>
+																<input :name="it" style="width:13px;height:13px;" type="radio"><a style="font-size: 13px;">错误</a>
+															</div>
+														</div>
 													</div>
 													<div class="form-group">
 														<label>题目类型</label>
 														<tr class="font">
 															<td height="30">&nbsp;
 																<select name="DropDownList1" id="DropDownList1" style="width:100px;">
-																	<option value="1" selected="selected">选择题</option>
-																	<option value="2">判断题</option>
+																	<option v-if="modify_questionid.type=='choose'" value="选择题" selected="selected">选择题</option>
+																	<option v-else value="判断题" selected="selected">判断题</option>
 																</select>
 															</td>
 														</tr>
 													</div>
 													<div>
-														<button v-on:click="addquestion" class="btn btn-gradient-info">添加</button>
+														<button v-on:click="confirmUpdate" class="btn btn-gradient-info">添加</button>
 													</div>
 												</div>
 											</div>
@@ -230,27 +254,46 @@
 	<script type="text/javascript">
 		var app = new Vue({
 			el: "#AddQuestionPage",
+			data: {
+				question_info: "",
+				correct_answer: [],
+				type: "choose",
+				answerList: []
+				modify_questionid: "",
+				se: "ds"
+			}
 			methods: {
-				addquestion() {
-					
-					var question_info =document.getElementById("question_info").value;
-					console.log("添加试题")
-					
+				confirmUpdate() {
+					console.log(this.modify_questionid)
 					ajax({
-						
-						success:res=>{
-							
-							if(成功)
-							window.location.href
-							else{
-								alert("网络出错")
-							}
+						url: "http://localhost:8080/question/updateQuestion",
+						method: "post",
+						data: {
+							"question_id": this.modify_questionid.question_id,
+							"question_info": this.modify_questionid.question_info,
+							"correct_answer": this.modify_questionid.correct_answer,
+							"type": this.modify_questionid.type,
+							"answerList": this.modify_questionid.answerList
+						},
+						success: res => {
+							console.log(res)
 						}
 					})
-					
+				},
+				questiontitle(e){
+					this.question_info=e.target.value;
+				},
+				chooseRightans(e) {
+					this.modify_questionid.correct_answer=e.target.value;
+				},
+				changeAnswer(index, item) {
+					if (this.modify_questionid.answerList[index] == this.modify_questionid.correct_answer) {
+						this.modify_questionid.correct_answer = item.target.value;
+					}
+					this.modify_questionid.answerList[index] = item.target.value;
+					this.se = item.target.value;
 				}
 			}
 		})
 	</script>
-
 </html>

@@ -43,7 +43,7 @@ public class MainLoginController {
     })
     @PostMapping("/login")//@RequestBody JSONObject data,//String userId,String userPassword,
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String successAddr="/htmlsite/index.html";
+        String successAddr="/htmlsite/pages/samples/index.html";
         String failAddr="/htmlsite/login.html";
         try{
             System.out.println("进入登陆验证...");

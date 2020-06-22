@@ -5,10 +5,10 @@ $(function() {
    */
   'use strict';
   var data = {
-    labels: ["2013", "2014", "2014", "2015", "2016", "2017"],
+    labels: ["60以下","[60,70)", "[70,80)", "[80,90)", "[90,100)", "100"],
     datasets: [{
       label: '# of Votes',
-      data: [10, 19, 3, 5, 2, 3],
+      data: [10, 8, 23, 50, 12, 6],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -42,7 +42,7 @@ $(function() {
       },
       {
         label: 'Dataset 2',
-        data: [5, 23, 7, 12, 42, 23],
+        data: [5, 2, 30, 52, 32, 23],
         borderColor: [
           '#ede190'
         ],
@@ -80,7 +80,7 @@ $(function() {
   };
   var doughnutPieData = {
     datasets: [{
-      data: [30, 40, 30],
+      data: [10, 8, 23, 50, 12, 6],
       backgroundColor: [
         'rgba(255, 99, 132, 0.5)',
         'rgba(54, 162, 235, 0.5)',
@@ -101,9 +101,12 @@ $(function() {
 
     // These labels appear in the legend and in the tooltips when hovering different arcs
     labels: [
-      'Pink',
-      'Blue',
-      'Yellow',
+      '60以下',
+      '[60,70)',
+      '[70,80)',
+      '[80,90)',
+      '[90,100)',
+      '100',
     ]
   };
   var doughnutPieOptions = {
@@ -203,9 +206,9 @@ $(function() {
 
   var scatterChartData = {
     datasets: [{
-        label: 'First Dataset',
+        label: 'Class One',
         data: [{
-            x: -10,
+            x: 10,
             y: 0
           },
           {
@@ -213,7 +216,7 @@ $(function() {
             y: 3
           },
           {
-            x: -25,
+            x: 25,
             y: 5
           },
           {
@@ -230,21 +233,21 @@ $(function() {
         borderWidth: 1
       },
       {
-        label: 'Second Dataset',
+        label: 'Class Two',
         data: [{
             x: 10,
             y: 5
           },
           {
             x: 20,
-            y: -30
+            y: 30
           },
           {
-            x: -25,
+            x: 25,
             y: 15
           },
           {
-            x: -10,
+            x: 10,
             y: 5
           }
         ],

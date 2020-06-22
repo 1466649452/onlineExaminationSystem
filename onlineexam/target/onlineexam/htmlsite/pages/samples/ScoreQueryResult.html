@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 	<head>
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
@@ -16,14 +17,11 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
-
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-		<script src="../../js/request.js"></script>
-		<script src="../../js/getcookiefile.js"></script>
 	</head>
 
+
 	<body>
-		<div class="container-scroller" id="AddQuestionPage">
+		<div class="container-scroller">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -100,7 +98,7 @@
 							<div class="collapse" id="ui-basic">
 								<ul class="nav flex-column sub-menu">
 									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/TeacherManager.html">教师管理</a></li>
-									<li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/XX.html">学生管理</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/StudentManager.html">学生管理</a></li>
 								</ul>
 							</div>
 						</li>
@@ -124,7 +122,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="../../pages/forms/xx.html">
+							<a class="nav-link" href="../../pages/samples/TestManager.html">
 								<span class="menu-title">试卷管理</span>
 								<i class="mdi mdi-format-list-bulleted menu-icon"></i>
 							</a>
@@ -137,19 +135,19 @@
 							</a>
 							<div class="collapse" id="analyze">
 								<ul class="nav flex-column sub-menu">
-									<li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/xx.html">成绩分布</a></li>
-									<li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/aa.html">正确率分析</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/Grades.html">成绩分布</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/Accuracy.html">正确率分析</a></li>
 								</ul>
 							</div>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="../../pages/tables/basic-table.html">
+							<a class="nav-link" href="../../pages/samples/ScoreQuery.html">
 								<span class="menu-title">成绩查询</span>
 								<i class="mdi mdi-chart-bar menu-icon"></i>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="../../pages/tables/basic-table.html">
+							<a class="nav-link" href="../../pages/samples/PersonalPage.html">
 								<span class="menu-title">个人信息修改</span>
 								<i class="mdi mdi-table-large menu-icon"></i>
 							</a>
@@ -159,85 +157,89 @@
 				<!-- partial -->
 				<div class="main-panel">
 					<div class="content-wrapper">
-						<div class="main-panel">
-							<div class="content-wrapper">
-								<div class="page-header">
-									<h3 class="page-title">
-										题库管理
-									</h3>
-									<nav aria-label="breadcrumb">
-										<ol class="breadcrumb">
-											<li class="breadcrumb-item"><a href="../../pages/samples/QuestionManager.html">题库管理</a></li>
-											<li class="breadcrumb-item active" aria-current="page">添加题目</li>
-										</ol>
-									</nav>
-								</div>
-								<div class="row">
-									<div class="col-md-6 grid-margin stretch-card">
-										<div class="card">
-											<div class="card-body">
-												<h4 class="card-title">新题目信息填写</h4>
-												<div class="forms-sample">
-													<div class="form-group">
-														<label for="exampleInputUsername1">题目信息</label>
-														<input type="text" class="form-control" id="question_info" @blur="questiontitle($event)" :value="modify_questionid.question_info">
-													</div>
-													<div v-if="modify_questionid.type=='choose'">
-														<div class="form-group">
-															<label>题目选项</label>
-															<div hidden>{{se}}</div>
-															<div v-for="item in arrs">
-																<div style="display: flex;flex-direction: row; align-items: center;margin-top: 10px;">
-																	<div>{{index+1}}.</div>
-																	<div style="margin-left: 20px;"><input type="text" class="form-control" :value="item" @blur="changeAnswer(index,$event)"></div>
-																</div>
-															</div>
-														</div>
-														<div class="form-group">
-															<label>正确答案</label>
-															<select v-model="modify_questionid.correct_answer" class="form-control" @change="chooseRightans($event)">
-																<option id="correct_answer" :value="item" v-for="(item,index) in modify_questionid.answerList">{{item}}</option>
-															</select>
-														</div>
-														
-													</div>
-													<div v-else>
-														<div class="form-group">
-															<label>正确答案</label>
-															<div>
-																<input :name="it" style="width:13px;height:13px;" type="radio"><a style="font-size: 13px;">正确</a>
-																<input :name="it" style="width:13px;height:13px;" type="radio"><a style="font-size: 13px;">错误</a>
-															</div>
-														</div>
-													</div>
-													<div class="form-group">
-														<label>题目类型</label>
-														<tr class="font">
-															<td height="30">&nbsp;
-																<select name="DropDownList1" id="DropDownList1" style="width:100px;">
-																	<option v-if="modify_questionid.type=='choose'" value="选择题" selected="selected">选择题</option>
-																	<option v-else value="判断题" selected="selected">判断题</option>
-																</select>
-															</td>
-														</tr>
-													</div>
-													<div>
-														<button v-on:click="confirmUpdate" class="btn btn-gradient-info">添加</button>
-													</div>
-												</div>
-											</div>
-										</div>
+						<div class="page-header">
+							<h3 class="page-title">
+								检索结果如下：
+							</h3>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 stretch-card">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title">本次考试成绩为：.</h4>
+										<p class="card-description">
+											如果你对你的成绩有任何疑问，请及时联系你的老师。
+										</p>
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>
+														学号
+													</th>
+													<th>
+														姓名
+													</th>
+													<th>
+														学校
+													</th>
+													<th>
+														班级
+													</th>
+													<th>
+														试卷ID
+													</th>
+													<th>
+														成绩
+													</th>
+													<th>
+														排名
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr class="table-info">
+													<td>
+														10001
+													</td>
+													<td>
+														Daisy Yin
+													</td>
+													<td>
+														No.2 Middle School
+													</td>
+													<td>
+														Class One
+													</td>
+													<td>
+														20200622
+													</td>
+													<td>
+														100
+													</td>
+													<td>
+														1
+													</td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</div>
-								<!-- partial -->
 							</div>
-							<!-- main-panel ends -->
 						</div>
-						<!-- page-body-wrapper ends -->
 					</div>
+					<!-- content-wrapper ends -->
+					<!-- 底部-->
+					<footer class="footer">
+						<div class="d-sm-flex justify-content-center justify-content-sm-between">
+						</div>
+					</footer>
+					<!-- partial -->
 				</div>
+				<!-- main-panel ends -->
 			</div>
+			<!-- page-body-wrapper ends -->
 		</div>
+		<!-- container-scroller -->
 		<!-- plugins:js -->
 		<script src="../../vendors/js/vendor.bundle.base.js"></script>
 		<script src="../../vendors/js/vendor.bundle.addons.js"></script>
@@ -251,49 +253,5 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
-	<script type="text/javascript">
-		var app = new Vue({
-			el: "#AddQuestionPage",
-			data: {
-				question_info: "",
-				correct_answer: [],
-				type: "choose",
-				answerList: []
-				modify_questionid: "",
-				se: "ds"
-			}
-			methods: {
-				confirmUpdate() {
-					console.log(this.modify_questionid)
-					ajax({
-						url: "http://localhost:8080/question/updateQuestion",
-						method: "post",
-						data: {
-							"question_id": this.modify_questionid.question_id,
-							"question_info": this.modify_questionid.question_info,
-							"correct_answer": this.modify_questionid.correct_answer,
-							"type": this.modify_questionid.type,
-							"answerList": this.modify_questionid.answerList
-						},
-						success: res => {
-							console.log(res)
-						}
-					})
-				},
-				questiontitle(e){
-					this.question_info=e.target.value;
-				},
-				chooseRightans(e) {
-					this.modify_questionid.correct_answer=e.target.value;
-				},
-				changeAnswer(index, item) {
-					if (this.modify_questionid.answerList[index] == this.modify_questionid.correct_answer) {
-						this.modify_questionid.correct_answer = item.target.value;
-					}
-					this.modify_questionid.answerList[index] = item.target.value;
-					this.se = item.target.value;
-				}
-			}
-		})
-	</script>
+
 </html>
