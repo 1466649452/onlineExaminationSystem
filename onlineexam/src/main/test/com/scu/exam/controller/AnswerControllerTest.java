@@ -225,12 +225,12 @@ public class AnswerControllerTest {
         System.out.println("开始测试getAnswerById():");
         System.out.println("期望输出：查找到后的answerList信息");
 
-        List<Answer> answerList = answerController.getAnswerById(111111);
-        System.out.println("查找到的answerList如下：");
-        for (int i = 0; i < answerList.size(); i++){
-            System.out.println("answer"+i+" :"+answerList.get(i).toString());
-        }
+        //List<Answer> answerList = answerController.getAnswerById(111111);
+        //System.out.println("查找到的answerList如下：");
+        //for (int i = 0; i < answerList.size(); i++){
+        //    System.out.println("answer"+i+" :"+answerList.get(i).toString());
+        //}
 
-        System.out.println("测试结束");
+        //System.out.println("测试结束");
     }
 }
