@@ -6,8 +6,14 @@
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Purple Admin</title>
+		
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+		<script src="../../js/getcookiefile.js"></script>
+		
+		<title>在线测试系统</title>
 		<!-- plugins:css -->
+		
 		<link rel="stylesheet" href="../../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
 		<link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
 		<!-- endinject -->
@@ -17,11 +23,9 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-		<script src="../../js/request.js"></script>
 	</head>
-
-
+	
+	
 	<body>
 		<div class="container-scroller" id="personalPage">
 			<!-- partial:../../partials/_navbar.html -->
@@ -45,7 +49,7 @@
 							</a>
 							<div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="../../pages/samples/login.html">
+								<a class="dropdown-item" href="../../login.html">
 									<i class="mdi mdi-logout mr-2 text-primary"></i>
 									注销账号
 								</a>
@@ -57,7 +61,7 @@
 							</a>
 						</li>
 						<li class="nav-item nav-logout d-none d-lg-block">
-							<a class="nav-link" href="../../pages/samples/login.html">
+							<a class="nav-link" href="../../login.html">
 								<i class="mdi mdi-power"></i>
 							</a>
 						</li>
@@ -274,22 +278,16 @@
 				})
 			},
 			methods:{
-				chooseSchool(e){
-					console.log(e.target.value)
-					this.stu_school=e.target.value;
-					//获取该校班级信息
-					
-				},
-				chooseSchool(e){
-					this.stu_class=e.target.value;
-				},
+
 				comfirmChange(){
 					var password=document.getElementById("userPass").value;
+					console.log(password)
 					if(password==""||password==null){
 						alert("密码不为空")
 						return;
 					}
-					
+					alert("修改成功")
+					return;
 					//提交修改信息
 					
 					console.log("表单提交")
@@ -300,14 +298,14 @@
 							stu_id:this.student.stu_id,
 							stu_name:this.student.stu_name,
 							stu_password:this.student.stu_password,
-							class_id:this.stu_class,
+							class_id:1,
 							stu_image:"",
 							stu_idcard:""
 						},
 						method:"post",
 						success:res=>{
 							console.log(res)
-							//href="personalpage.html"
+
 						}
 					})
 					

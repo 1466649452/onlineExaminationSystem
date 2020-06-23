@@ -286,7 +286,9 @@ public class ScoreController {
             }
             //String stu_id, int paper_id, double score, Date finish, JSONObject stu_ans
             Double score = Double.valueOf(js.get("score").toString());
+
             Score insertScore = new Score((String) js.get("stu_id"), (Integer) js.get("paper_id"), score, (Long) js.get("finish"), (JSONObject) js.get("stu_ans"));
+            System.out.println(insertScore);
             if (scoreService.findOneScore(insertScore.getStu_id(), insertScore.getPaper_id()) != null) {
                 res.put("status", "fail");
                 res.put("error", "该学生已经做过该题");

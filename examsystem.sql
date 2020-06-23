@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 16/06/2020 22:00:29
+ Date: 22/06/2020 09:58:30
 */
 
 SET NAMES utf8mb4;
@@ -57,6 +57,13 @@ CREATE TABLE `classes` (
   CONSTRAINT `班级-学校` FOREIGN KEY (`school`) REFERENCES `school` (`school_name`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `班级-教师` FOREIGN KEY (`t_id`) REFERENCES `teacher` (`t_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of classes
+-- ----------------------------
+BEGIN;
+INSERT INTO `classes` VALUES ('1', 1, 'lilaoshi', NULL, NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for correctrate
@@ -114,6 +121,13 @@ CREATE TABLE `score` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
+-- Records of score
+-- ----------------------------
+BEGIN;
+INSERT INTO `score` VALUES ('1', 1, 23.3, '2020-06-19 12:06:58', '{\"123\":12}');
+COMMIT;
+
+-- ----------------------------
 -- Table structure for student
 -- ----------------------------
 DROP TABLE IF EXISTS `student`;
@@ -131,6 +145,13 @@ CREATE TABLE `student` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
+-- Records of student
+-- ----------------------------
+BEGIN;
+INSERT INTO `student` VALUES ('1', 'yan', 'yan', '1', NULL, NULL, NULL);
+COMMIT;
+
+-- ----------------------------
 -- Table structure for teacher
 -- ----------------------------
 DROP TABLE IF EXISTS `teacher`;
@@ -141,6 +162,15 @@ CREATE TABLE `teacher` (
   `t_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '教师头像地址',
   PRIMARY KEY (`t_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of teacher
+-- ----------------------------
+BEGIN;
+INSERT INTO `teacher` VALUES ('1', '王莉', '12345678', '');
+INSERT INTO `teacher` VALUES ('456', '王老师', '456', '');
+INSERT INTO `teacher` VALUES ('lilaoshi', '李', 'lilaoshi', '');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for test
@@ -155,6 +185,14 @@ CREATE TABLE `test` (
   PRIMARY KEY (`paper_id`) USING BTREE,
   KEY `试卷-老师` (`t_id`) USING BTREE,
   CONSTRAINT `试卷-老师` FOREIGN KEY (`t_id`) REFERENCES `teacher` (`t_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
+
+-- ----------------------------
+-- Records of test
+-- ----------------------------
+BEGIN;
+INSERT INTO `test` VALUES (1, 'name', 'lilaoshi', '2020-06-16 22:16:11', '2020-06-16 22:16:14');
+INSERT INTO `test` VALUES (2, 'na', 'lilaoshi', '2020-06-16 22:17:28', '2020-06-16 22:17:31');
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
