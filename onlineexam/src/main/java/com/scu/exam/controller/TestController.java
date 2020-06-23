@@ -7,6 +7,7 @@ import com.scu.exam.service.AnswerService;
 import com.scu.exam.service.CorrectRateService;
 import com.scu.exam.service.QuestionService;
 import com.scu.exam.service.TestService;
+import com.scu.exam.utils.JsonOperation;
 import com.scu.exam.utils.ResponseUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,6 +37,7 @@ public class TestController {
     private QuestionService questionService;
     @Autowired
     private AnswerService answerService;
+
 
     @ApiOperation("获取老师发布试卷列表")
     @ApiImplicitParams({
@@ -67,7 +69,6 @@ public class TestController {
             res.put("status","fail");
             res.put("error","没有传入必要信息");
             ResponseUtils.renderJson(response,res);
-            return;
         }
         //插入test数据库
         Test test = new Test();
@@ -84,15 +85,15 @@ public class TestController {
 
 
         //插入correctrate数据库
-        //question_id and point 二维数组
         List<CorrectRate> correctRateList = new ArrayList<CorrectRate>();
-        int a[][]= (int[][]) js.get("arraylist");
         int p_id = test.getPaper_id();
-        for(int i=0; i<a.length; i++){
+        JSONArray jsonArray = (JSONArray) js.get("arraylist");
+        for(int i = 0; i<jsonArray.size(); i++){
+            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
             CorrectRate correctRate = new CorrectRate();
             correctRate.setPaper_id(p_id);
-            correctRate.setQuestion_id(a[i][0]);
-            correctRate.setPoint(a[i][1]);
+            correctRate.setQuestion_id((Integer) jsonObject.get("question_id"));
+            correctRate.setPoint((Integer) jsonObject.get("point"));
             correctRateList.add(correctRate);
         }
         System.out.println(correctRateList);
@@ -110,30 +111,51 @@ public class TestController {
         }
     }
 
-
-    @GetMapping("/toUpdate")
-    public String toUpdate(Integer paper_id, ModelMap modelMap){
+    //老师修改试卷界面所需奥的信息
+    @ApiOperation("老师修改试卷")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "paper_id", dataType = "Integer", required = true, value = "试卷Id"),
+    })
+    @GetMapping("/testInfo")
+    @ResponseBody
+    public void testList (Integer paper_id, HttpServletResponse response) {
+        //卷子信息
         Test test = testService.findByPid(paper_id);
+        JSONObject testjson = (JSONObject) JSONObject.toJSON(test);
+
         List<CorrectRate> correctRateList = correctRateService.findByPid(paper_id);
-        modelMap.addAttribute("test", test);
-        modelMap.addAttribute("correctRateList", correctRateList);
-       //题目具体内容
         int n = correctRateList.size();
-        List<Question> questionList = new ArrayList<Question>();
-        List<Answer> list = new ArrayList<Answer>();
-        List<List<Answer>> answerList = new ArrayList<List<Answer>>();
+        List<JSONObject> jsonQuestionAndAnswerList = new ArrayList<>();
+        jsonQuestionAndAnswerList.add(testjson);
+
         for(int i=0; i<n; i++){
             int question_id = correctRateList.get(i).getQuestion_id();
+
+            //一道题的信息（除了选项）
             Question question = questionService.findQuestionById(question_id);
-            questionList.add(question);
+            CorrectRate correctRate = correctRateService.findByAllId(question_id, paper_id);
+            JSONObject questionjson = (JSONObject) JSONObject.toJSON(question);
+            JSONObject correctratejson = (JSONObject) JSONObject.toJSON(correctRate);
+            JsonOperation.combineJson(correctratejson, questionjson);
+
+            // 一道题的选项
+            List<Answer> list = new ArrayList<>();
             list = answerService.findAnswerById(question_id);
-            answerList.add(list);
+            List<JSONObject> AnswerList = new ArrayList<>();
+            for(int j=0; j<list.size(); j++){
+                JSONObject answer = (JSONObject) JSONObject.toJSON(list.get(j));
+                AnswerList.add(answer);
+            }
+            JSONArray answerlistjson = (JSONArray) JSONArray.toJSON(AnswerList);
+            correctratejson.put("answerlist", answerlistjson);
+            jsonQuestionAndAnswerList.add(correctratejson);
         }
-        modelMap.addAttribute("questionList", questionList);
-        modelMap.addAttribute("answerList",answerList);
-        return "update";
+        JSONArray QuestionAndAnswerList = (JSONArray) JSONArray.toJSON(jsonQuestionAndAnswerList);
+        ResponseUtils.renderJson(response, QuestionAndAnswerList);
     }
 
+
+    //老师修改试卷信息后，后端数据库的处理
     @ApiOperation("修改试卷信息")
     @PostMapping("/updateTest")
     @ResponseBody
@@ -145,7 +167,7 @@ public class TestController {
             res.put("error","没有传入必要信息");
             ResponseUtils.renderJson(response,res);
         }else{
-            int p_id = (int) js.get("paper_id");
+            Integer p_id = (Integer) js.get("paper_id");
             if(js.get("paper_name")!=null){
                 Test test = testService.findByPid(p_id);
                 test.setPaper_name((String) js.get("paper_name"));
@@ -156,7 +178,7 @@ public class TestController {
             }
             if(js.get("start")!=null){
                 Test test = testService.findByPid(p_id);
-                test.setPaper_name((String) js.get("start"));
+                test.setStart((Timestamp) js.get("start"));
                 int result2=testService.updateTest(test);
                 if(result2==1){
                     ResponseUtils.renderJson(response,"修改开始时间成功");
@@ -164,28 +186,30 @@ public class TestController {
             }
             if(js.get("end")!=null){
                 Test test = testService.findByPid(p_id);
-                test.setPaper_name((String) js.get("end"));
+                test.setEnd((Timestamp) js.get("end"));
                 int result3=testService.updateTest(test);
                 if(result3==1){
                     ResponseUtils.renderJson(response,"修改结束时间成功");
                 }
             }
             //arrayList: question_id,point,type(delete:0;add:1;change:3)
-            if(js.get("arrayList")!=null){
-                int a[][]= (int[][]) js.get("arrayList");
-                for(int i=0; i<a.length; i++){
+            if(js.get("arraylist")!=null){
+                JSONArray jsonArray = (JSONArray) js.get("arraylist");
+                for(int i=0; i<jsonArray.size(); i++){
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                    int change = (Integer) jsonObject.get("change");
                     //删除该卷的某道题
-                    if (a[i][2]==0){
-                        int result4=correctRateService.deleteCorrectRate(a[i][0], p_id);
+                    if (change == 0){
+                        int result4=correctRateService.deleteCorrectRate((Integer) jsonObject.get("question_id"), p_id);
                         if(result4==1){
                             ResponseUtils.renderJson(response,"删除题目成功");
                         }
                     }
                     //添加题目
-                    if (a[i][2]==1){
+                    if (change==1){
                         CorrectRate correctRate = new CorrectRate();
-                        correctRate.setPoint(a[i][1]);
-                        correctRate.setQuestion_id(a[i][0]);
+                        correctRate.setPoint((Integer) jsonObject.get("point"));
+                        correctRate.setQuestion_id((Integer) jsonObject.get("question_id"));
                         correctRate.setPaper_id(p_id);
                         int result5=correctRateService.insertCorrectRate(correctRate);
                         if(result5==1){
@@ -193,10 +217,10 @@ public class TestController {
                         }
                     }
                     //修改某道题
-                    if(a[i][2]==3){
+                    if(change==3){
                         CorrectRate correctRate = new CorrectRate();
-                        correctRate.setPoint(a[i][1]);
-                        correctRate.setQuestion_id(a[i][0]);
+                        correctRate.setPoint((Integer) jsonObject.get("point"));
+                        correctRate.setQuestion_id((Integer) jsonObject.get("question_id"));
                         correctRate.setPaper_id(p_id);
                         int result6=correctRateService.updateCorrectRate(correctRate);
                         if(result6==1){
