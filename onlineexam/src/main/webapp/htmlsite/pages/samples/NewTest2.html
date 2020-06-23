@@ -162,10 +162,9 @@
 					<div class="content-wrapper">
 						<h2>请添加试卷题目</h2>
 						<div class="form-check form-check-info" v-for="(item,index) in questionList">
-							<label class="form-check-label">
-								<input type="checkbox" class="form-check-input" @click="chooseQuestion(index,item.question_id)">
-								{{item.question_info}}
-								
+							<label class="form-check-label"  @click="chooseQuestion(index,item.question_id)">
+								<input type="checkbox" class="form-check-input">
+								<a style="margin-left: 30px;">{{item.question_info}}</a>
 							</label>
 						</div>
 						<div>

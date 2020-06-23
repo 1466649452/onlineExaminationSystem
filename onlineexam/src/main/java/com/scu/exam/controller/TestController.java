@@ -2,12 +2,14 @@ package com.scu.exam.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.scu.exam.pojo.*;
+import com.scu.exam.pojo.Answer;
+import com.scu.exam.pojo.CorrectRate;
+import com.scu.exam.pojo.Question;
+import com.scu.exam.pojo.Test;
 import com.scu.exam.service.AnswerService;
 import com.scu.exam.service.CorrectRateService;
 import com.scu.exam.service.QuestionService;
 import com.scu.exam.service.TestService;
-import com.scu.exam.pojo.Test;
 import com.scu.exam.utils.JsonOperation;
 import com.scu.exam.utils.ResponseUtils;
 import io.swagger.annotations.Api;
@@ -75,13 +77,12 @@ public class TestController {
             test.setT_id((String) js.get("t_id"));
             test.setPaper_name((String) js.get("paper_name"));
             //注意类型转换
-
-            test.setStart(new Timestamp((long) js.get("start")));
-
+            Timestamp timestamp = new Timestamp((long) js.get("start"));
+            test.setStart(timestamp);
             if (js.get("end") != null) {
-                test.setStart(new Timestamp((long) js.get("end")));
+                Timestamp time = new Timestamp((long) js.get("end"));
+                test.setEnd(time);
             }
-
             int result1 = testService.insertTest(test);
             System.out.println(result1);
             System.out.println(test.getPaper_id());
@@ -116,6 +117,7 @@ public class TestController {
             res.put("error", "插入不成功");
             ResponseUtils.renderJson(response, res);
         }
+
     }
 
     //老师修改试卷界面所需奥的信息
@@ -185,7 +187,8 @@ public class TestController {
             }
             if (js.get("start") != null) {
                 Test test = testService.findByPid(p_id);
-                test.setStart((Timestamp) js.get("start"));
+                Timestamp timestamp = new Timestamp((long) js.get("start"));
+                test.setStart(timestamp);
                 int result2 = testService.updateTest(test);
                 if (result2 == 1) {
                     ResponseUtils.renderJson(response, "修改开始时间成功");
@@ -193,7 +196,8 @@ public class TestController {
             }
             if (js.get("end") != null) {
                 Test test = testService.findByPid(p_id);
-                test.setEnd((Timestamp) js.get("end"));
+                Timestamp time = new Timestamp((long) js.get("end"));
+                test.setEnd(time);
                 int result3 = testService.updateTest(test);
                 if (result3 == 1) {
                     ResponseUtils.renderJson(response, "修改结束时间成功");
@@ -252,7 +256,7 @@ public class TestController {
             int result1 = correctRateService.deleteCorrectRateBatch((Integer) data.get("paper_id"));
             int result2 = testService.deleteTest((Integer) data.get("paper_id"));
             if (result1 == 1 && result2 == 1) {
-                res.put("status","success");
+                res.put("status", "success");
             } else {
                 System.out.println("删除错误");
                 res.put("status", "fail");
