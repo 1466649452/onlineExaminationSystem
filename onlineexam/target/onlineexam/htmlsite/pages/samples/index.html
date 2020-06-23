@@ -16,10 +16,12 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+		<script src="../../js/request.js"></script>
+		
 	</head>
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="indexpage">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -230,5 +232,17 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
+	<script type="text/javascript">
+		ajax({
+			url:"http://localhost:8080/userinfo/user",
+			success:res=>{
+				console.log(res)
+				localStorage.setItem("user_id",res.user_id);
+				localStorage.setItem("identity",res.identity);
+			}
+		})
+		
+		
+	</script>
 
 </html>

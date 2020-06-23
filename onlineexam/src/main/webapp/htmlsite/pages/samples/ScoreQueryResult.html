@@ -17,11 +17,15 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+		
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+		<script src="../../js/getcookiefile.js"></script>
 	</head>
 
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="scoreQueryResult">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -192,32 +196,32 @@
 														成绩
 													</th>
 													<th>
-														排名
+														完成时间
 													</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody v-for="item in pageData">
 												<tr class="table-info">
 													<td>
-														10001
+														{{item.stu_id}}
 													</td>
 													<td>
-														Daisy Yin
+														{{item.stu_name}}
 													</td>
 													<td>
-														No.2 Middle School
+														{{item.school}}
 													</td>
 													<td>
-														Class One
+														{{item.class_id}}
 													</td>
 													<td>
-														20200622
+														{{item.paper_name}}
 													</td>
 													<td>
-														100
+														{{item.score}}
 													</td>
 													<td>
-														1
+														{{item.finish}}
 													</td>
 												</tr>
 											</tbody>
@@ -253,5 +257,32 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
-
+<script type="text/javascript">
+	var app=new Vue({
+		el:"#scoreQueryResult",
+		data:{
+			pageData:[]
+		},
+		created:function(){
+			var stu_id =localStorage.getItem('student_id')
+			ajax({
+				url:"http://localhost:8080/score/getstudentAllScore",
+				data:{
+					stu_id:stu_id
+				},
+				method:"get",
+				success:res=>{
+					this.pageData=res.data;
+					for(var i=0;i<this.pageData.length;i++){
+						var temp=new Date(this.pageData[i].finish);
+						this.pageData[i].finish=temp.getFullYear()+"年"+(temp.getMonth()+1)+"月"+temp.getDate()+"日";
+					}
+				}
+			})
+		},
+		methods:{
+			
+		}
+	})
+</script>
 </html>

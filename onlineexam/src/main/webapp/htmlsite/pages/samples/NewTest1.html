@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Purple Admin</title>
+		<!-- plugins:css -->
+		<link rel="stylesheet" href="../../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+		<link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
+		<!-- endinject -->
+		<!-- plugin css for this page -->
+		<!-- End plugin css for this page -->
+		<!-- inject:css -->
+		<link rel="stylesheet" href="../../css/style.css">
+		<!-- endinject -->
+		<link rel="shortcut icon" href="../../images/favicon.png" />
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+	</head>
+
+
+	<body>
+		<div class="container-scroller" id="newTest1page">
+			<!-- partial:../../partials/_navbar.html -->
+			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+					<p class="text-lg-center ellipsis mb-0" style="color: #19d5ff;font-size: 30px;">
+						在线测试系统
+					</p>
+				</div>
+				<div class="navbar-menu-wrapper d-flex align-items-stretch">
+					<ul class="navbar-nav navbar-nav-right">
+						<li class="nav-item nav-profile dropdown">
+							<a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+								<div class="nav-profile-img">
+									<img src="../../images/faces/face1.jpg" alt="image">
+									<span class="availability-status online"></span>
+								</div>
+								<div class="nav-profile-text">
+									<p class="mb-1 text-black">葱宝</p>
+								</div>
+							</a>
+							<div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="../../pages/samples/login.html">
+									<i class="mdi mdi-logout mr-2 text-primary"></i>
+									注销账号
+								</a>
+							</div>
+						</li>
+						<li class="nav-item d-none d-lg-block full-screen-link">
+							<a class="nav-link">
+								<i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+							</a>
+						</li>
+						<li class="nav-item nav-logout d-none d-lg-block">
+							<a class="nav-link" href="../../pages/samples/login.html">
+								<i class="mdi mdi-power"></i>
+							</a>
+						</li>
+						<li class="nav-item nav-settings d-none d-lg-block">
+							<a class="nav-link" href="#">
+								<i class="mdi mdi-format-line-spacing"></i>
+							</a>
+						</li>
+					</ul>
+					<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+						<span class="mdi mdi-menu"></span>
+					</button>
+				</div>
+			</nav>
+			<!-- partial -->
+			<div class="container-fluid page-body-wrapper">
+				<!-- partial:../../partials/_sidebar.html -->
+				<nav class="sidebar sidebar-offcanvas" id="sidebar">
+					<ul class="nav">
+						<li class="nav-item nav-profile">
+							<a href="#" class="nav-link">
+								<div class="nav-profile-image">
+									<img src="../../images/faces/face1.jpg" alt="profile">
+									<span class="login-status online"></span>
+									<!--change to offline or busy as needed-->
+								</div>
+								<div class="nav-profile-text d-flex flex-column">
+									<span class="font-weight-bold mb-2">葱宝</span>
+									<span class="text-secondary text-small">管理员</span>
+								</div>
+								<i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+								<span class="menu-title">系统管理</span>
+								<i class="menu-arrow"></i>
+								<i class="mdi mdi-human-male-female menu-icon"></i>
+							</a>
+							<div class="collapse" id="ui-basic">
+								<ul class="nav flex-column sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/TeacherManager.html">教师管理</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/StudentManager.html">学生管理</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="collapse" href="#question" aria-expanded="false" aria-controls="question">
+								<span class="menu-title">题库管理</span>
+								<i class="menu-arrow"></i>
+								<i class="mdi mdi-crosshairs-gps menu-icon"></i>
+							</a>
+							<div class="collapse" id="question">
+								<ul class="nav flex-column sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/AddQuestion.html">添加题目</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/QuestionManager.html">查看题库</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/samples/CreateTheme.html">
+								<span class="menu-title">参加考试</span>
+								<i class="mdi mdi-contacts menu-icon"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/samples/TestManager.html">
+								<span class="menu-title">试卷管理</span>
+								<i class="mdi mdi-format-list-bulleted menu-icon"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="collapse" href="#analyze" aria-expanded="false" aria-controls="analyze">
+								<span class="menu-title">成绩分析</span>
+								<i class="menu-arrow"></i>
+								<i class="mdi mdi-chart-areaspline"></i>
+							</a>
+							<div class="collapse" id="analyze">
+								<ul class="nav flex-column sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/GradesQuery.html">成绩分布</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/Accuracy.html">正确率分析</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/samples/ScoreQuery.html">
+								<span class="menu-title">成绩查询</span>
+								<i class="mdi mdi-chart-bar menu-icon"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/samples/PersonalPage.html">
+								<span class="menu-title">个人信息修改</span>
+								<i class="mdi mdi-table-large menu-icon"></i>
+							</a>
+						</li>
+					</ul>
+				</nav>
+				<!-- partial -->
+				<div class="main-panel">
+					<div class="content-wrapper">
+						<div class="col-lg-12 grid-margin stretch-card">
+							<form class="forms-sample">
+								<h2 style="color: #52f1ff;">请输入试卷基本信息</h2>
+								<div class="form-group">
+									<label for="exampleInputUsername1">出题人ID</label>
+									<input type="text" class="form-control" disabled :value="t_id">
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">考试开始时间</label>
+									<input class="form-control" @blur="begintime($event)" placeholder="请输入开始时间 年/月/日 时:分:秒">
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">考试结束时间</label>
+									<input class="form-control" @blur="endtime($event)" placeholder="请输入结束时间 年/月/日 时:分:秒">
+								</div>
+								<div class="form-group">
+									<label for="exampleInputEmail1">试卷名称</label>
+									<input class="form-control" @blur="papername($event)" placeholder="请输入试卷名称">
+								</div>
+							</form>
+							<div>
+								<button style="position:absolute;top:390px;left:30px;" @click="nextpage" class="btn btn-gradient-info">下一步</button>
+							</div>
+						</div>
+					</div>
+					<!-- content-wrapper ends -->
+					<!-- partial:../../partials/_footer.html -->
+					<!-- partial -->
+				</div>
+				<!-- main-panel ends -->
+			</div>
+			<!-- page-body-wrapper ends -->
+		</div>
+		<!-- container-scroller -->
+		<!-- plugins:js -->
+		</div>
+		<script src="../../vendors/js/vendor.bundle.base.js"></script>
+		<script src="../../vendors/js/vendor.bundle.addons.js"></script>
+		<!-- endinject -->
+		<!-- Plugin js for this page-->
+		<!-- End plugin js for this page-->
+		<!-- inject:js -->
+		<script src="../../js/off-canvas.js"></script>
+		<script src="../../js/misc.js"></script>
+		<!-- endinject -->
+		<!-- Custom js for this page-->
+		<!-- End custom js for this page-->
+	</body>
+	<script type="text/javascript">
+		var app=new Vue({
+			el:"#newTest1page",
+			data:{
+				t_id:"",
+				begin:"",
+				end:"",
+				paper_name:"",
+				
+			},
+			created:function(){
+				this.t_id=localStorage.getItem("user_id");
+			},
+			methods:{
+				begintime(event){
+					console.log(event.target.value);
+					var time=event.target.value
+					this.begin=new Date(time).getTime()
+					if(this.begin=="Invalid Date"){
+						alert("时间格式错误")
+						this.begin=""
+					}
+				},
+				endtime(event){
+					console.log(event.target.value);
+					var time=event.target.value
+					this.end=new Date(time).getTime()
+					if(this.end=="Invalid Date"){
+						alert("时间格式错误")
+						this.end=""
+					}
+				},
+				papername(event){
+					console.log(event.target.value);
+					this.paper_name=event.target.value;
+				},
+				nextpage(){
+					if(this.begin==""||this.end==""||this.paper_name==""){
+						alert("信息不完整")
+						return;
+					}
+					var paper_info={};
+					paper_info["start"]=this.begin
+					paper_info["end"]=this.end
+					paper_info["t_id"]=this.t_id
+					paper_info["paper_name"]=this.paper_name
+					
+					localStorage.setItem("paper_info",paper_info);
+					window.location.href='NewTest2.html'
+				}
+				
+			}
+		})
+	</script>
+
+</html>

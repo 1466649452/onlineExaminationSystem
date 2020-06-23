@@ -43,6 +43,35 @@ public class ScoreController {
     /*
      * 查询学生情况相关API
      * */
+
+    @ApiOperation("获取一位考生所有考试的信息(测试通过）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "stu_id", dataType = "String", required = true, value = "用户Id")
+    })
+    @GetMapping("/getstudentAllScore")
+    public void getAllScoreInfo(String stu_id, HttpServletResponse response) {
+        JSONObject res = new JSONObject();
+        try {
+            JSONArray queryans = new JSONArray();
+            List<Score> scoreList = scoreService.findScoreBystuid(stu_id);
+            for (Score ss : scoreList) {
+                queryans.add(this.getCompleteInfoBystu_idandPaper_id(stu_id, ss.getPaper_id()));
+            }
+            if (queryans == null) {
+                //没有查询到
+                res.put("status", "fail");
+            } else {
+                res.put("status", "success");
+                res.put("data", queryans);
+            }
+            ResponseUtils.renderJson(response, res);
+        } catch (Exception e) {
+            res.put("status", "fail");
+            ResponseUtils.renderJson(response, res);
+        }
+    }
+
+
     @ApiOperation("获取一位考生某次考试的信息(测试通过）")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "stu_id", dataType = "String", required = true, value = "用户Id"),
@@ -50,18 +79,18 @@ public class ScoreController {
     })
     @GetMapping("/getstudentScore")
     public void getScoreInfo(String stu_id, Integer paper_id, HttpServletResponse response) {
-        JSONObject res=new JSONObject();
-        try{
+        JSONObject res = new JSONObject();
+        try {
             JSONObject queryans = this.getCompleteInfoBystu_idandPaper_id(stu_id, paper_id);
             if (queryans == null) {
                 //没有查询到
                 res.put("status", "fail");
             } else {
                 res.put("status", "success");
-                res.put("data",queryans);
+                res.put("data", queryans);
             }
             ResponseUtils.renderJson(response, res);
-        }catch (Exception e){
+        } catch (Exception e) {
             res.put("status", "fail");
             ResponseUtils.renderJson(response, res);
         }
@@ -96,14 +125,14 @@ public class ScoreController {
     })
     @GetMapping("/getPaperStudentScoreInfo")
     public void getPaperStudentScoreInfo(Integer paper_id, HttpServletResponse response) {
-        JSONObject res=new JSONObject();
-        try{
+        JSONObject res = new JSONObject();
+        try {
             //testinfojson同时作为返回的容器
             Test testinfo = testService.findByPid(paper_id);
             JSONObject testinfojson = (JSONObject) JSONObject.toJSON(testinfo);
             if (testinfo == null) {
                 //没有该试卷
-                res.put("status","fail");
+                res.put("status", "fail");
                 ResponseUtils.renderJson(response, res);
                 return;
             }
@@ -123,14 +152,75 @@ public class ScoreController {
             JSONArray studentsinfojson = (JSONArray) JSONArray.toJSON(studentsinfo);
             testinfojson.put("studentscores", studentsinfojson);
 
-            res.put("data",testinfojson);
-            res.put("status","success");
+            res.put("data", testinfojson);
+            res.put("status", "success");
             ResponseUtils.renderJson(response, res);
-        }catch (Exception e){
-            res.put("status","fail");
+        } catch (Exception e) {
+            res.put("status", "fail");
             ResponseUtils.renderJson(response, res);
         }
 
+    }
+
+    @ApiOperation("获取60以下，此后每隔10分的成绩统计（测试通过）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "paper_id", dataType = "Integer", required = true, value = "试卷id")
+    })
+    @GetMapping("/countStudentScore")
+    public void countStudentScore(Integer paper_id, HttpServletResponse response) {
+        JSONObject res = new JSONObject();
+        try {
+            List<Integer> resdata = new ArrayList<>();
+            //低于60
+            List<Score> scoreList = scoreService.findScoreCompare(paper_id, 60, "less");
+            resdata.add(scoreList.size());
+            //[60,70)
+            scoreList = betweern(paper_id, 60, 70);
+            resdata.add(scoreList.size());
+            //70-80
+            scoreList = betweern(paper_id, 70, 80);
+            resdata.add(scoreList.size());
+            //80-90
+            scoreList = betweern(paper_id, 80, 90);
+            resdata.add(scoreList.size());
+            //90-100
+            scoreList = betweern(paper_id, 90, 100);
+            resdata.add(scoreList.size());
+            //100
+            scoreList = scoreService.findScoreCompare(paper_id, 100, "equal");
+            resdata.add(scoreList.size());
+            JSONArray jsonArray=(JSONArray)JSONArray.toJSON(resdata);
+            res.put("status","success");
+            res.put("data",jsonArray);
+            ResponseUtils.renderJson(response, res);
+        } catch (Exception e) {
+            res.put("status", "fail");
+            ResponseUtils.renderJson(response, res);
+        }
+    }
+
+    private List<Score> betweern(Integer paper_id, double start, double end) {
+        try {
+            List<Score> scoreListmore = scoreService.findScoreCompare(paper_id, start, "more");
+            List<Score> scoreListless = scoreService.findScoreCompare(paper_id, end, "less");
+            List<Score> returnList = new ArrayList<>();
+            Iterator<Score> itscore = scoreListmore.iterator();
+            while (itscore.hasNext()) {
+                Score temp = itscore.next();
+                if (scoreListless.contains(temp)) {
+                    returnList.add(temp);
+                }
+            }
+            //加两个边界
+            List<Score> scoreequal1 = scoreService.findScoreCompare(paper_id, start, "equal");
+            itscore = scoreequal1.iterator();
+            while (itscore.hasNext()) {
+                returnList.add(itscore.next());
+            }
+            return returnList;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @ApiOperation("分数区间人数统计（测试通过）")
@@ -141,8 +231,8 @@ public class ScoreController {
     })
     @GetMapping("/countStudentBetween")
     public void countStudentBetween(Integer paper_id, Double startScore, Double endScore, HttpServletResponse response) {
-        JSONObject res=new JSONObject();
-        try{
+        JSONObject res = new JSONObject();
+        try {
             List<Score> scoreListmore = scoreService.findScoreCompare(paper_id, startScore, "more");
             List<Score> scoreListless = scoreService.findScoreCompare(paper_id, endScore, "less");
             List<Score> returnList = new ArrayList<>();
@@ -159,17 +249,20 @@ public class ScoreController {
             while (itscore.hasNext()) {
                 returnList.add(itscore.next());
             }
-            List<Score> scoreequal2 = scoreService.findScoreCompare(paper_id, startScore, "equal");
-            itscore = scoreequal2.iterator();
-            while (itscore.hasNext()) {
-                returnList.add(itscore.next());
-            }
-            res.put("status","success");
+            /*不包括右边界限
+             * List<Score> scoreequal2 = scoreService.findScoreCompare(paper_id, startScore, "equal");
+             * itscore = scoreequal2.iterator();
+             *
+             * while (itscore.hasNext()) {
+             * returnList.add(itscore.next());
+             * }
+             * */
+            res.put("status", "success");
             JSONArray betweenjson = (JSONArray) JSONArray.toJSON(returnList);
-            res.put("data",betweenjson);
+            res.put("data", betweenjson);
             ResponseUtils.renderJson(response, res);
-        }catch (Exception e){
-            res.put("status","fail");
+        } catch (Exception e) {
+            res.put("status", "fail");
             ResponseUtils.renderJson(response, res);
         }
     }
@@ -182,7 +275,7 @@ public class ScoreController {
     @PostMapping("/addRecordOfScore")
     public void addRecordOfScore(@RequestBody JSONObject data, HttpServletResponse response) throws JsonProcessingException {
         JSONObject res = new JSONObject();
-        try{
+        try {
             JSONObject js = (JSONObject) JSONObject.toJSON(data.get("record"));
             //必要数据校验 stu_id,paper_id
             if (js.get("stu_id") == null || js.get("paper_id") == null) {
@@ -207,7 +300,7 @@ public class ScoreController {
                 res.put("error", "未知错误");
             }
             ResponseUtils.renderJson(response, res);
-        }catch (Exception e){
+        } catch (Exception e) {
             res.put("status", "fail");
             ResponseUtils.renderJson(response, res);
         }
@@ -217,7 +310,7 @@ public class ScoreController {
     @PostMapping("/updateOneScore")
     public void updateOneScore(@RequestBody JSONObject data, HttpServletResponse response) {
         JSONObject res = new JSONObject();
-        try{
+        try {
             //必要数据校验 stu_id,paper_id
             String stu_id = (String) data.get("stu_id");
             Integer paper_id = (Integer) data.get("paper_id");
@@ -235,7 +328,7 @@ public class ScoreController {
                 res.put("status", "fail");
             }
             ResponseUtils.renderJson(response, res);
-        }catch (Exception e){
+        } catch (Exception e) {
             res.put("status", "fail");
             ResponseUtils.renderJson(response, res);
         }

@@ -3,16 +3,55 @@ package com.scu.exam.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.scu.exam.pojo.Score;
 import com.scu.exam.utils.ResponseUtils;
+import com.scu.exam.utils.TokenSign;
 import io.swagger.annotations.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 @Api(tags = "用户模块")
 @Controller
+@RequestMapping("userinfo")
 public class DemoController {
+    @ApiOperation("获取用户信息")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功"),
+            @ApiResponse(code = 400, message = "请求参数没填好"),
+            @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
+    })
+    @GetMapping("/user")
+    public void userlist(HttpServletRequest request,HttpServletResponse response) {
+        JSONObject res=new JSONObject();
+        try{
+            String token = request.getHeader("accessToken");
+            if(token==null){
+                Cookie[] cookies=request.getCookies();
+                for(Cookie cookie : cookies){
+                    if(cookie.getName().equals("accessToken")){
+                        token=cookie.getValue();
+                        break;
+                    }else{
+                        token=null;
+                    }
+                }
+            }
+            String user_id=TokenSign.getUserId(token);
+            String identity=TokenSign.getUserIdentity(token);
+            res.put("status","success");
+            res.put("user_id",user_id);
+            res.put("identity",identity);
+            ResponseUtils.renderJson(response,res);
+        }catch (Exception e){
+            res.put("status","fail");
+            ResponseUtils.renderJson(response,res);
+        }
+    }
+
+
     @ApiOperation("使用responsebody返回对象数据到前端")
     @ApiImplicitParams({
             /*

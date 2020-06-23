@@ -276,7 +276,10 @@
 							"answerList": this.modify_questionid.answerList
 						},
 						success: res => {
-							console.log(res)
+							if(res.status== "修改成功！"){
+								alert("修改成功")
+								window.location.href="QuestionManager.html";
+							}
 						}
 					})
 				},

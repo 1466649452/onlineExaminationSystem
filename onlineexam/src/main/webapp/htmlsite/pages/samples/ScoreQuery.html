@@ -17,11 +17,16 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+		
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+		<script src="../../js/getcookiefile.js"></script>
+		
 	</head>
 
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="scoreQuery">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -159,7 +164,7 @@
 					<div class="content-wrapper">
 						<div class="page-header">
 							<h3 class="page-title">
-								输入你想要查询学生的学号或者输入学号与试卷id
+								输入你想要查询学生的学号
 							</h3>
 						</div>
 						<div class="row">
@@ -175,12 +180,12 @@
 																<div class="input-group-prepend bg-transparent">
 																	<i class="input-group-text border-0 mdi mdi-magnify"></i>
 																</div>
-																<input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+																<input id="student_id" type="text" class="form-control bg-transparent border-0" placeholder="学号">
 															</div>
 														</form>
 													</div>
 													<div class="mt-2">
-														<a class="btn btn-block btn-gradient-info btn-lg font-weight-bold auth-form-btn" href="../../pages/samples/ScoreQueryResult.html">查询</a>
+														<a class="btn btn-block btn-gradient-info btn-lg font-weight-bold auth-form-btn" @click="queryaction">查询</a>
 													</div>
 												</div>
 											</form>
@@ -212,5 +217,35 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
+	<script type="text/javascript">
+		var app=new Vue({
+			el:"#scoreQuery",
+			methods:{
+				queryaction(){
+					var stu_id=document.getElementById("student_id").value;
+					if(stu_id==""){
+						alert("请输入学号")
+						return;
+					}
+					console.log(stu_id)
+					ajax({
+						url:"http://localhost:8080/score/getstudentAllScore",
+						data:{
+							stu_id:stu_id
+						},
+						method:"get",
+						success:res=>{
+							if(res.status=="fail"){
+								alert("暂无该学生考试记录")
+							}else{
+								localStorage.setItem("student_id",stu_id);
+								window.location.href="ScoreQueryResult.html"
+							}
+						}
+					})
+				}
+			}
+		})
+	</script>
 
 </html>

@@ -17,11 +17,16 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+		<script src="../../js/getcookiefile.js"></script>
+
 	</head>
 
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="testQuery">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -161,7 +166,7 @@
 					<div class="content-wrapper">
 						<div class="page-header">
 							<h3 class="page-title">
-								输入你想要查询考试试卷ID
+								输入你想要查询考试试卷id
 							</h3>
 						</div>
 						<div class="row">
@@ -177,12 +182,12 @@
 																<div class="input-group-prepend bg-transparent">
 																	<i class="input-group-text border-0 mdi mdi-magnify"></i>
 																</div>
-																<input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+																<input type="text" class="form-control bg-transparent border-0" id="paper_name" placeholder="试卷id">
 															</div>
 														</form>
 													</div>
 													<div class="mt-2">
-														<a class="btn btn-block btn-gradient-info btn-lg font-weight-bold auth-form-btn" href="../../pages/samples/GradesQueryResult.html">查询</a>
+														<a class="btn btn-block btn-gradient-info btn-lg font-weight-bold auth-form-btn" @click="queryaction">查询</a>
 													</div>
 												</div>
 											</form>
@@ -196,19 +201,53 @@
 				</div>
 				<!-- page-body-wrapper ends -->
 			</div>
-			<!-- container-scroller -->
-			<!-- plugins:js -->
-			<script src="../../vendors/js/vendor.bundle.base.js"></script>
-			<script src="../../vendors/js/vendor.bundle.addons.js"></script>
-			<!-- endinject -->
-			<!-- Plugin js for this page-->
-			<!-- End plugin js for this page-->
-			<!-- inject:js -->
-			<script src="../../js/off-canvas.js"></script>
-			<script src="../../js/misc.js"></script>
-			<!-- endinject -->
-			<!-- Custom js for this page-->
-			<!-- End custom js for this page-->
+		</div>
+		<!-- container-scroller -->
+		<!-- plugins:js -->
+		<script src="../../vendors/js/vendor.bundle.base.js"></script>
+		<script src="../../vendors/js/vendor.bundle.addons.js"></script>
+		<!-- endinject -->
+		<!-- Plugin js for this page-->
+		<!-- End plugin js for this page-->
+		<!-- inject:js -->
+		<script src="../../js/off-canvas.js"></script>
+		<script src="../../js/misc.js"></script>
+		<!-- endinject -->
+		<!-- Custom js for this page-->
+		<!-- End custom js for this page-->
 	</body>
-
+	<script type="text/javascript">
+		var app = new Vue({
+			el: "#testQuery",
+			methods: {
+				queryaction() {
+					var paper_name = document.getElementById("paper_name").value;
+					if (paper_name == "") {
+						alert("请输入试卷名")
+						return;
+					}
+					paper_name=parseInt(paper_name)
+					if(isNaN(paper_name)){
+						alert("暂无这项考试")
+						return ;
+					}
+					ajax({
+						url: "http://localhost:8080/score/getPaperStudentScoreInfo",
+						data: {
+							paper_id: paper_name
+						},
+						method: "get",
+						success: res => {
+							if (res.status == "fail") {
+								alert("暂无这项考试")
+							} else {
+								localStorage.setItem("paper_id",paper_name);
+								window.location.href = "GradesQueryResult.html"
+							}
+						}
+					})
+				}
+			}
+		})
+	</script>
 </html>

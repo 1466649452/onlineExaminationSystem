@@ -17,11 +17,13 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
 	</head>
 
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="personalPage">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -175,15 +177,16 @@
 									<form class="pt-3">
 										<div class="form-group">
 											<label for="fname">姓名</label>
-											<input type="text" class="form-control form-control-lg" id="exampleInputUsername1" placeholder="颜家俊">
+											<input type="text" class="form-control form-control-lg" id="exampleInputUsername1" disabled :value="student.stu_name">
 										</div>
+										
 										<div class="form-group">
 											<label for="fname">学号</label>
-											<input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="2017141411203">
+											<input type="email" class="form-control form-control-lg" id="exampleInputEmail1" disabled :value="student.stu_id">
 										</div>
 										<div class="form-group">
 											<label for="fname">学校</label>
-											<select class="form-control form-control-lg" id="exampleFormControlSelect2">
+											<select class="form-control form-control-lg" v-model="stu_school" @change="chooseSchool($event)" >
 												<option>第一中学</option>
 												<option>第二中学</option>
 												<option>第三中学</option>
@@ -193,7 +196,7 @@
 										</div>
 										<div class="form-group">
 											<label for="fname">班级</label>
-											<select class="form-control form-control-lg" id="exampleFormControlSelect2">
+											<select class="form-control form-control-lg"  v-model="stu_class" @change="chooseClass($event)">
 												<option>1班</option>
 												<option>2班</option>
 												<option>3班</option>
@@ -203,10 +206,10 @@
 										</div>
 										<div class="form-group">
 											<label for="fname">密码</label>
-											<input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password">
+											<input type="password" id="userPass" class="form-control form-control-lg" :value="student.stu_password" placeholder="录入新密码">
 										</div>
 										<div class="mt-3">
-											<a class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn" href="personalpage.html">Confirm</a>
+											<a class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"  @click="comfirmChange"  >确认修改</a>
 										</div>
 									</form>
 								</span>
@@ -233,5 +236,85 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
+	
+	<script type="text/javascript">
+		var app=new Vue({
+			el:"#personalPage",
+			data:{
+				student:{},
+				school:{},
+				stu_school:"",
+				stu_class:"",
+			},
+			created:function(){
+				var stu_id=localStorage.getItem("user_id");
+				ajax({
+					url: "http://localhost:8080/student/getStudent",
+					data: {
+						stu_id: stu_id,
+					},
+					success: res => {
+						console.log(res)
+						
+						this.student=res.student;
+						this.stu_class=res.student.class_id;
+						ajax({
+							url: "http://localhost:8080/classes/getClass",
+							data: {
+								class_id: res.student.class_id,
+							},
+							success:res=>{
+								this.stu_school=res.classes.school;	
+							}
+						})
+						
+						//获取所有学校
+					
+					}
+				})
+			},
+			methods:{
+				chooseSchool(e){
+					console.log(e.target.value)
+					this.stu_school=e.target.value;
+					//获取该校班级信息
+					
+				},
+				chooseSchool(e){
+					this.stu_class=e.target.value;
+				},
+				comfirmChange(){
+					var password=document.getElementById("userPass").value;
+					if(password==""||password==null){
+						alert("密码不为空")
+						return;
+					}
+					
+					//提交修改信息
+					
+					console.log("表单提交")
+					console.log(this.student.stu_id,this.student.stu_name,this.student.stu_password,this.stu_class,)
+					ajax({
+						url:"http://localhost:8080/student/updateStudent",
+						data:{
+							stu_id:this.student.stu_id,
+							stu_name:this.student.stu_name,
+							stu_password:this.student.stu_password,
+							class_id:this.stu_class,
+							stu_image:"",
+							stu_idcard:""
+						},
+						method:"post",
+						success:res=>{
+							console.log(res)
+							//href="personalpage.html"
+						}
+					})
+					
+				}
+			}
+		})
+		
+	</script>
 
 </html>

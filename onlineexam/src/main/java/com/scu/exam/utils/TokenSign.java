@@ -114,5 +114,20 @@ public class TokenSign {
         }
         return null;
     }
+    /**
+     * 获取token中信息 userIdentity
+     * @param token
+     * @return
+     */
+    public static String getUserIdentity(String token) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("identity").asString();
+        } catch (JWTDecodeException e) {
+            e.getStackTrace();
+        }
+        return null;
+    }
+
 
 }

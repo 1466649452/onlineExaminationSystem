@@ -86,19 +86,18 @@ public class StudentController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/updateStudent")
-    public void updateAdminInfo(String stu_id, @RequestBody JSONObject studentInfo, HttpServletResponse response){
+    public void updateAdminInfo(@RequestBody JSONObject studentInfo, HttpServletResponse response){
+        System.out.println(studentInfo);
         Student student = setStudentByJSON(studentInfo);
-        student.setStu_id(stu_id);
 
         /* 在数据库修改相对应的学生信息 */
         try{
-            studentService.updateStudent(student);
+            System.out.println(studentService.updateStudent(student));
+            ResponseUtils.renderJson(response, "修改成功！");
         }catch (DataAccessException e){
+            System.out.println("modigy");
             ResponseUtils.renderJson(response, "修改失败！");
         }
-        ResponseUtils.renderJson(response, "修改成功！");
-
-        System.out.println(response);
     }
 
     //删除学生信息

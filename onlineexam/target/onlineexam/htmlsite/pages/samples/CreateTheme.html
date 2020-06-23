@@ -8,7 +8,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<script src="../../js/request.js"></script>
-		<script src="../../js/getcookiefile.js"></script>
 		<title>Purple Admin</title>
 		<!-- plugins:css -->
 		<link rel="stylesheet" href="../../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
@@ -123,7 +122,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="../../pages/forms/xx.html">
+							<a class="nav-link" href="../../pages/samples/TestManager.html">
 								<span class="menu-title">试卷管理</span>
 								<i class="mdi mdi-format-list-bulleted menu-icon"></i>
 							</a>
@@ -218,7 +217,8 @@
 														<td style="height: 24px">&nbsp;</td>
 														<td style="height: 24px">&nbsp;
 															<div style="position:absolute;top:620px;left:500px">
-																<input type="submit" name="Button1" value="考试" id="Button1" v-on:click="exam" onclick="window.location.href='exam.html'" class="btn btn-gradient-info btn-fw">
+																<input type="submit" name="Button1" value="考试" id="Button1" v-on:click="exam" onclick="window.location.href='exam.html'"
+																 class="btn btn-gradient-info btn-fw">
 															</div>
 														</td>
 														<td style="height: 24px">&nbsp;</td>
@@ -344,30 +344,36 @@
 				value: ["暂无考试内容"],
 				choosetest_id: "",
 			},
-			beforeCreate: function() {
-				//这个学生的教师。
+			created: function() {
+				var stu_id=localStorage.getItem("user_id");
 				ajax({
-					url: "http://localhost:8080/score/getPaperStudentScoreInfo",
+					url: "http://localhost:8080/student/getStudent",
 					data: {
-						stu_id: "1",
-						paper_id: 1
+						stu_id: stu_id,
 					},
 					success: res => {
 						ajax({
-							url: "http://localhost:8080/teacher/testList",
+							url: "http://localhost:8080/classes/getClass",
 							data: {
-								t_id: res.data.t_id
+								class_id: res.student.class_id,
 							},
-							success: res => {
-								console.log(res)
-								var temp = [];
-								for (var i = 0; i < res.length; i++) {
-									temp.push({
-										"p_id": res[i].paper_id,
-										"p_name": res[i].paper_name
-									})
-								}
-								this.value = temp;
+							success:res=>{
+								ajax({
+									url: "http://localhost:8080/teacher/testList",
+									data: {
+										t_id: res.classes.t_id
+									},
+									success: res => {
+										var temp = [];
+										for (var i = 0; i < res.length; i++) {
+											temp.push({
+												"p_id": res[i].paper_id,
+												"p_name": res[i].paper_name
+											})
+										}
+										this.value = temp;
+									}
+								})
 							}
 						})
 					}
@@ -379,7 +385,7 @@
 				},
 				exam: function() {
 					console.log(this.choosetest_id)
-					localStorage.setItem("paper_id",this.choosetest_id)
+					localStorage.setItem("paper_id", this.choosetest_id)
 				},
 			}
 		})
