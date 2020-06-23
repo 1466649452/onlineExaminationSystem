@@ -21,7 +21,7 @@
 
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="testManagerpage">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -230,39 +230,13 @@
 	</body>
 <script type="text/javascript">
 		var app=new Vue({
-			el:"#personalPage",
+			el:"#testManagerpage",
 			data:{
-				student:{},
-				school:{},
-				stu_school:"",
-				stu_class:"",
+				t_id:"",
 				
 			},
 			created:function(){
-				var stu_id=localStorage.getItem("user_id");
-				ajax({
-					url: "http://localhost:8080/student/getStudent",
-					data: {
-						stu_id: stu_id,
-					},
-					success: res => {
-						console.log(res)
-						this.student=res.student;
-						this.stu_class=res.student.class_id;
-						ajax({
-							url: "http://localhost:8080/classes/getClass",
-							data: {
-								class_id: res.student.class_id,
-							},
-							success:res=>{
-								this.stu_school=res.classes.school;	
-							}
-						})
-						
-						//获取所有学校
-					
-					}
-				})
+				this.t_id=localStorage.getItem("user_id");
 			},
 			methods:{
 				

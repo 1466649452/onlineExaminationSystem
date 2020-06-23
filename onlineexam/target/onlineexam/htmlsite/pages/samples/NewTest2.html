@@ -17,11 +17,13 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
 	</head>
 
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="newTest2page">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -159,12 +161,16 @@
 				<div class="main-panel">
 					<div class="content-wrapper">
 						<h2>请添加试卷题目</h2>
-						<div class="form-check form-check-info">
+						
+						
+						
+						<div class="form-check form-check-info" v-for="(item,index) in questionList">
 						  <label class="form-check-label">
-						    <input type="checkbox" class="form-check-input" checked>
-						    用V-for获取试题信息，进行多项选择
+						    <input type="checkbox" class="form-check-input" @click="chooseQuestion(item.question_id)" >
+						    {{item.question_info}}
 						  </label>
 						</div>
+						
 						<div class="form-check form-check-info">
 						  <label class="form-check-label">
 						    <input type="checkbox" class="form-check-input" checked>
@@ -172,7 +178,7 @@
 						  </label>
 						</div>
 						<div>
-							<button onclick="window.location.href='TestManager.html'" class="btn btn-gradient-info">完成并保存试卷</button>
+							<button onclick="window.location.href='TestManager.html'" class="btn btn-gradient-info" @click="completeThePaper">完成并保存试卷</button>
 						</div>
 					</div>
 					<!-- content-wrapper ends -->
@@ -197,5 +203,33 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
+	<script type="text/javascript">
+		var app=new Vue({
+			el:"#newTest2page",
+			data:{
+				paper_info:{},
+				questionList:[]
+			},
+			created:function(){
+				this.paper_info=localStorage.getItem("paper_info");
+				ajax({
+					url: "http://localhost:8080/question/findAllQuestion",
+					success: res => {
+						this.questionList = res.questionList;
+						console.log(res.questionList)
+					}
+				})
+			},
+			methods:{
+				chooseQuestion(event){
+					console.log(event)
+				},
+				completeThePaper(){
+					
+				}
+			}
+		})
+		
+	</script>
 
 </html>

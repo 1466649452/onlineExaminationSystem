@@ -19,7 +19,6 @@
 		<link rel="shortcut icon" href="../../images/favicon.png" />
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<script src="../../js/request.js"></script>
-		<script src="../../js/getcookiefile.js"></script>
 	</head>
 
 
@@ -180,6 +179,7 @@
 											<label for="fname">姓名</label>
 											<input type="text" class="form-control form-control-lg" id="exampleInputUsername1" disabled :value="student.stu_name">
 										</div>
+										
 										<div class="form-group">
 											<label for="fname">学号</label>
 											<input type="email" class="form-control form-control-lg" id="exampleInputEmail1" disabled :value="student.stu_id">
@@ -245,7 +245,6 @@
 				school:{},
 				stu_school:"",
 				stu_class:"",
-				
 			},
 			created:function(){
 				var stu_id=localStorage.getItem("user_id");
@@ -256,6 +255,7 @@
 					},
 					success: res => {
 						console.log(res)
+						
 						this.student=res.student;
 						this.stu_class=res.student.class_id;
 						ajax({

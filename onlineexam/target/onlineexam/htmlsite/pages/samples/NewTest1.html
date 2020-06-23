@@ -17,11 +17,13 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
 	</head>
 
 
 	<body>
-		<div class="container-scroller">
+		<div class="container-scroller" id="newTest1page">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -162,23 +164,23 @@
 								<h2 style="color: #52f1ff;">请输入试卷基本信息</h2>
 								<div class="form-group">
 									<label for="exampleInputUsername1">出题人ID</label>
-									<input type="text" class="form-control" id="exampleInputUsername1" placeholder="请输入你的ID">
+									<input type="text" class="form-control" disabled :value="t_id">
 								</div>
 								<div class="form-group">
 									<label for="exampleInputEmail1">考试开始时间</label>
-									<input class="form-control" placeholder="请输入开始时间">
+									<input class="form-control" @blur="begintime($event)" placeholder="请输入开始时间 年/月/日 时:分:秒">
 								</div>
 								<div class="form-group">
 									<label for="exampleInputEmail1">考试结束时间</label>
-									<input class="form-control" placeholder="请输入结束时间">
+									<input class="form-control" @blur="endtime($event)" placeholder="请输入结束时间 年/月/日 时:分:秒">
 								</div>
 								<div class="form-group">
 									<label for="exampleInputEmail1">试卷名称</label>
-									<input class="form-control" placeholder="请输入试卷名称">
+									<input class="form-control" @blur="papername($event)" placeholder="请输入试卷名称">
 								</div>
 							</form>
 							<div>
-								<button style="position:absolute;top:390px;left:30px;"onclick="window.location.href='NewTest2.html'" class="btn btn-gradient-info">下一步</button>
+								<button style="position:absolute;top:390px;left:30px;" @click="nextpage" class="btn btn-gradient-info">下一步</button>
 							</div>
 						</div>
 					</div>
@@ -205,5 +207,59 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
+	<script type="text/javascript">
+		var app=new Vue({
+			el:"#newTest1page",
+			data:{
+				t_id:"",
+				begin:"",
+				end:"",
+				paper_name:"",
+				
+			},
+			created:function(){
+				this.t_id=localStorage.getItem("user_id");
+			},
+			methods:{
+				begintime(event){
+					console.log(event.target.value);
+					var time=event.target.value
+					this.begin=new Date(time).getTime()
+					if(this.begin=="Invalid Date"){
+						alert("时间格式错误")
+						this.begin=""
+					}
+				},
+				endtime(event){
+					console.log(event.target.value);
+					var time=event.target.value
+					this.end=new Date(time).getTime()
+					if(this.end=="Invalid Date"){
+						alert("时间格式错误")
+						this.end=""
+					}
+				},
+				papername(event){
+					console.log(event.target.value);
+					this.paper_name=event.target.value;
+				},
+				nextpage(){
+					if(this.begin==""||this.end==""||this.paper_name==""){
+						alert("信息不完整")
+						return;
+					}
+					var paper_info={};
+					paper_info["start"]=this.begin
+					paper_info["end"]=this.end
+					paper_info["t_id"]=this.t_id
+					paper_info["paper_name"]=this.paper_name
+					
+					localStorage.setItem("paper_info",paper_info);
+					window.location.href='NewTest2.html'
+				}
+				
+			}
+		})
+	</script>
 
 </html>

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Iterator;
+import java.util.List;
 
 @Api(tags = "学校信息相关API")
 @Controller
@@ -69,6 +70,26 @@ public class SchoolController {
     @GetMapping("/getSchool")
     public void getSchoolInfo(String school_name, HttpServletResponse response){
         School school = schoolService.findSchoolByName(school_name);
+        if (school != null){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("school", school);
+            ResponseUtils.renderJson(response, jsonObject);
+        }
+
+        //测试用，待删
+        System.out.println(response);
+    }
+
+    //查看学校信息
+    @ApiOperation("查看所有学校信息")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功"),
+            @ApiResponse(code = 400, message = "请求参数没填好"),
+            @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
+    })
+    @GetMapping("/getAllSchool")
+    public void getAllSchool(HttpServletResponse response){
+        List<School> school = schoolService.findAllSchool();
         if (school != null){
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("school", school);

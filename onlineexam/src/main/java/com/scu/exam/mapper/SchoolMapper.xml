@@ -9,6 +9,11 @@
         select * from school where school_name = #{school_name}
     </select>
 
+    <!--查找所有学校-->
+    <select id="findAllSchool" parameterType="String" resultType="School">
+        select * from school
+    </select>
+
     <!--增加-->
     <insert id="insertSchool" parameterType="com.scu.exam.pojo.School" keyProperty="school_name">
         insert into school (school_name,school_address,school_phone) values(#{school_name},#{school_address},#{school_phone})
