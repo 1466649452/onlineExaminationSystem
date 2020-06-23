@@ -42,6 +42,7 @@ public class studentTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        System.out.println(b);
         int result= studentService.insertStudent(b);
         System.out.println(result);
     }

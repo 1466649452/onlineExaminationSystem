@@ -34,24 +34,40 @@ public class StudentController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/addStudent")
-    public void addAdmin(@RequestBody JSONObject studentInfo, HttpServletResponse response){
+    public void addAdmin(@RequestBody JSONObject studentInfo, HttpServletResponse response) {
         System.out.println(studentInfo.toString());
+        try {
+            Student student = setStudentByJSON(studentInfo);
+            System.out.println(student.getStu_id());
+            Student student1 = studentService.findStudentById((String)student.getStu_id());
+            if(student1==null){
+                try {
+                    System.out.println(student);
+                    studentService.insertStudent(student);
+                    ResponseUtils.renderJson(response, "注册成功！！！！");
+                } catch (DataAccessException e) {
+                    System.out.println("插入报错");
+                    System.out.println("here");
 
-        Student student = setStudentByJSON(studentInfo);
-        Student student1 = studentService.findStudentById(student.getStu_id());
-
-        if(student1.getStu_idcard().equals(student1.getStu_idcard())){
-            ResponseUtils.renderJson(response, "失败！该用户已存在！");
-        }else{
-            try{
-                studentService.insertStudent(student);
-            }catch (DataAccessException e){
-                ResponseUtils.renderJson(response, "注册失败！！！");
+                    ResponseUtils.renderJson(response, "注册失败！！！");
+                }
+            }else {
+                if (student1.getStu_idcard().equals(student1.getStu_idcard())) {
+                    ResponseUtils.renderJson(response, "失败！该用户已存在！");
+                } else {
+                    try {
+                        studentService.insertStudent(student);
+                        ResponseUtils.renderJson(response, "注册成功！！！！");
+                    } catch (DataAccessException e) {
+                        System.out.println("插入报错");
+                        ResponseUtils.renderJson(response, "注册失败！！！");
+                    }
+                }
             }
-        }
-        ResponseUtils.renderJson(response, "注册成功！！！！");
 
-        System.out.println(response);
+        } catch (Exception e) {
+            System.out.println("查询错了");
+        }
     }
 
     //查看学生信息
@@ -65,9 +81,9 @@ public class StudentController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @GetMapping("/getStudent")
-    public void getStudentInfo(String stu_id, HttpServletResponse response){
+    public void getStudentInfo(String stu_id, HttpServletResponse response) {
         Student student = studentService.findStudentById(stu_id);
-        if (student != null){
+        if (student != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("student", student);
             ResponseUtils.renderJson(response, jsonObject);
@@ -84,14 +100,14 @@ public class StudentController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/updateStudent")
-    public void updateAdminInfo(@RequestBody JSONObject studentInfo, HttpServletResponse response){
+    public void updateAdminInfo(@RequestBody JSONObject studentInfo, HttpServletResponse response) {
         Student student = setStudentByJSON(studentInfo);
 
         /* 在数据库修改相对应的学生信息 */
-        try{
+        try {
             studentService.updateStudent(student);
             ResponseUtils.renderJson(response, "修改成功！");
-        }catch (DataAccessException e){
+        } catch (DataAccessException e) {
             System.out.println("modigy");
             ResponseUtils.renderJson(response, "修改失败！");
         }
@@ -103,22 +119,22 @@ public class StudentController {
             @ApiImplicitParam(paramType = "query", name = "stu_id", dataType = "String", required = true, value = "学生id")
     })
     @PostMapping("/deleteStudent")
-    public void deleteOneScore(String stu_id, HttpServletResponse response){
-        int stu=studentService.deleteStudentById(stu_id);
-        JSONObject js=new JSONObject();
-        if(stu!=0){
-            js.put("status","success");
-            ResponseUtils.renderJson(response,js);
-        }else{
-            js.put("status","fail");
-            ResponseUtils.renderJson(response,js);
+    public void deleteOneScore(String stu_id, HttpServletResponse response) {
+        int stu = studentService.deleteStudentById(stu_id);
+        JSONObject js = new JSONObject();
+        if (stu != 0) {
+            js.put("status", "success");
+            ResponseUtils.renderJson(response, js);
+        } else {
+            js.put("status", "fail");
+            ResponseUtils.renderJson(response, js);
         }
     }
 
     /*
        将前端传回的json对象中信息取出存入student对象中
     */
-    public Student setStudentByJSON(JSONObject jsonObject){
+    public Student setStudentByJSON(JSONObject jsonObject) {
         Student student = new Student();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dstr="2008-04-24";
@@ -128,10 +144,10 @@ public class StudentController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        student.setStu_password((String)jsonObject.get("stu_password"));
-        student.setStu_name((String)jsonObject.get("stu_name"));
-        student.setClass_id((String)jsonObject.get("class_id"));
-        student.setStu_id((String)jsonObject.get("stu_id"));
+        student.setStu_password((String) jsonObject.get("stu_password"));
+        student.setStu_name((String) jsonObject.get("stu_name"));
+        student.setClass_id((String) jsonObject.get("class_id"));
+        student.setStu_id((String) jsonObject.get("stu_id"));
         student.setStu_idcard("123");
         student.setStu_Image("123");
 
