@@ -6,6 +6,8 @@ import com.scu.exam.service.ClassesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClassesServiceImpl implements ClassesService {
 
@@ -30,5 +32,10 @@ public class ClassesServiceImpl implements ClassesService {
     @Override
     public int deleteClassById(String class_id) {
         return classesMapper.deleteClassById(class_id);
+    }
+
+    @Override
+    public List<Classes> findClassBySchool(String school) {
+        return classesMapper.findClassBySchool(school);
     }
 }

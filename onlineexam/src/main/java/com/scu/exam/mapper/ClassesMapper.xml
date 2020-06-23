@@ -9,7 +9,7 @@
         select * from classes where class_id = #{class_id}
     </select>
 
-    <insert id="insertClass" parameterType="com.scu.exam.pojo.Classes" keyProperty="class_">
+    <insert id="insertClass" parameterType="com.scu.exam.pojo.Classes" keyProperty="class_id">
         insert into classes (class_id,grade,t_id,stu_number,school) values(#{class_id},#{grade},#{t_id},#{stu_number},#{school})
     </insert>
 
@@ -27,5 +27,9 @@
     <delete id="deleteClassById" parameterType="String">
         delete from classes where class_id = #{class_id}
     </delete>
+
+    <select id="findClassBySchool" parameterType="String" resultType="Classes">
+        select * from classes where school = #{school}
+    </select>
 
 </mapper>

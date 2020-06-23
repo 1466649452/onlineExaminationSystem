@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Api(tags = "班级管理相关API")
 @Controller
@@ -63,6 +64,29 @@ public class ClassesController {
     @GetMapping("/getClass")
     public void getClassInfo(String class_id, HttpServletResponse response){
         Classes classes = classesService.findClassById(class_id);
+        if (classes != null){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("classes", classes);
+            ResponseUtils.renderJson(response, jsonObject);
+        }
+
+        //测试用，待删
+        System.out.println(response);
+    }
+
+    //查看同一个学校的班级信息
+    @ApiOperation("查看同一个学校的班级信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "school", dataType = "String", required = true, value = "学校名称")
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功"),
+            @ApiResponse(code = 400, message = "请求参数没填好"),
+            @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
+    })
+    @GetMapping("/getClassBySchool")
+    public void getClassBySchool(String school, HttpServletResponse response){
+        List<Classes> classes = classesService.findClassBySchool(school);
         if (classes != null){
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("classes", classes);
