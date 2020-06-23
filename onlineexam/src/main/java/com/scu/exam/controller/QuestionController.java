@@ -26,6 +26,58 @@ public class QuestionController {
     @Autowired
     private AnswerController answerController;
 
+    @ApiOperation("得到所有的试题列表")
+    /*
+       响应的数据结构：是由quesWithAns构成的列表，再将该列表放入到一个JSONObject中
+
+               单个quesWithAns的结构如下：
+                   {
+                     “question_id": question_id,
+                     "question_info": question_info,
+                     "correct_answer": correct_answer,
+                     "type": type,
+                     "answerList": [
+                            "answer1",
+                            "answer"2,
+                            ........,
+                            "answern"
+                      ]
+                      "status": status
+                   }
+     */
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "请求成功"),
+            @ApiResponse(code = 400, message = "请求参数没填好"),
+            @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
+    })
+    @GetMapping("/findAllQuestion")
+    public void findAllQuestion(HttpServletResponse response){
+        JSONObject resultJSON = new JSONObject();
+        List<JSONObject> jsonObjectList = new ArrayList<>();
+        try {
+            //得到所有的Question列表
+            List<Question> questionList = questionService.findAllQuestion();
+            for (int i = 0; i < questionList.size(); i++){
+                //将每一个quesion及其answer放入到一个JSONObject中
+                JSONObject quesWithAns = new JSONObject();
+                Question question = (Question)questionList.get(i);
+                quesWithAns.put("question_id", question.getQuestion_id());
+                quesWithAns.put("question_info", question.getQuestion_info());
+                quesWithAns.put("correct_answer", question.getCorrect_answer());
+                quesWithAns.put("type", question.getType());
+                quesWithAns.put("answerList", answerController.getAnswerById(question.getQuestion_id()));
+
+                //将得到的JSONObject放入到一个List中
+                jsonObjectList.add(quesWithAns);
+            }
+            resultJSON.put("questionList", jsonObjectList);
+            resultJSON.put("status", "查找成功！");
+        }catch (DataAccessException e){
+            resultJSON.put("status", "查找失败！"+"\\n"+"详情："+e.getMessage());
+        }
+        //封装结果
+        ResponseUtils.renderJson(response, resultJSON);
+    }
 
     @ApiOperation("添加题目到数据库中（测试通过）")
     /*
@@ -64,6 +116,7 @@ public class QuestionController {
                 //得到系统对所插入题目生成的id,用来设置要插入的answer
                 Integer question_id = questionService.findQuestionByInfo(question.getQuestion_info()).getQuestion_id();
                 //同时也要把题目设置的选项添加到数据库的answer表中
+                System.out.println(data);
                 answerController.addAnswer(question_id, data);
                 //反馈结果
                 jsonObject.put("status", "添加成功！");

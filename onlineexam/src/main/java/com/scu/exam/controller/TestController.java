@@ -37,7 +37,6 @@ public class TestController {
     @Autowired
     private AnswerService answerService;
 
-
     @ApiOperation("获取老师发布试卷列表")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", name = "t_id", dataType = "String", required = true, value = "老师Id"),

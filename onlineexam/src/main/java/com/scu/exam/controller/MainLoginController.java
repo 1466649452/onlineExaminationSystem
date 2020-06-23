@@ -13,6 +13,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -41,13 +42,15 @@ public class MainLoginController {
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/login")//@RequestBody JSONObject data,//String userId,String userPassword,
-    public void login( HttpServletRequest request,HttpServletResponse response) throws IOException {
-        String successAddr="index2.html";
-        String failAddr="index3.html";
+    public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String successAddr="/htmlsite/pages/samples/index.html";
+        String failAddr="/htmlsite/login.html";
         try{
             System.out.println("进入登陆验证...");
             String userId=request.getParameter("userId").toString();
             String userPassword=request.getParameter("userPassword").toString();
+            //String userId=data.get("userId").toString();
+            //String userPassword=data.get("userPassword").toString();
             System.out.println(userId+":"+userPassword);
             //数据库权限校验
             boolean loginsuccess = false;
@@ -94,12 +97,13 @@ public class MainLoginController {
                 //产生token
                 String accessToken = TokenSign.signToken(userId, userName,identity);
                 Cookie cookie = new Cookie("accessToken", accessToken);
-                cookie.setMaxAge(60000);
+                //两个小时过期
+                cookie.setMaxAge(TokenSign.EXPIRE_TIME);
                 cookie.setPath("./");
                 cookie.setDomain(request.getServerName());
                 response.addCookie(cookie);
                 JSONObject json = new JSONObject();
-                json.put("login", "success");
+                json.put("status", "success");
                 json.put("identity", identity);
                 //验证通过
                 //重定位到合适的页面
@@ -109,7 +113,7 @@ public class MainLoginController {
                 //未通过
                 System.out.println("登陆验证未通过...");
                 JSONObject json = new JSONObject();
-                json.put("login", "fail");
+                json.put("status", "fail");
                 //验证未通过
                 //重定位到合适的页面
                 response.sendRedirect(failAddr);
@@ -117,9 +121,9 @@ public class MainLoginController {
             }
         }catch (Exception e){
             //未通过
-            System.out.println("登陆验证未通过...");
+            System.out.println("登陆验出错，未通过...");
             JSONObject json = new JSONObject();
-            json.put("login", "fail");
+            json.put("status", "fail");
 
             //验证未通过
             //重定位到合适的页面

@@ -9,7 +9,6 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext*.xml</param-value>
     </context-param>
-
     <!--跨域问题解决-->
     <filter>
         <filter-name>cors</filter-name>
@@ -34,8 +33,6 @@
         <filter-name>encoding</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-
 
     <!--过滤器的方式来验证登陆是否有效-->
 

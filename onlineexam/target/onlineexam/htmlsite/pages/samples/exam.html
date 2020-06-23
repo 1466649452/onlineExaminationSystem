@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Purple Admin</title>
+		<!-- plugins:css -->
+		<link rel="stylesheet" href="../../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+		<link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
+		<link rel="stylesheet" href="../../css/awesome-bootstrap-checkbox.css" />
+		<link rel="stylesheet" href="../../css/font-awesome.min.css" />
+		<!-- endinject -->
+		<!-- plugin css for this page -->
+		<!-- End plugin css for this page -->
+		<!-- inject:css -->
+		<link rel="stylesheet" href="../../css/style.css">
+		<!-- endinject -->
+		<link rel="shortcut icon" href="../../images/favicon.png" />
+
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+		<script src="../../js/getcookiefile.js"></script>
+
+	</head>
+
+	<body>
+		<div class="container-scroller" id="exampage">
+			<!-- partial:../../partials/_navbar.html -->
+			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+					<p class="text-lg-center ellipsis mb-0" style="color: #19d5ff;font-size: 30px;">
+						在线测试系统
+					</p>
+				</div>
+				<div class="navbar-menu-wrapper d-flex align-items-stretch">
+					<ul class="navbar-nav navbar-nav-right">
+						<li class="nav-item nav-profile dropdown">
+							<a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+								<div class="nav-profile-img">
+									<img src="../../images/faces/face1.jpg" alt="image">
+									<span class="availability-status online"></span>
+								</div>
+								<div class="nav-profile-text">
+									<p class="mb-1 text-black">葱宝</p>
+								</div>
+							</a>
+							<div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="../../pages/samples/login.html">
+									<i class="mdi mdi-logout mr-2 text-primary"></i>
+									注销账号
+								</a>
+							</div>
+						</li>
+						<li class="nav-item d-none d-lg-block full-screen-link">
+							<a class="nav-link">
+								<i class="mdi mdi-fullscreen" id="fullscreen-button"></i>
+							</a>
+						</li>
+						<li class="nav-item nav-logout d-none d-lg-block">
+							<a class="nav-link" href="../../pages/samples/login.html">
+								<i class="mdi mdi-power"></i>
+							</a>
+						</li>
+						<li class="nav-item nav-settings d-none d-lg-block">
+							<a class="nav-link" href="#">
+								<i class="mdi mdi-format-line-spacing"></i>
+							</a>
+						</li>
+					</ul>
+					<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+						<span class="mdi mdi-menu"></span>
+					</button>
+				</div>
+			</nav>
+			<!-- partial -->
+			<div class="container-fluid page-body-wrapper">
+				<!-- partial:../../partials/_sidebar.html -->
+				<nav class="sidebar sidebar-offcanvas" id="sidebar">
+					<ul class="nav">
+						<li class="nav-item nav-profile">
+							<a href="#" class="nav-link">
+								<div class="nav-profile-image">
+									<img src="../../images/faces/face1.jpg" alt="profile">
+									<span class="login-status online"></span>
+									<!--change to offline or busy as needed-->
+								</div>
+								<div class="nav-profile-text d-flex flex-column">
+									<span class="font-weight-bold mb-2">葱宝</span>
+									<span class="text-secondary text-small">管理员</span>
+								</div>
+								<i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+								<span class="menu-title">系统管理</span>
+								<i class="menu-arrow"></i>
+								<i class="mdi mdi-human-male-female menu-icon"></i>
+							</a>
+							<div class="collapse" id="ui-basic">
+								<ul class="nav flex-column sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/TeacherManager.html">教师管理</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/XX.html">学生管理</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="collapse" href="#question" aria-expanded="false" aria-controls="question">
+								<span class="menu-title">题库管理</span>
+								<i class="menu-arrow"></i>
+								<i class="mdi mdi-crosshairs-gps menu-icon"></i>
+							</a>
+							<div class="collapse" id="question">
+								<ul class="nav flex-column sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/AddQuestion.html">添加题目</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/samples/QuestionManager.html">查看题库</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/samples/CreateTheme.html">
+								<span class="menu-title">参加考试</span>
+								<i class="mdi mdi-contacts menu-icon"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/forms/xx.html">
+								<span class="menu-title">试卷管理</span>
+								<i class="mdi mdi-format-list-bulleted menu-icon"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="collapse" href="#analyze" aria-expanded="false" aria-controls="analyze">
+								<span class="menu-title">成绩分析</span>
+								<i class="menu-arrow"></i>
+								<i class="mdi mdi-chart-areaspline"></i>
+							</a>
+							<div class="collapse" id="analyze">
+								<ul class="nav flex-column sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/xx.html">成绩分布</a></li>
+									<li class="nav-item"> <a class="nav-link" href="../../pages/ui-features/aa.html">正确率分析</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/tables/basic-table.html">
+								<span class="menu-title">成绩查询</span>
+								<i class="mdi mdi-chart-bar menu-icon"></i>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../../pages/tables/basic-table.html">
+								<span class="menu-title">个人信息修改</span>
+								<i class="mdi mdi-table-large menu-icon"></i>
+							</a>
+						</li>
+					</ul>
+				</nav>
+				<!-- partial -->
+				<div class="main-panel">
+					<div class="content-wrapper">
+						<div style="position:absolute;top:115px;right:100px">
+							<a id="HyperLink1" class="alert-info" href="CreateTheme.html">
+								<button type="button" class="btn btn-gradient-info">返回</button>
+							</a>
+						</div>
+						<div>
+							<h3 class="display-3" style="font-weight: bold;margin-bottom: 30px;" align="center" bgcolor="#fffae8">{{examinfo.paper_name}}</h3>
+						</div>
+						<div v-for="(item,index) in examinationQuestion" style="margin-top: 20px;margin-left: 50px;">
+							<div v-if="item.type=='choose'">								
+								<!--选择题的循环-->
+								<td style="width: 100%">
+									<span id="GridView1_ctl02_Label1" style="font-size: 22px;">{{index+1}}.
+									</span>
+									<span id="GridView1_ctl02_Label2" style="font-size: 22px;"> {{item.question_info}}
+									</span>
+									<span style="font-size: 14px;"> ({{item.point}}分)<br />
+									</span>
+								</td>
+
+								<td style="width: 100%;">
+									<div v-for="items in item.answerlist" style="margin-top: 10px;" @click="namespace(item.question_id,items.answer)">
+										<input :name="item.question_info" style="width:13px;height:13px;" type="radio">
+										<a style="margin-left: 15px;font-size: 18px;">{{items.answer}}</a>
+										</input>
+									</div>
+								</td>
+							</div>
+							<div v-else>
+								<!--判断题的循环-->
+								<td style="width: 100%">
+									<span id="GridView1_ctl02_Label1" style="font-size: 22px;">{{index+1}}.
+									</span>
+									<span id="GridView1_ctl02_Label2" style="font-size: 22px;"> {{item.question_info}}
+									</span>
+									<span style="font-size: 14px;"> ({{item.point}}分)<br />
+									</span>
+								</td>
+								<td style="width: 100%;">
+									<tr>
+										<input :name="item.question_info" @click="namespace(item.question_id,'true')" style="width:13px;height:13px;margin-top: 15px;" type="radio"><a style="font-size: 18px;">正确</a>
+										<input :name="item.question_info" @click="namespace(item.question_id,'false')" style="width:13px;height:13px;margin-left:300px;" type="radio"><a style="font-size: 18px;">错误</a>
+									</tr>
+								</td>
+							</div>
+						</div>
+						<div align="center" style="margin-top: 90px;margin-bottom: 40px;">
+							<td align="center" style="width:100%; height: 1px">
+								<button type="butoon" class="btn btn-gradient-success" name="Button1" id="Button1" @click="submit" />提交
+							</td>
+						</div>
+						<!-- content-wrapper ends -->
+						<!-- partial:../../partials/_footer.html -->
+						<!-- partial -->
+						</tbody>
+						</table>
+					</div>
+					<!-- main-panel ends -->
+				</div>
+			</div>
+		</div>
+		<!-- page-body-wrapper ends -->
+		</div>
+		<!-- container-scroller -->
+		</div>
+		</div>
+		<!-- plugins:js -->
+		<script src="../../vendors/js/vendor.bundle.base.js"></script>
+		<script src="../../vendors/js/vendor.bundle.addons.js"></script>
+		<!-- endinject -->
+		<!-- Plugin js for this page-->
+		<!-- End plugin js for this page-->
+		<!-- inject:js -->
+		<script src="../../js/off-canvas.js"></script>
+		<script src="../../js/misc.js"></script>
+		<!-- endinject -->
+		<!-- Custom js for this page-->
+		<!-- End custom js for this page-->
+	</body>
+
+	<script type="text/javascript">
+		var app = new Vue({
+			el: "#exampage",
+			data: {
+				paper_id: "",
+				examinfo: {},
+				stu_ans: {},
+				/*
+				examinationQuestion: [{
+					question_id: 12334,
+					question_info: "成都冷？",
+					answerlist: ["晴天", "阴天", "内容"],
+					correct_answer: "晴天",
+					point: 20,
+					type: "choose"
+				}],
+				*/
+			   examinationQuestion:[]
+			},
+			created: function() {
+				this.paper_id = localStorage.getItem("paper_id");
+				console.log(this.paper_id)
+				//获取内容
+				//请求获取数据
+				//考试信息获取
+				ajax({
+					url:"http://localhost:8080/student/test",
+					data:{
+						paper_id:parseInt(this.paper_id)
+					},
+					method:"get",
+					success:res=>{
+						var data=res.shift();
+						data.end=new Date(data.start);
+						data.start=new Date(data.start);
+						this.examinfo=data;
+						this.examinationQuestion=res;
+						console.log(res)
+					}
+				})
+			},
+			methods: {
+				submit: function() {
+					if(Object.keys(this.stu_ans).length<Object.keys(this.examinationQuestion).length){
+						window.alert("您还没有做完所有题目！")
+						return;
+					}
+					var student_score=judgethePaper(this.stu_ans,this.examinationQuestion);
+					//将考试数据放到数据库中
+					let studentData = {
+						"finish": new Date().getTime(),
+						"paper_id": parseInt(this.paper_id),
+						"score": student_score,
+						"stu_ans": this.stu_ans,
+						"stu_id": "1",
+					}
+					console.log(studentData)
+					ajax({
+						url: "http://localhost:8080/score/addRecordOfScore",
+						method: "post",
+						data: {
+							'record': studentData
+						},
+						success: function(res) {
+							console.log(res)
+						}
+					})
+
+				},
+				namespace(question_id, answer) {
+					this.stu_ans[question_id] = answer
+				},
+			},
+			getScore: function() {
+				return 1;
+			}
+		})
+
+		function judgethePaper(stu_ans, examination) {
+			console.log("开始评分...");
+			var totalScore = 0;
+			for (var i = 0; i < examination.length; i++) {
+				var q_id = examination[i].question_id;
+				var q_score = examination[i].point;
+				console.log(q_score)
+				var q_correctans = examination[i].correct_answer;
+				var student_ans = stu_ans[q_id];
+				if (student_ans == q_correctans) {
+					totalScore += q_score;
+				}
+			}
+			console.log("得分为："+totalScore)
+			return totalScore;
+
+		}
+	</script>
+</html>

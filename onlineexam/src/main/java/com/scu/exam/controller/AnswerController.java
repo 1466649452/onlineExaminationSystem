@@ -52,5 +52,4 @@ public class AnswerController {
         }
         return answerList;
     }
-
 }
