@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Api(tags = "学生信息相关API")
@@ -77,26 +79,23 @@ public class StudentController {
 
     //修改学生信息
     @ApiOperation("管理员修改学生信息")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", name = "stu_id", dataType = "String", required = true, value = "学生id")
-    })
     @ApiResponses({
             @ApiResponse(code = 200, message = "请求成功"),
             @ApiResponse(code = 400, message = "请求参数没填好"),
             @ApiResponse(code = 404, message = "请求路径没有或页面跳转路径不对")
     })
     @PostMapping("/updateStudent")
-    public void updateAdminInfo(String stu_id, @RequestBody JSONObject studentInfo, HttpServletResponse response){
+    public void updateAdminInfo(@RequestBody JSONObject studentInfo, HttpServletResponse response){
         Student student = setStudentByJSON(studentInfo);
-        student.setStu_id(stu_id);
 
         /* 在数据库修改相对应的学生信息 */
         try{
             studentService.updateStudent(student);
+            ResponseUtils.renderJson(response, "修改成功！");
         }catch (DataAccessException e){
             ResponseUtils.renderJson(response, "修改失败！");
         }
-        ResponseUtils.renderJson(response, "修改成功！");
+
 
         System.out.println(response);
     }
@@ -124,14 +123,20 @@ public class StudentController {
     */
     public Student setStudentByJSON(JSONObject jsonObject){
         Student student = new Student();
-        Administrator administrator = new Administrator();
-        student.setStu_birthdate((Date) jsonObject.get("stu_birthdate"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dstr="2008-04-24";
+        try {
+            Date dt = sdf.parse(dstr);
+            student.setStu_birthdate(dt);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         student.setStu_password((String)jsonObject.get("stu_password"));
         student.setStu_name((String)jsonObject.get("stu_name"));
         student.setClass_id((String)jsonObject.get("class_id"));
         student.setStu_id((String)jsonObject.get("stu_id"));
-        student.setStu_idcard((String)jsonObject.get("stu_idcard"));
-        student.setStu_Image((String)jsonObject.get("stu_Image"));
+        student.setStu_idcard("123");
+        student.setStu_Image("123");
 
         return student;
     }
