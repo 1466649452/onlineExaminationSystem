@@ -6,7 +6,13 @@
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>Purple Admin</title>
+		
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+		<script src="../../js/getcookiefile.js"></script>
+		
+		<title>省级计算机在线考试系统</title>
+	
 		<!-- plugins:css -->
 		<link rel="stylesheet" href="../../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
 		<link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
@@ -17,13 +23,11 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-		<script src="../../js/request.js"></script>
 	</head>
 
 
 	<body>
-		<div class="container-scroller" id="newTest2page">
+		<div class="container-scroller">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -160,21 +164,60 @@
 				<!-- partial -->
 				<div class="main-panel">
 					<div class="content-wrapper">
-						<h2>请添加试卷题目</h2>
-						<div class="form-check form-check-info" v-for="(item,index) in questionList">
-							<label class="form-check-label">
-								<input type="checkbox" class="form-check-input" @click="chooseQuestion(index,item.question_id)">
-								{{item.question_info}}
-								
-							</label>
+						<div class="main-panel">
+							<div class="content-wrapper">
+								<div class="page-header">
+									<h3 class="card-title" style="color: #89cacd;">新增教师信息填写：</h3>
+									<nav aria-label="breadcrumb">
+										<ol class="breadcrumb">
+											<li class="breadcrumb-item"><a href="../../pages/samples/TeacherManager.html">教师管理</a></li>
+											<li class="breadcrumb-item active" aria-current="page">添加教师</li>
+										</ol>
+									</nav>
+								</div>
+								<div class="row">
+									<div class="col-md-6 grid-margin stretch-card">
+										<div class="card">
+											<div class="card-body">
+												<form class="forms-sample">
+													<div class="form-group">
+														<label for="exampleInputUsername1">教师工号</label>
+														<input type="text" class="form-control" id="exampleInputUsername1" placeholder="xxx">
+													</div>
+													<div class="form-group">
+														<label for="exampleInputEmail1">教师姓名</label>
+														<input class="form-control" placeholder="张三">
+													</div>
+													<div class="form-group">
+														<label for="exampleInputEmail1">所属学校</label>
+														<input class="form-control" placeholder="第一中学">
+													</div>
+													<div class="form-group">
+														<label for="exampleInputEmail1">所属年级</label>
+														<input class="form-control" placeholder="2017">
+													</div>
+													<div class="form-group">
+														<label for="exampleInputEmail1">管理班级</label>
+														<input class="form-control" placeholder="1班">
+													</div>
+													<div class="form-group">
+														<label for="exampleInputEmail1">密码</label>
+														<input class="form-control" placeholder="Password">
+													</div>
+													<div>
+														<button type="submit" onclick="addquestion()" class="btn btn-gradient-info">添加</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- partial -->
+							</div>
+							<!-- main-panel ends -->
 						</div>
-						<div>
-							<button class="btn btn-gradient-info" @click="completeThePaper">完成并保存试卷</button>
-						</div>
+						<!-- page-body-wrapper ends -->
 					</div>
-					<!-- content-wrapper ends -->
-					<!-- partial:../../partials/_footer.html -->
-					<!-- partial -->
 				</div>
 				<!-- main-panel ends -->
 			</div>
@@ -194,70 +237,5 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
-	<script type="text/javascript">
-		var app = new Vue({
-			el: "#newTest2page",
-			data: {
-				paper_info: {},
-				questionList: [],
-				usingList: {},
-				choosedList: [],
-			},
-			created: function() {
-				this.paper_info = JSON.parse(localStorage.getItem("paper_info"));
-				console.log(this.paper_info)
-				ajax({
-					url: "http://localhost:8080/question/findAllQuestion",
-					success: res => {
-						this.questionList = res.questionList;
-					}
-				})
-			},
-			methods: {
-				chooseQuestion(index, event) {
-					if (this.usingList[index] != event) {
-						this.usingList[index] = event;
-					} else {
-						this.usingList[index] = "";
-					}
-				},
-				completeThePaper() {
-					var i = 0;
-					for (var key in this.usingList) {
-						var item = this.usingList[key];
-						if (item != "") {
-							var temp = {};
-							temp['question_id'] = item;
-							temp['point'] = 20;
-							this.choosedList.push(temp);
-						}
-					}
-
-					//添加试题的网络请求
-					ajax({
-						url: "http://localhost:8080/teacher/addTest",
-						method: "post",
-						data: {
-							test: {
-								t_id: this.paper_info.t_id,
-								start: this.paper_info.start,
-								end: this.paper_info.end,
-								paper_name: this.paper_info.paper_name,
-								arraylist: this.choosedList,
-							}
-						},
-						success: res => {
-							console.log(res)
-							this.choosedList = []
-							if(res.status=="fail"){
-								alert('添加失败')
-							}
-							window.location.href='TestManager.html'
-						}
-					})
-				}
-			}
-		})
-	</script>
 
 </html>

@@ -40,7 +40,7 @@
     </mvc:interceptors>
     -->
 
-    <!-- <mvc:interceptors>
+     <mvc:interceptors>
          <mvc:interceptor>
              <mvc:mapping path="/**"/>
              <mvc:exclude-mapping path="/htmlsite/login.html"/>
@@ -58,7 +58,7 @@
              <mvc:exclude-mapping path="/**/swagger-resources/**"/>
              <bean class="com.scu.exam.interceptor.LoginInterceptor"></bean>
          </mvc:interceptor>
-     </mvc:interceptors>-->
+     </mvc:interceptors>
 
     <!-- 配置文件上传解析器 MultipartResolver -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

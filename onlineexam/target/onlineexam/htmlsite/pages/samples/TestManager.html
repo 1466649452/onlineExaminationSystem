@@ -17,6 +17,8 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
 	</head>
 
 
@@ -181,18 +183,18 @@
 											<thead>
 												<tr style="background-color: #9cc5cd;">
 													<th>试卷ID</th>
-													<th>考试题目</th>
-													<th>日期</th>
+													<th>考试名称</th>
+													<th>开始时间</th>
 													<th>操作</th>
 												</tr>
 											</thead>
-											<tbody>
+											<tbody v-for="(item,index) in paper_list">
 												<tr>
-													<td>01</td>
-													<td>期末考试</td>
-													<td> 6/22/2020</td>
-													<td> 
-														<button class="btn btn-outline-dark btn-fw btn-icon-tex">删除</button>
+													<td>{{item.paper_id}}</td>
+													<td>{{item.paper_name}}</td>
+													<td>{{item.start}}</td>
+													<td>
+														<button class="btn btn-outline-dark btn-fw btn-icon-tex" @click="deleteTestPaper(item.paper_id,index)">删除</button>
 													</td>
 												</tr>
 
@@ -228,20 +230,55 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
-<script type="text/javascript">
-		var app=new Vue({
-			el:"#testManagerpage",
-			data:{
-				t_id:"",
-				
+	<script type="text/javascript">
+		var app = new Vue({
+			el: "#testManagerpage",
+			data: {
+				t_id: "",
+				paper_list: []
 			},
-			created:function(){
-				this.t_id=localStorage.getItem("user_id");
+			created: function() {
+				this.t_id = localStorage.getItem("user_id");
+				ajax({
+					url: "http://localhost:8080/teacher/testList",
+					data: {
+						t_id: this.t_id
+					},
+					method: "get",
+					success: res => {
+						if(res.status=="fail"){
+							return;
+						}
+						this.paper_list = res;
+						for (var i = 0; i < this.paper_list.length; i++) {
+							var temp = new Date(this.paper_list[i].start);
+							this.paper_list[i].start = temp.getFullYear() + "年" + (temp.getMonth() + 1) + "月" + temp.getDate() + "日 " +
+								temp.getHours() + ":" + (temp.getMinutes() < 10 ? "0" + temp.getMinutes() : temp.getMinutes());
+						}
+					}
+				})
 			},
-			methods:{
-				
+			methods: {
+				deleteTestPaper(e,index) {
+					console.log(e,index)
+					ajax({
+						url:"http://localhost:8080/teacher/deleteOneTest",
+						data:{
+							paper_id:e
+						},
+						method:'post',
+						success:res=>{
+							console.log(res)
+							if(res.status=="success"){
+								this.paper_list.splice(index,1);	
+							}else{
+								alert("删除失败！")
+							}
+							
+						}
+					})
+				}
 			}
 		})
-		
 	</script>
 </html>

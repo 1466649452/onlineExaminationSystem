@@ -165,7 +165,6 @@
 							<label class="form-check-label">
 								<input type="checkbox" class="form-check-input" @click="chooseQuestion(index,item.question_id)">
 								{{item.question_info}}
-								<a style="margin-left: 30px;" >分值：</a><input style="width: 60px;" type="number" value="20" />
 								
 							</label>
 						</div>
@@ -202,7 +201,7 @@
 				paper_info: {},
 				questionList: [],
 				usingList: {},
-				choosedList:[],
+				choosedList: [],
 			},
 			created: function() {
 				this.paper_info = JSON.parse(localStorage.getItem("paper_info"));
@@ -223,38 +222,39 @@
 					}
 				},
 				completeThePaper() {
-					var i=0;
+					var i = 0;
 					for (var key in this.usingList) {
 						var item = this.usingList[key];
-						if(item!=""){
-							var temp={};
-							temp['question_id']=item;
-							temp['point']=20;
+						if (item != "") {
+							var temp = {};
+							temp['question_id'] = item;
+							temp['point'] = 20;
 							this.choosedList.push(temp);
 						}
 					}
-					/**
+
 					//添加试题的网络请求
 					ajax({
-						url:"http://localhost:8080/teacher/addTest",
-						method:"post",
-						data:{
-							t_id:this.paper_info.t_id,
-							start:this.paper_info.start,
-							end:this.paper_info.end,
-							paper_name:this.paper_info.paper_name,
-							arraylist:this.choosedList,
+						url: "http://localhost:8080/teacher/addTest",
+						method: "post",
+						data: {
+							test: {
+								t_id: this.paper_info.t_id,
+								start: this.paper_info.start,
+								end: this.paper_info.end,
+								paper_name: this.paper_info.paper_name,
+								arraylist: this.choosedList,
+							}
 						},
-						success:res=>{
+						success: res => {
 							console.log(res)
-							this.choosedList=[]
-							
-							//window.location.href='TestManager.html'
+							this.choosedList = []
+							if(res.status=="fail"){
+								alert('添加失败')
+							}
+							window.location.href='TestManager.html'
 						}
 					})
-					*/
-					console.log(this.choosedList)
-					this.choosedList=[]
 				}
 			}
 		})

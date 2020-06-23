@@ -254,7 +254,7 @@
 					paper_info["t_id"]=this.t_id
 					paper_info["paper_name"]=this.paper_name
 					
-					localStorage.setItem("paper_info",paper_info);
+					localStorage.setItem("paper_info",JSON.stringify(paper_info));
 					window.location.href='NewTest2.html'
 				}
 				

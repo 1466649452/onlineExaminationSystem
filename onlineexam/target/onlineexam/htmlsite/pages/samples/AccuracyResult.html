@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 	<head>
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="../../js/request.js"></script>
+		<script src="../../js/getcookiefile.js"></script>
+		
 		<title>Purple Admin</title>
 		<!-- plugins:css -->
+		
 		<link rel="stylesheet" href="../../vendors/iconfonts/mdi/css/materialdesignicons.min.css">
 		<link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css">
 		<!-- endinject -->
@@ -17,13 +22,11 @@
 		<link rel="stylesheet" href="../../css/style.css">
 		<!-- endinject -->
 		<link rel="shortcut icon" href="../../images/favicon.png" />
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-		<script src="../../js/request.js"></script>
 	</head>
 
 
 	<body>
-		<div class="container-scroller" id="newTest2page">
+		<div class="container-scroller">
 			<!-- partial:../../partials/_navbar.html -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
@@ -157,28 +160,47 @@
 					</ul>
 				</nav>
 				<!-- partial -->
-				<!-- partial -->
 				<div class="main-panel">
 					<div class="content-wrapper">
-						<h2>请添加试卷题目</h2>
-						<div class="form-check form-check-info" v-for="(item,index) in questionList">
-							<label class="form-check-label">
-								<input type="checkbox" class="form-check-input" @click="chooseQuestion(index,item.question_id)">
-								{{item.question_info}}
-								
-							</label>
+						<div class="row">
+							<div class="col-lg-12 grid-margin stretch-card">
+								<div class="card">
+									<div class="card-body">
+										<h4 class="card-title" style="color: #0db4cd;">正确率统计</h4>
+										<table class="table">
+											<thead>
+												<tr style="background-color: #a6cdcb;">
+													<th>问题编号</th>
+													<th>试卷编号</th>
+													<th>回答人数</th>
+													<th>分值</th>
+													<th>平均得分</th>
+													<th>正确率</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>111</td>
+													<td>100</td>
+													<td>6</td>
+													<td>4.2</td>
+													<td>70%</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							<!-- content-wrapper ends -->
+							<!-- partial:../../partials/_footer.html -->
+							<!-- partial -->
 						</div>
-						<div>
-							<button class="btn btn-gradient-info" @click="completeThePaper">完成并保存试卷</button>
-						</div>
+						<!-- main-panel ends -->
 					</div>
-					<!-- content-wrapper ends -->
-					<!-- partial:../../partials/_footer.html -->
-					<!-- partial -->
+					<!-- page-body-wrapper ends -->
 				</div>
-				<!-- main-panel ends -->
 			</div>
-			<!-- page-body-wrapper ends -->
 		</div>
 		<!-- container-scroller -->
 		<!-- plugins:js -->
@@ -194,70 +216,5 @@
 		<!-- Custom js for this page-->
 		<!-- End custom js for this page-->
 	</body>
-	<script type="text/javascript">
-		var app = new Vue({
-			el: "#newTest2page",
-			data: {
-				paper_info: {},
-				questionList: [],
-				usingList: {},
-				choosedList: [],
-			},
-			created: function() {
-				this.paper_info = JSON.parse(localStorage.getItem("paper_info"));
-				console.log(this.paper_info)
-				ajax({
-					url: "http://localhost:8080/question/findAllQuestion",
-					success: res => {
-						this.questionList = res.questionList;
-					}
-				})
-			},
-			methods: {
-				chooseQuestion(index, event) {
-					if (this.usingList[index] != event) {
-						this.usingList[index] = event;
-					} else {
-						this.usingList[index] = "";
-					}
-				},
-				completeThePaper() {
-					var i = 0;
-					for (var key in this.usingList) {
-						var item = this.usingList[key];
-						if (item != "") {
-							var temp = {};
-							temp['question_id'] = item;
-							temp['point'] = 20;
-							this.choosedList.push(temp);
-						}
-					}
-
-					//添加试题的网络请求
-					ajax({
-						url: "http://localhost:8080/teacher/addTest",
-						method: "post",
-						data: {
-							test: {
-								t_id: this.paper_info.t_id,
-								start: this.paper_info.start,
-								end: this.paper_info.end,
-								paper_name: this.paper_info.paper_name,
-								arraylist: this.choosedList,
-							}
-						},
-						success: res => {
-							console.log(res)
-							this.choosedList = []
-							if(res.status=="fail"){
-								alert('添加失败')
-							}
-							window.location.href='TestManager.html'
-						}
-					})
-				}
-			}
-		})
-	</script>
 
 </html>
