@@ -82,6 +82,7 @@ public class TestController {
         System.out.println(result1);
         System.out.println(test.getPaper_id());
 
+
         //插入correctrate数据库
         //question_id and point 二维数组
         List<CorrectRate> correctRateList = new ArrayList<CorrectRate>();

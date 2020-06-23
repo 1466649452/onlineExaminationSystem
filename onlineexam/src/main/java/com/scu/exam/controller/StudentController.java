@@ -72,7 +72,6 @@ public class StudentController {
             jsonObject.put("student", student);
             ResponseUtils.renderJson(response, jsonObject);
         }
-
         //测试用，待删
         System.out.println(response);
     }
